@@ -1,4 +1,4 @@
-from rrPlugins import *
+from rrPlugins_CAPI import *
 
 rrDataHandle = createRoadRunnerDataFromFile("testData.dat")
 hdr = getRoadRunnerDataColumnHeader(rrDataHandle)
