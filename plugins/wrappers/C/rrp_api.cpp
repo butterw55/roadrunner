@@ -173,21 +173,21 @@ RRHandle rrp_cc getRRHandleFromPlugin(RRPluginHandle handle)
     catch_ptr_macro
 }
 
-RRStringArray* rrp_cc getPluginNames(RRPluginManagerHandle handle)
+char* rrp_cc getPluginNames(RRPluginManagerHandle handle)
 {
     start_try
         PluginManager *pm = castToPluginManager(handle);
         StringList names = pm->getPluginNames();
-        return createList(names);
+        return createText(names.AsString());
     catch_ptr_macro
 }
 
-RRStringArray* rrp_cc getPluginLibraryNames(RRPluginManagerHandle handle)
+char* rrp_cc getPluginLibraryNames(RRPluginManagerHandle handle)
 {
     start_try
         PluginManager *pm = castToPluginManager(handle);
         StringList names = pm->getPluginLibraryNames();
-        return createList(names);
+        return createText(names.AsString());
     catch_ptr_macro
 }
 
@@ -290,27 +290,27 @@ bool rrp_cc executePluginEx(RRPluginHandle handle, bool inAThread)
     catch_bool_macro
 }
 
-bool rrp_cc assignPluginStartedCallBack(RRPluginHandle handle, pluginCallBack theCB, void* userData1, void* userData2)
+bool rrp_cc assignOnStartedEvent(RRPluginHandle handle, PluginEvent theCB, void* userData1, void* userData2)
 {
     start_try
         Plugin* aPlugin = castToPlugin(handle);
-        return (aPlugin) ? aPlugin->assignPluginStartedCallBack(theCB, userData1, userData2) : false;
+        return (aPlugin) ? aPlugin->assignOnStartedEvent(theCB, userData1, userData2) : false;
     catch_bool_macro
 }
 
-bool rrp_cc assignPluginProgressCallBack(RRPluginHandle handle, pluginCallBack theCB, void* userData1, void* userData2)
+bool rrp_cc assignOnProgressEvent(RRPluginHandle handle, PluginEvent theCB, void* userData1, void* userData2)
 {
     start_try
         Plugin* aPlugin = castToPlugin(handle);
-        return (aPlugin) ? aPlugin->assignPluginProgressCallBack(theCB, userData1, userData2) : false;
+        return (aPlugin) ? aPlugin->assignOnProgressEvent(theCB, userData1, userData2) : false;
     catch_bool_macro
 }
 
-bool rrp_cc assignPluginFinishedCallBack(RRPluginHandle handle, pluginCallBack theCB, void* userData1, void* userData2)
+bool rrp_cc assignOnFinishedEvent(RRPluginHandle handle, PluginEvent theCB, void* userData1, void* userData2)
 {
     start_try
         Plugin* aPlugin = castToPlugin(handle);
-        return (aPlugin) ? aPlugin->assignPluginFinishedCallBack(theCB, userData1, userData2) : false;
+        return (aPlugin) ? aPlugin->assignOnFinishedEvent(theCB, userData1, userData2) : false;
     catch_bool_macro
 }
 
@@ -386,7 +386,7 @@ RRCDataPtr rrp_cc createRRCData(RRDataHandle rrDataHandle)
     catch_ptr_macro
 }
 
-int rrp_cc  getRRDataNumRows (RRCDataPtr result)
+int rrp_cc  getRRCDataNumRows (RRCDataPtr result)
 {
     if (result == NULL)
     {
@@ -396,7 +396,7 @@ int rrp_cc  getRRDataNumRows (RRCDataPtr result)
     return result->RSize;
 }
 
-int  rrp_cc  getRRDataNumCols (RRCDataPtr result)
+int  rrp_cc  getRRCDataNumCols (RRCDataPtr result)
 {
     if (result == NULL)
     {
@@ -421,13 +421,93 @@ char* rrp_cc getLastPluginError()
     return rrc::getLastError();
 }
 
+bool rrp_cc freeText(char* text)
+{
+    return rr::freeText(text);
+}
+
 char* rrp_cc getPluginPropertiesAsXML(RRPluginHandle handle)
 {
     start_try
         Plugin* aPlugin = castToPlugin(handle);
-        
-    return createText(aPlugin->getPluginPropertiesAsXML().c_str());
+        return createText(aPlugin->getPluginPropertiesAsXML().c_str());
     catch_ptr_macro
 }
+
+
+bool rrp_cc getRoadRunnerDataElement(RRDataHandle data, int row, int col, double* value)
+{
+    start_try
+        RoadRunnerData* rrData = castToRRData(data);
+        const DoubleMatrix& theData = rrData->getData();
+        *value = theData.Element(row, col);
+        return true;
+    catch_bool_macro
+}
+
+char* rrp_cc getRoadRunnerDataColumnHeader(RRDataHandle _data)
+{
+    start_try
+        RoadRunnerData* data = castToRRData(_data);
+        return createText(data->getColumnNamesAsString());        
+    catch_ptr_macro
+}
+
+int rrp_cc getRoadRunnerDataNumRows(RRDataHandle _data)
+{
+    start_try
+        RoadRunnerData* data = castToRRData(_data);
+        return data->rSize();        
+    catch_int_macro
+}
+
+int rrp_cc getRoadRunnerDataNumCols(RRDataHandle _data)
+{
+    start_try
+        RoadRunnerData* data = castToRRData(_data);
+        return data->cSize();        
+    catch_int_macro
+}
+
+RRDataHandle rrp_cc createRoadRunnerData(int nRows, int nCols, char* colNames)
+{
+    start_try
+        RoadRunnerData* data = new RoadRunnerData(nRows, nCols);
+        if (colNames)
+        {
+            string cNames(colNames);
+            StringList colNames(cNames, ",");
+            data->setColumnNames(colNames);
+        }
+        return data;        
+    catch_ptr_macro
+}
+
+bool rrp_cc freeRoadRunnerData(RRDataHandle rrData)
+{
+    start_try
+        RoadRunnerData* data = castToRRData(rrData);
+        delete data;
+        return true;
+    catch_bool_macro
+}
+
+bool rrp_cc writeRoadRunnerDataToFile(RRDataHandle rrData, char* fName)
+{
+    start_try
+        RoadRunnerData* data = castToRRData(rrData);
+        return data->writeTo(fName);        
+    catch_bool_macro
+}
+
+bool rrp_cc readRoadRunnerDataFromFile(RRDataHandle rrData, char* fName)
+{
+    start_try
+        RoadRunnerData* data = castToRRData(rrData);
+        return data->readFrom(fName);        
+    catch_bool_macro
+
+}
+
 
 }

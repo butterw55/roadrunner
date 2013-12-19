@@ -126,7 +126,7 @@ RRP_DECLSPEC int rrp_cc getNumberOfPlugins(RRPluginManagerHandle handle);
  \return Returns names for loaded plugins as a RRStringArrayPtr, NULL otherwise
  \ingroup plugin_manager
 */
-RRP_DECLSPEC RRStringArrayPtr rrp_cc getPluginNames(RRPluginManagerHandle handle);
+RRP_DECLSPEC char* rrp_cc getPluginNames(RRPluginManagerHandle handle);
 
 /*!
  \brief Function to retrieve the library name of currently loaded plugins.
@@ -134,7 +134,7 @@ RRP_DECLSPEC RRStringArrayPtr rrp_cc getPluginNames(RRPluginManagerHandle handle
  \return Returns names for loaded plugins as a RRStringArrayPtr, NULL otherwise
  \ingroup plugin_manager
 */
-RRP_DECLSPEC RRStringArrayPtr rrp_cc getPluginLibraryNames(RRPluginManagerHandle handle);
+RRP_DECLSPEC char* rrp_cc getPluginLibraryNames(RRPluginManagerHandle handle);
 
 /*!
  \brief getFirstPlugin retrieves the "first" plugin in the plugin managers internal list of plugins.
@@ -315,37 +315,37 @@ RRP_DECLSPEC bool rrp_cc isBeingTerminated(RRPluginHandle handle);
 RRP_DECLSPEC bool rrp_cc wasTerminated(RRPluginHandle handle);
 
 /*!
- \brief Assign callback function fired when a plugin starts its work
+ \brief Assign event function fired when a plugin starts its work
  \param handle Handle to a plugin
- \param cb Function pointer to callback routine
+ \param cb Function pointer to event routine
  \param userData1 void* pointer to user data.
  \param userData2 void* pointer to user data.
  \return Returns true or false indicating success/failure
  \ingroup plugins
 */
-RRP_DECLSPEC bool rrp_cc assignPluginStartedCallBack(RRPluginHandle handle, pluginCallBack cb, void* userData1, void* userData2);
+RRP_DECLSPEC bool rrp_cc assignOnStartedEvent(RRPluginHandle handle, PluginEvent cb, void* userData1, void* userData2);
 
 /*!
- \brief Assign callback function fired as a plugin progresses
+ \brief Assign event function fired as a plugin progresses
  \param handle Handle to a plugin
- \param cb Function pointer to callback routine
+ \param cb Function pointer to event routine
  \param userData1 void* pointer to user data.
  \param userData2 void* pointer to user data.
  \return Returns true or false indicating success/failure
  \ingroup plugins
 */
-RRP_DECLSPEC bool rrp_cc assignPluginProgressCallBack(RRPluginHandle handle, pluginCallBack cb, void* userData1, void* userData2);
+RRP_DECLSPEC bool rrp_cc assignOnProgressEvent(RRPluginHandle handle, PluginEvent cb, void* userData1, void* userData2);
 
 /*!
- \brief Assign callback function fired when a plugin finishes its work
+ \brief Assign event function fired when a plugin finishes its work
  \param handle Handle to a plugin
- \param cb Function pointer to callback routine
+ \param cb Function pointer to event routine
  \param userData1 void* pointer to user data.
  \param userData2 void* pointer to user data.
  \return Returns true or false indicating success/failure
  \ingroup plugins
 */
-RRP_DECLSPEC bool rrp_cc assignPluginFinishedCallBack(RRPluginHandle handle, pluginCallBack cb, void* userData1, void* userData2);
+RRP_DECLSPEC bool rrp_cc assignOnFinishedEvent(RRPluginHandle handle, PluginEvent cb, void* userData1, void* userData2);
 
 /*!
  \brief Hand external data to a plugin
@@ -363,14 +363,6 @@ RRP_DECLSPEC bool rrp_cc assignPluginInput(RRPluginHandle handle, void* userData
  \ingroup plugins
 */
 RRP_DECLSPEC RRHandle rrp_cc getRRHandleFromPlugin(RRPluginHandle handle);
-
-/*!
- \brief Get a Plugins capabilities as a string
- \param handle Handle to a plugin
- \return Returns available capabilities for a particular plugin as a pointer to a string, NULL otherwise.
- \ingroup plugins
-*/
-RRP_DECLSPEC char* rrp_cc getPluginCapabilities(RRPluginHandle handle);
 
 /*!
  \brief Get a Plugins Parameterse as an xml document. The string returned from this function is formated as xml.
@@ -432,7 +424,7 @@ RRP_DECLSPEC RRDataHandle rrp_cc getRoadRunnerDataHandle(RRHandle handle);
 RRP_DECLSPEC RRCDataPtr rrp_cc createRRCData(RRDataHandle rrDataHandle);
 
 /*!
- \brief Retrieve the number of rows in the given RoadRunner numberical data (returned from simulate(RRHandle handle))
+ \brief Retrieve the number of rows in the given RoadRunner C numberical data (returned from simulate(RRHandle handle))
 
  Example: \code nRows = getRRDataNumRows (result); \endcode
 
@@ -440,10 +432,10 @@ RRP_DECLSPEC RRCDataPtr rrp_cc createRRCData(RRDataHandle rrDataHandle);
  \return Returns -1 if fails, otherwise returns the number of rows
  \ingroup utilities
 */
-RRP_DECLSPEC int rrp_cc getRRDataNumRows (RRCDataPtr rrData);
+RRP_DECLSPEC int rrp_cc getRRCDataNumRows (RRCDataPtr rrData);
 
 /*!
- \brief Retrieve the number of columns in the given rrData data (returned form simulat(RRHandle handle))
+ \brief Retrieve the number of columns in the given rrCData data (returned form simulat(RRHandle handle))
 
  Example: \code nRows = getResultNumCols (rrData); \endcode
 
@@ -451,10 +443,10 @@ RRP_DECLSPEC int rrp_cc getRRDataNumRows (RRCDataPtr rrData);
  \return Returns -1 if fails, otherwise returns the number of columns
  \ingroup utilities
 */
-RRP_DECLSPEC int rrp_cc getRRDataNumCols (RRCDataPtr rrData);
+RRP_DECLSPEC int rrp_cc getRRCDataNumCols (RRCDataPtr rrData);
 
 /*!
- \brief Retrieves an element at a given row and column from a RoadRunner data type variable
+ \brief Retrieves an element at a given row and column from a RRCData struct type variable
 
  RoadRunner numerical data are indexed from zero
 
@@ -465,10 +457,32 @@ RRP_DECLSPEC int rrp_cc getRRDataNumCols (RRCDataPtr rrData);
  \param c - The column index to the rrData data
  \param[out] value - The retrieved value from the rrData data
  \return Returns true if succesful
+ \note The F indicate this is a forwarde fucntion from RoadRUnners C API.
  \ingroup utilities
 */
 RRP_DECLSPEC bool rrp_cc getRRCDataElementF(RRCDataPtr rrcData, int r, int c, double *value);
 
+
+/*!
+ \brief Retrieves an element at a given row and column from a RoadRunner data type variable
+
+ RoadRunner numerical data are indexed from zero
+
+ Example: \code status = getRoadRunnerDataElement (rrDataHandle, 2, 4, *value); \endcode
+
+ \param rrcData A Handle o a RoadRunner data type variable
+ \param r -The row index to the rrData data
+ \param c - The column index to the rrData data
+ \param[out] value - The retrieved value from the rrData data
+ \return Returns true if succesful
+ \ingroup utilities
+*/
+RRP_DECLSPEC bool           rrp_cc getRoadRunnerDataElement(RRDataHandle rrData, int r, int c, double *value);
+RRP_DECLSPEC char*          rrp_cc getRoadRunnerDataColumnHeader(RRDataHandle _data);
+RRP_DECLSPEC int            rrp_cc getRoadRunnerDataNumRows(RRDataHandle rrData);
+RRP_DECLSPEC int            rrp_cc getRoadRunnerDataNumCols(RRDataHandle rrData);
+RRP_DECLSPEC RRDataHandle   rrp_cc createRoadRunnerData(int rows, int cols, char* colNames);
+RRP_DECLSPEC bool           rrp_cc freeRoadRunnerData(RRDataHandle handle);
 /*!
  \brief Returns a string list in string form.
  \return Returns string list as a character string
@@ -477,6 +491,11 @@ RRP_DECLSPEC bool rrp_cc getRRCDataElementF(RRCDataPtr rrcData, int r, int c, do
 */
 RRP_DECLSPEC char* rrp_cc stringArrayToStringFWD(const RRStringArrayPtr list);
 
+RRP_DECLSPEC bool rrp_cc writeRoadRunnerDataToFile(RRDataHandle rrData, char* fName);
+RRP_DECLSPEC bool rrp_cc readRoadRunnerDataFromFile(RRDataHandle rrData, char* fName);
+
+
+
 /*!
  \brief Return last API error
  \return Returns a string with the error
@@ -484,6 +503,13 @@ RRP_DECLSPEC char* rrp_cc stringArrayToStringFWD(const RRStringArrayPtr list);
  \note Forwarded from roadruners C API
 */
 RRP_DECLSPEC char* rrp_cc getLastPluginError();
+
+/*!
+ \brief Free char* generated by library routines
+ \ingroup freeRoutines
+*/
+RRP_DECLSPEC bool rrp_cc freeText(char* text);
+
 
 #if defined(__cplusplus)
 } }    //rrp namespace and extern "C"
