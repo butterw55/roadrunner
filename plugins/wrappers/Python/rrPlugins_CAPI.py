@@ -1,4 +1,4 @@
-##@Module rrPlugins
+##@Module rrPlugins_CAPI
 #This module allows access to the rrplugins_api.dll from python"""
 import os
 import sys
@@ -1066,7 +1066,6 @@ def plotRoadRunnerData(data, colHeaders):
     
     for serie in range(nrOfSeries):
         ySeries = np.zeros([nrRows])
-        print 'creating series' + `serie`
         ySeries = data[:,serie + 1]
         plot.plot(x, ySeries, "", label=colHeaders[serie +1])      
               
