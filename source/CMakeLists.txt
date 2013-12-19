@@ -146,7 +146,6 @@ if(RR_BUILD_SHARED_CORE)
         nleq-static
         rr-libstruct-static
         poco_foundation-static
-        libxml2
         )
 
     if (USE_POCO_NET)
