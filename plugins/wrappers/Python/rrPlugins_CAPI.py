@@ -1125,6 +1125,18 @@ def getText(fName):
     file = open(fName, 'r')
     return file.read()
 
+## \brief Reads the entire contents of a file and returns it as a string
+##@code
+## str = readAllText ("mytextfile.txt")
+##@endcode
+
+def readAllText(fName):
+    file = open(fName, 'r')
+    str = file.read()
+    file.close()
+    return str
+
+
 ## \brief Free RoadRunnerData 
 ## \param dataHandle Handle to a roadrunner data object 
 ## \return Returns True or false indicating result
