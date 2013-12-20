@@ -251,7 +251,7 @@ def getPluginLibraryNames(pm):
     names = rrpLib.getPluginLibraryNames(pm)
     if not names:
         return list()    
-    return names.split(" ")
+    return names.split(",")
 
 ## \brief getFirstPlugin retrieves the "first" plugin in the plugin managers internal list of plugins.
 ## This function is typically used together with the getNextPlugin and the getPreviousPlugin functions.
