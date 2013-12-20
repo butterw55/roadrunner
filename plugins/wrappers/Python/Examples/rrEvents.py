@@ -2,7 +2,7 @@ import os
 import roadrunner
 import matplotlib.pyplot as plot
 import numpy
-from rrPlugins import *
+from rrPlugins_CAPI import *
 
 #Create a roadrunner instance
 rr = roadrunner.RoadRunner()

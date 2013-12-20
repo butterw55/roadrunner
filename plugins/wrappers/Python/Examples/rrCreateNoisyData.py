@@ -1,5 +1,5 @@
 import roadrunner
-from rrPlugins import *
+from rrPlugins_CAPI import *
 
 #Create a plugin manager
 pm = createPluginManager()
