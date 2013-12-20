@@ -108,7 +108,7 @@ NotifyEvent  = CFUNCTYPE(None)
 ## This is a helper object that a client can use as an argument to a roadrunner plugin.
 ## The exact number of plugins event functions required arguments, and their type is plugin dependent. A client of the
 ## the plugin need to get this information from plugin specific documentation. An example of 
-## using this particular function, NotifyIntStrEvent is shown below. As indicated, this python function takes two arguments.
+## using this particular function, NotifyIntIntEvent is shown below. As indicated, this python function takes two arguments.
 ## The first argument is an integer, indicating progress (possibly a percentage), the second argument is not used in this particular case, but still required.
 ##@code
 ##def pluginIsProgressing(progress, dummy):
@@ -118,11 +118,11 @@ NotifyEvent  = CFUNCTYPE(None)
 ## #Note, make sure you assign the event to a variable (c_event) so that the Python garbage 
 ## #collector doesn't delete it
 ## c_event = NotifyEvent(myPluginFunction)
-## c_event = NotifyIntStrEvent(pluginIsProgressing)
+## c_event = NotifyIntIntEvent(pluginIsProgressing)
 ## assignOnStartedEvent(plugin, c_event)
 ##@endcode
 ## \ingroup plugins
-NotifyIntStrEvent  = CFUNCTYPE(None, POINTER(c_int), c_void_p)
+NotifyIntIntEvent  = CFUNCTYPE(None, POINTER(c_int), c_void_p)
 
 ## \brief Create a new instance of a plugin manager.
 ## \brief A PluginManager manages a collection of plugins, loaded and unloaded by
