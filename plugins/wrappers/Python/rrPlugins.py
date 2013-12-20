@@ -1,6 +1,7 @@
 ##@Module rrPlugins_CAPI
 
 import rrPlugins_CAPI as rrp 
+import matplotlib.pyplot as plt
 
 __version__ = "0.5.01"
 
@@ -22,10 +23,11 @@ class DataSeries(object):
     def __getHandle (self):
         return self._data
         
-    def getnumpy (self):
+    def __AsNumpy (self):
         return rrp.getNumpyData (self._data)
 
     data = property (__getHandle)
+    AsNumpy = property (__AsNumpy)
     
 
 # ------------------------------------------------------------------------
@@ -41,11 +43,30 @@ class Plugins:
         if (isinstance (value, DataSeries)):        
            rrp.setPluginParameter (self.plugin, name, value.data)
         else:
-           rrp.setPluginParameter (self.plugin, name, value)
+           handle  = rrp.getPluginParameter(self.plugin, name);
+           t1 = rrp.getParameterType (handle)
+           if (t1 == "listOfParameters"):
+              if isinstance (value, list):
+                 if len(value) != 2:
+                    raise TypeError ("Expecting two elements in the parameter list")
+                 if not isinstance(value[0], str):
+                     raise TypeError("Expecting parameter name in first element of list")
+                 if (not isinstance(value[1], float)) and (isinstance(value[1], int)):
+                     raise TypeError("Expecting floating value in second element of list")               
+                 para1 = rrp.createParameter(value[0], "double", "", value[1])
+                 rrp.addParameterToList (handle, para1)
+              else:
+                 raise  TypeError ("Expecting a list in setParameter")
+           else:
+              rrp.setPluginParameter (self.plugin, name, value)
         
     def getParameter (self, name):
         handle = rrp.getPluginParameter (self.plugin, name)
-        return rrp.getParameter (handle)        
+        value = rrp.getParameter (handle)        
+        if (rrp.getParameterType(handle) == "roadRunnerData"):
+            return DataSeries (value)
+        else:        
+           return value         
         
     def loadDataSeriesAsNumPy (self, fileName):
         rrDataHandle = rrp.createRoadRunnerDataFromFile (fileName)
@@ -68,10 +89,29 @@ class Plugins:
            rrp.plotRoadRunnerData(npData, hdr)
         else:
            raise TypeError ("Expecting DataSeries type")
+           
+    def readAllText(self, fName):
+        file = open(fName, 'r')
+        str = file.read()
+        file.close()
+        return str
         
     def loadPlugins(self):
         rrp.loadPlugins (self.pluginsManager)
         
+        
+       
+def extractColumn (data, index):
+    return data[:,index]
+    
+def plot (data, myColor="red", myLinestyle="None", myMarker="None", myLabel=""):
+    columns = data.shape[1]
+    for i in range(columns-1):
+        p = plt.plot (data[:,0], data[:,i+1])
+        plt.setp (p, color=myColor, marker=myMarker, linestyle = myLinestyle, linewidth=1, label=myLabel)
+        plt.legend(bbox_to_anchor=(1.05, 1), loc=1, borderaxespad=0.)
+        return p
+         
 if __name__=='__main__':
     
     print "Starting Test"

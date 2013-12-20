@@ -1136,7 +1136,6 @@ def readAllText(fName):
     file.close()
     return str
 
-
 ## \brief Free RoadRunnerData 
 ## \param dataHandle Handle to a roadrunner data object 
 ## \return Returns True or false indicating result
