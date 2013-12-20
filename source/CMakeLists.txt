@@ -146,7 +146,14 @@ if(RR_BUILD_SHARED_CORE)
         nleq-static
         rr-libstruct-static
         poco_foundation-static
+
         )
+
+    if(WIN32)
+        target_link_libraries (${target}
+        libxml2
+        )
+    endif(WIN32)        
 
     if (USE_POCO_NET)
     target_link_libraries (${target}
@@ -155,8 +162,7 @@ if(RR_BUILD_SHARED_CORE)
     add_definitions(
         -DWITH_POCO_NET
     )
-
-    endif()
+    endif(USE_POCO_NET)
 
     if(UNIX)
         target_link_libraries (${target}
@@ -172,7 +178,7 @@ if(RR_BUILD_SHARED_CORE)
             )
     endif(UNIX)
 
-    #Libxml we can't build right now
+    #Libxml is not built. Use a VS converted import file for Borland
     if(${BORLAND})
         target_link_libraries (${target}
             libxml2_xe
