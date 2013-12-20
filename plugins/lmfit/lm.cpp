@@ -20,15 +20,15 @@ LM::LM(rr::RoadRunner* aRR)
 :
 CPPPlugin(                  "Levenberg-Marquardt", "Fitting",       aRR, NULL),
 mLMFit(                     "LMFit",                                "Fit Model Parameters Using the Levenberg-Marquardt Algorithm"),    //The 'capability'
-mSBML(                      "SBML",                                 "<none>",               "SBML, i.e. the model to be used in the fitting"),
-mObservedData(              "ExperimentalData",                     NULL,                   "Data object holding Experimental data: Provided by client"),
-mModelData(                 "FittedData",                           NULL,                   "Data object holding model data: Handed to client"),
-mResidualsData(             "Residuals",                            NULL,                   "Data object holding residuals: Handed to client"),
-mInputParameterList(        "InputParameterList",                   Parameters(),           "List of parameters to fit"),
-mOutputParameterList(       "OutputParameterList",                  Parameters(),           "List of parameters that was fittedt"),
-mObservedDataSelectionList( "ExperimentalDataSelectionList",            StringList(),       "Experimental data selection list"),
-mModelDataSelectionList(    "FittedDataSelectionList",               StringList(),           "Fitted data selection list"),
-mNorm(                      "Norm",                                 -1.0,                   "Norm of fitting. An estimate of goodness of fit"),
+mSBML(                      "<none>",               "SBML",                                 "SBML, i.e. the model to be used in the fitting"),
+mObservedData(              RoadRunnerData(),       "ExperimentalData",                     "Data object holding Experimental data: Provided by client"),
+mModelData(                 RoadRunnerData(),       "FittedData",                           "Data object holding model data: Handed to client"),
+mResidualsData(             RoadRunnerData(),       "Residuals",                            "Data object holding residuals: Handed to client"),
+mInputParameterList(        Parameters(),           "InputParameterList",                   "List of parameters to fit"),
+mOutputParameterList(       Parameters(),           "OutputParameterList",                  "List of parameters that was fittedt"),
+mObservedDataSelectionList( StringList(),           "ExperimentalDataSelectionList",        "Experimental data selection list"),
+mModelDataSelectionList(    StringList(),           "FittedDataSelectionList",              "Fitted data selection list"),
+mNorm(                      -1.0,                   "Norm",                                 "Norm of fitting. An estimate of goodness of fit"),
 mLMWorker(*this)
 {
     mVersion = "1.0";
@@ -52,10 +52,10 @@ mLMWorker(*this)
 LM::~LM()
 {
     //DE allocate data        
-    RoadRunnerData* data = mResidualsData.getValue();
-    delete data;
-    data =  mModelData.getValue();
-    delete data;
+//    RoadRunnerData* data = mResidualsData.getValue();
+//    delete data;
+//    data =  mModelData.getValue();
+//    delete data;
 }
 
 bool LM::isWorking()
@@ -99,10 +99,23 @@ bool LM::resetPlugin()
     }
 
     mTerminate = false;
-    mSBML.getValueReference().clear();
-    mObservedData.getValueReference()->clear();
-    mModelData.getValueReference()->clear();
-    mResidualsData.getValueReference()->clear();
+
+
+//    if(mObservedData.getValue())
+//    {
+//        mObservedData.getValueReference()->clear();
+//    }
+//
+//    if(mModelData.getValue())
+//    {
+//        mModelData.getValue()->clear();
+//    }
+//
+//    if(mResidualsData.getValue())
+//    {
+//        mResidualsData.getValueReference()->clear();
+//    }
+
     mInputParameterList.getValueReference().clear();
     mOutputParameterList.getValueReference().clear();
     mObservedDataSelectionList.getValueReference().clear();

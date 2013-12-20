@@ -114,13 +114,13 @@ void LMWorker::run()
     parsOut.clear();
     for (int i = 0; i < mLMData.nrOfParameters; ++i)
     {
-        parsOut.add(new Parameter<double>(mLMData.parameterLabels[i], mLMData.parameters[i], ""), true);
+        parsOut.add(new Parameter<double>(mLMData.parameters[i], mLMData.parameterLabels[i], ""), true);
     }
 
     mTheHost.mNorm.setValue(status.fnorm);
-    createModelData(mTheHost.mModelData.getValueReference());
+    createModelData(mTheHost.mModelData.getValuePointer());
 
-    createResidualsData(mTheHost.mResidualsData.getValueReference());
+    createResidualsData(mTheHost.mResidualsData.getValuePointer());
     workerFinished();
 }
 
@@ -164,7 +164,7 @@ bool LMWorker::setup()
         }
     }
 
-    RoadRunnerData& obsData             = *(mTheHost.mObservedData.getValueReference());
+    RoadRunnerData& obsData             = (mTheHost.mObservedData.getValueReference());
     mLMData.nrOfTimePoints              = obsData.rSize();
     mLMData.timeStart                   = obsData.getTimeStart();
     mLMData.timeEnd                     = obsData.getTimeEnd();
@@ -351,8 +351,8 @@ void LMWorker::createResidualsData(RoadRunnerData* _data)
 {
     RoadRunnerData& resData = *(_data);        
     //We now have the parameters
-    RoadRunnerData& obsData = *(mTheHost.mObservedData.getValueReference());
-    RoadRunnerData& modData = *(mTheHost.mModelData.getValueReference());
+    RoadRunnerData& obsData = (mTheHost.mObservedData.getValueReference());
+    RoadRunnerData& modData = (mTheHost.mModelData.getValueReference());
 
     resData.reSize(modData.rSize(), modData.cSize());
 

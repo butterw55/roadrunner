@@ -9,14 +9,41 @@ using namespace std;
 namespace rrp
 {
 
-PluginParameter::PluginParameter(const string& name, const string& hint)
+PluginParameter::PluginParameter(const string& type, const string& name, const string& hint)
 :
 mName(name),
-mHint(hint)
+mHint(hint),
+mType(type)
 {}
 
 PluginParameter::~PluginParameter()
 {}
+
+PluginParameter::PluginParameter(const PluginParameter& pp)
+{
+    //We could assert here, assigning incompatible types    
+    mName = pp.mName;
+    mType = pp.mType;
+    mHint = pp.mHint;
+}
+
+PluginParameter& PluginParameter::operator=(const PluginParameter& rhs)
+{
+    if((this) == &rhs)
+    {
+        return *(this);
+    }
+
+    mName = rhs.mName;
+    mType = rhs.mType;
+    mHint = rhs.mHint;
+    return *(this);
+}
+
+string PluginParameter::getType() const
+{
+    return mType;
+}
 
 string PluginParameter::getName() const
 {
@@ -50,66 +77,9 @@ void* PluginParameter::getValueHandle()
 
 string PluginParameter::getValueAsString() const
 {
-
-    PluginParameter* ptr = const_cast<PluginParameter*>(this);
-
-    //Test some downcasting..
-    if(dynamic_cast< Parameter<int>* >( ptr))
-    {
-        return dynamic_cast< Parameter<int>* >(ptr)->getValueAsString();
-    }
-
-    if(dynamic_cast< Parameter<double>* >(ptr))
-    {
-        return "double";
-    }
-
-    if(dynamic_cast< Parameter<bool>* >(ptr))
-    {
-        return "boolean";
-    }
-
-    return "Need to cast in subclass!";
-}
-
-string PluginParameter::asString() const
-{
     stringstream val;
-    val<<"Name: "<<mName<<endl;
-    val<<"Type: "<<getType()<<endl;
-    val<<"Value: "<<getValueAsString()<<endl;
-    val<<"Hint: "<<mHint<<endl;
+    val<<"The type:"<<getType()<<" do not have a string representation.";
     return val.str();
-}
-
-string PluginParameter::getType() const
-{
-    string val("no info");
-
-    //Downcasts
-    PluginParameter* ptr = const_cast<PluginParameter*>(this);
-
-    if(dynamic_cast< Parameter<int>* >(ptr))
-    {
-        return "integer";
-    }
-
-    if(dynamic_cast< Parameter<double>* >(ptr))
-    {
-        return "double";
-    }
-
-    if(dynamic_cast< Parameter<bool>* >(ptr))
-    {
-        return "boolean";
-    }
-
-    if(dynamic_cast< Parameter<rrc::RRCData*>* >(ptr))
-    {
-        return "RRCDataPtr";
-    }
-
-    return val;
 }
 
 ostream& operator<<(ostream& stream, const PluginParameter& outMe)
@@ -117,6 +87,17 @@ ostream& operator<<(ostream& stream, const PluginParameter& outMe)
     stream<<outMe.asString();   //virtual friend idiom
     return stream;
 }
+
+string PluginParameter::asString() const
+{
+    stringstream val;
+    val<<"Name: "<<     mName<<endl;
+    val<<"Type: "<<     getType()<<endl;
+    val<<"Value: "<<    getValueAsString()<<endl;
+    val<<"Hint: "<<     mHint<<endl;
+    return val.str();
+}
+
 
 
 }

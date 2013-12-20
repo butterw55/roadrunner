@@ -15,9 +15,9 @@ AddNoise::AddNoise(rr::RoadRunner* aRR, PluginEvent fn1, PluginEvent fn2, Plugin
 :
 CPPPlugin(                 "AddNoise",                 "Signal Processing",    aRR, NULL),
 mAddNoise(                 "Add Noise",                "Add artificial noise to data"),
-mNoiseType(                "NoiseType",                 ntGaussian,                     "Type of noise (Gaussian = 0, Psychological = 1)."),
-mSigma(                    "Sigma",                     1,                              "Size of applied noise"),
-mData(                     "InputData",                 NULL,                           "Pointer to RoadRunnerData to apply noise to"),
+mNoiseType(         ntGaussian,         "NoiseType",   "Type of noise (Gaussian = 0, Psychological = 1)."),
+mSigma(             1,                   "Sigma",       "Size of applied noise"),
+mData(              RoadRunnerData(),    "InputData",    "Pointer to RoadRunnerData to apply noise to"),
 mAddNoiseWorker(*this)
 {
     mVersion = "1.0";

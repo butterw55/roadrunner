@@ -47,9 +47,9 @@ void AddNoiseWorker::run()
         mTheHost.mWorkStartedEvent(NULL, mTheHost.mWorkStartedData2);
     }
 
-    if(mTheHost.mData.getValue())
-    {
-        RoadRunnerData& data = *(mTheHost.mData.getValue());
+//    if(mTheHost.mData.getValue())
+    //{
+        RoadRunnerData& data = (mTheHost.mData.getValueReference());
         Noise noise(0, mTheHost.mSigma.getValue());
         noise.randomize();
 
@@ -62,13 +62,13 @@ void AddNoiseWorker::run()
             }
 
             if(mTheHost.mWorkProgressEvent)
-            {                
+            {
                 int progress = (int) (row * 100.0) /(data.rSize() -1.0) ;
                 mTheHost.mWorkProgressEvent((void*) &progress,  mTheHost.mWorkProgressData2);
             }
         }
-    }
-    
+//    }
+
 
     if(mTheHost.mWorkFinishedEvent)
     {

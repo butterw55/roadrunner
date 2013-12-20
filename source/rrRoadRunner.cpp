@@ -338,7 +338,7 @@ bool RoadRunner::initializeModel()
     }
 }
 
-RoadRunnerData *RoadRunner::getSimulationResult()
+RoadRunnerData* RoadRunner::getSimulationResult()
 {
     return &mRoadRunnerData;
 }

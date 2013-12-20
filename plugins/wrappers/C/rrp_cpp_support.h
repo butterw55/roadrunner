@@ -43,10 +43,12 @@
 
 #ifndef rrp_cpp_supportH
 #define rrp_cpp_supportH
+#include <string>
 #include "rrp_api.h"
 #include "rrRoadRunnerData.h"
 namespace rrp
 {
+using std::string;
 template <class T>
 class Parameter;
 class Parameters;
@@ -136,14 +138,14 @@ Parameter<Parameters>*              castToParametersParameter(RRParameterHandle 
 rr::RoadRunnerData*                 castToRoadRunnerData(RRParameterHandle handle);
 
 /*!
- \brief Cast a handle to RoadRunner Parameter<RoadRunnerData*> pointer, throws if it fails
+ \brief Cast a handle to RoadRunner Parameter<RoadRunnerData> pointer, throws if it fails
  \param[in] handle  A handle to a roadrunner parameter instance
- \return Pointer to a Parameter<RoadRunnerData>* instance
- \note To limit the amount of supported types, the underlying type can only be of Pointer to RoadRunner
+ \return Pointer to a Parameter<RoadRunnerData> instance
+ \note To limit the amount of supported types, the underlying type can only be of RoadRunnerData, not pointer to
   data.
  \ingroup cpp_support
 */
-Parameter<rr::RoadRunnerData*>*      castToRoadRunnerDataParameter(RRParameterHandle handle);
+Parameter<rr::RoadRunnerData>*      castToRoadRunnerDataParameter(RRParameterHandle handle);
 
 //Result data
 /*!

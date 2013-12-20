@@ -23,9 +23,9 @@ class LM : public CPPPlugin
     protected:
         Capability                              mLMFit;        
         Parameter<string>                       mSBML;                          //This is the model
-        Parameter<RoadRunnerData*>              mObservedData;
-        Parameter<RoadRunnerData*>              mModelData;
-        Parameter<RoadRunnerData*>              mResidualsData;
+        Parameter<RoadRunnerData>              mObservedData;
+        Parameter<RoadRunnerData>              mModelData;
+        Parameter<RoadRunnerData>              mResidualsData;
         Parameter<Parameters>                   mInputParameterList;            //Parameters to fit
         Parameter<Parameters>                   mOutputParameterList;           //Parameters that was fitted
         Parameter<StringList>                   mObservedDataSelectionList;     //Species selection list for observed data

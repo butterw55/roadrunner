@@ -133,5 +133,4 @@ ostream& operator<<(ostream& stream, const Parameters& paras)
     return stream;
 }
 
-
 }

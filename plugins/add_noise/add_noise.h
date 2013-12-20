@@ -23,7 +23,7 @@ class AddNoise : public CPPPlugin
         Capability                  mAddNoise;
         Parameter<int>              mNoiseType;
         Parameter<double>           mSigma;
-        Parameter<RoadRunnerData*>  mData;
+        Parameter<RoadRunnerData>  mData;
         AddNoiseWorker              mAddNoiseWorker;
 
     public:
@@ -47,8 +47,9 @@ RR_PLUGIN_DECLSPEC const char*  plugins_cc getImplementationLanguage();
 
 namespace rrp
 {
+
 template<>
-inline string Parameter<addNoise::AddNoise::NoiseType>::getType() const
+inline string getParaType(const addNoise::AddNoise::NoiseType& value)
 {
     return "NoiseType";
 }
