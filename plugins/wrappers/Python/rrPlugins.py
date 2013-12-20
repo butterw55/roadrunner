@@ -31,15 +31,13 @@ class DataSeries(object):
     
 
 # ------------------------------------------------------------------------
-    
-_pluginManager = rrp.createPluginManager()
-_pluginsAlreadyLoaded = False
-    
-class Plugin:
+        
+class Plugins:
 
     def __init__(self, pluginName):
+        self.pluginManager = rrp.createPluginManager()
         self.pluginName = pluginName
-        self.plugin = rrp.loadPlugin (_pluginManager, pluginName)
+        self.plugin = rrp.loadPlugin (self.pluginManager, pluginName)
                
     def setParameter(self, name, value):
         if (isinstance (value, DataSeries)):        
@@ -68,10 +66,7 @@ class Plugin:
         if (rrp.getParameterType(handle) == "roadRunnerData"):
             return DataSeries (value)
         else:        
-           return value    
-          
-    def listOfParameters ():          
-        return ['x', 'y']
+           return value         
         
     def loadDataSeriesAsNumPy (self, fileName):
         rrDataHandle = rrp.createRoadRunnerDataFromFile (fileName)
@@ -104,26 +99,6 @@ class Plugin:
     def loadPlugins(self):
         rrp.loadPlugins (self.pluginsManager)
         
-    @staticmethod
-    def listOfPlugins():
-        global _pluginsAlreadyLoaded
-        # Hack to get round bug in loadPlugins
-        if not _pluginsAlreadyLoaded:
-           rrp.loadPlugins (_pluginManager)
-           _pluginsAlreadyLoaded = True
-           
-        aList = []
-        names = rrp.getPluginLibraryNames (_pluginManager) 
-        n = rrp.getNumberOfPlugins (_pluginManager)
-        for i in range (0, n): 
-            handle = rrp.getPlugin(_pluginManager, names[i])  
-            info = rrp.getPluginInfo (handle)  
-            info = info.split ("\n")        
-            #name = rrp.getPluginName(handle)
-            hint = info[2]
-            hint = hint.replace("Category......................", "")
-            aList.append ([names[i], hint])
-        return aList        
         
        
 def extractColumn (data, index):
@@ -141,23 +116,14 @@ if __name__=='__main__':
     
     print "Starting Test"
     
-    rrp.loadPlugins (_pluginManager)
-    print rrp.getPluginLibraryNames (_pluginManager)
-    p = rrp.getPlugin(_pluginManager, "rrp_add_noise")    
-    #print p    
-    info = rrp.getPluginInfo (p)    
-    print info
-    info = info.split ("\n")
-    #print info
-    print info[0].replace (".", "")
-#    p = Plugin ("rrp_add_noise")
-#    p.setParameter ("Sigma", 0.0001)
-#    
-#    series = p.loadDataSeries (".\\Examples\\testData.dat") 
-#    p.plotTimeSeriesHandle (series)
-#    p.setParameter ("InputData", series)
-#    p.execute()
-#    p.plotTimeSeriesHandle (series)
+    p = Plugins ("rrp_add_noise")
+    p.setParameter ("Sigma", 0.0001)
+    
+    series = p.loadDataSeries (".\\Examples\\testData.dat") 
+    p.plotTimeSeriesHandle (series)
+    p.setParameter ("InputData", series)
+    p.execute()
+    p.plotTimeSeriesHandle (series)
     
     print "Test Finished"
         
