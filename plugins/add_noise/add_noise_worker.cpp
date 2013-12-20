@@ -64,7 +64,7 @@ void AddNoiseWorker::run()
             if(mTheHost.mWorkProgressEvent)
             {
                 int progress = (int) (row * 100.0) /(data.rSize() -1.0) ;
-                mTheHost.mWorkProgressEvent((void*) &progress,  mTheHost.mWorkProgressData2);
+                mTheHost.mWorkProgressEvent((void*) progress,  mTheHost.mWorkProgressData2);
             }
         }
 //    }
