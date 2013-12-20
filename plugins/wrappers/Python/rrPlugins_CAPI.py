@@ -122,7 +122,7 @@ NotifyEvent  = CFUNCTYPE(None)
 ## assignOnStartedEvent(plugin, c_event)
 ##@endcode
 ## \ingroup plugins
-NotifyIntIntEvent  = CFUNCTYPE(None, POINTER(c_int), c_void_p)
+NotifyIntEvent  = CFUNCTYPE(None, c_int)
 
 ## \brief Create a new instance of a plugin manager.
 ## \brief A PluginManager manages a collection of plugins, loaded and unloaded by
@@ -986,9 +986,8 @@ def getParameter(paraHandle):
     if paraType == 'listOfParameters':
         return getParameterValueHandle(paraHandle)    
     if paraType == 'roadRunnerData': #The value of this is a handle
-        paraVoidPtr = getParameterValueHandle(paraHandle)
-        ptr = cast(paraVoidPtr, POINTER(c_void_p))
-        return ptr[0]             
+        ptr = getParameterValueHandle(paraHandle)        
+        return ptr             
     else:
        raise TypeError ('Parameter is not a string type')
 
@@ -1018,9 +1017,8 @@ def getParameterValue(paraHandle):
     if paraType == 'listOfParameters':
         return getParameterValueHandle(paraHandle)    
     if paraType == 'roadRunnerData': #The value of this is a handle
-        paraVoidPtr = getParameterValueHandle(paraHandle)
-        ptr = cast(paraVoidPtr, POINTER(c_void_p))
-        return ptr[0]             
+        ptr = getParameterValueHandle(paraHandle)        
+        return ptr             
     else:
        raise TypeError ('Parameter is not a string type')
 
@@ -1277,24 +1275,24 @@ def unLoadAPI():
 ## -# Get a handle to a plugin
 ## -# Obtain some info from the plugin
 
-## \example rrPluginParameterDemo.py
+## \example rrPluginParameter.py
 ## This Example shows
 ## -# Get a handle to a parameter in a Plugin
 ## -# Obtain some info about the parameter
 ## -# Getting the value of the parameter
 ## -# Setting the value of the parameter
 
-## \example rrPluginDocumentationDemo.py
+## \example rrPluginDocumentation.py
 ## This Example shows
 ## -# Get a plugin's categories in the form of an XML string
 ## -# Obtain and view a Plugin's documentation as a PDF (Needs a system PDF reader)
 
-## \example rrEventFunctionDemo.py
+## \example rrEventFunction.py
 ## This Example shows
 ## -# How to define Python event functions and passing them to a plugin
 
-## \example rrNoisePluginDemo.py
+## \example rrNoisePlugin.py
 ## This Example Demonstrate the use of the AddNoise plugin
 
-## \example rrLevenbergMarquardtDemo.py
+## \example rrLevenbergMarquardt.py
 ## This Example Demonstrate the use of the Minimization Plugin, using the Levenberg-Marquardt algorithm.

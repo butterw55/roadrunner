@@ -12,6 +12,7 @@ endif()
 install(
         FILES 
         rrPlugins.py 
+        rrPlugins_CAPI.py 
         README.txt 
         DESTINATION plugins/python  	
         COMPONENT plugins_api

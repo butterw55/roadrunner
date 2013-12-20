@@ -13,8 +13,8 @@ pm = createPluginManager()
 def pluginStarted():
     print 'The plugin was started'
 
-def pluginIsProgressing(progress, dummy):
-    nr = progress[0]
+def pluginIsProgressing(progress):
+    nr = progress
     print '\nPlugin progress:' + `nr` +' %'
 
 def pluginIsFinished():
@@ -51,32 +51,24 @@ setParameterByString(sigmaHandle, '0.01')
 cb_func1 =  NotifyEvent(pluginStarted)
 assignOnStartedEvent(plugin,  cb_func1)
 
-cb_func2 =  NotifyIntStrEvent(pluginIsProgressing)
+cb_func2 =  NotifyIntEvent(pluginIsProgressing)
 assignOnProgressEvent(plugin, cb_func2)
 
 cb_func3 =  NotifyEvent(pluginIsFinished)
 assignOnFinishedEvent(plugin, cb_func3)
 
 #Assign data to the plugin
-setPluginParameter(plugin,"InputData", getRoadRunnerDataHandle(rr))
+pluginData = getPluginParameter(plugin,"InputData")
+setParameter(pluginData, getRoadRunnerDataHandle(rr))
 
 #Execute the noise plugin which will add some noise to the (internal) data
-executePluginEx(plugin, True)
+executePluginEx(plugin)
 
-while isPluginWorking(plugin) == True:
-    print ('.'),
+#Retrieve data from plugin
 
-result = rr.getSimulationResult()
-x = result['time']
-y = result['[x]']
-
-plot.plot(x, y, label="[x]")
-
-plot.legend(bbox_to_anchor=(1.05, 1), loc=5, borderaxespad=0.)
-plot.ylabel('Concentration (moles/L)')
-plot.xlabel('time (s)')
-plot.show()
-
+rrData = getNumpyData(getParameter(pluginData))
+colNames = getRoadRunnerDataColumnHeader(getParameter(pluginData))
+plotRoadRunnerData(rrData, colNames)
 unLoadPlugins(pm)
 unLoadAPI()
 
