@@ -90,13 +90,13 @@ class ParameterObject:
 ## \brief Plugin function event type definition
 ## This is a helper object that a client can use as an argument to a roadrunner plugin.
 ## The exact number of plugins functions required arguments, and their type, is plugin dependent. A client of the
-## the plugin needs to get this information from the plugin specific documentation. 
+## the plugin needs to get this information from the plugin specific documentation.
 ## An example of using NotifyEvent is shown below. The NotifyEvent takes no arguments.
 ##@code
 ##def myPluginFunction():
 ##    print 'The plugin can call this function!'
 ## #The user can assign this function as a plugin event to monitor the start of the plugin as follows.
-## #Note, make sure you assign the event to a variable (c_event) so that the Python garbage 
+## #Note, make sure you assign the event to a variable (c_event) so that the Python garbage
 ## #collector doesn't delete it
 ## c_event = NotifyEvent(myPluginFunction)
 ## assignOnStartedEvent(plugin,  c_event)
@@ -107,15 +107,15 @@ NotifyEvent  = CFUNCTYPE(None)
 ## \brief Plugin function event type definition
 ## This is a helper object that a client can use as an argument to a roadrunner plugin.
 ## The exact number of plugins event functions required arguments, and their type is plugin dependent. A client of the
-## the plugin need to get this information from plugin specific documentation. An example of 
-## using this particular function, NotifyIntIntEvent is shown below. As indicated, this python function takes two arguments.
+## the plugin need to get this information from plugin specific documentation. An example of
+## using this particular function, NotifyIntEvent is shown below. As indicated, this python function takes two arguments.
 ## The first argument is an integer, indicating progress (possibly a percentage), the second argument is not used in this particular case, but still required.
 ##@code
 ##def pluginIsProgressing(progress, dummy):
 ##    nr = progress[0]
 ##    print '\nPlugin progress:' + `nr` +' %'
 ## #The user can assign this function as a plugin event to monitor the start of the plugin as follows.
-## #Note, make sure you assign the event to a variable (c_event) so that the Python garbage 
+## #Note, make sure you assign the event to a variable (c_event) so that the Python garbage
 ## #collector doesn't delete it
 ## c_event = NotifyEvent(myPluginFunction)
 ## c_event = NotifyIntIntEvent(pluginIsProgressing)
@@ -123,6 +123,25 @@ NotifyEvent  = CFUNCTYPE(None)
 ##@endcode
 ## \ingroup plugins
 NotifyIntEvent  = CFUNCTYPE(None, c_int)
+
+## \brief Plugin function event type definition
+## This is a helper object that a client can use as an argument to a roadrunner plugin.
+## The exact number of plugins event functions required arguments, and their type is plugin dependent. A client of the
+## the plugin need to get this information from plugin specific documentation. An example of
+## using this particular function, NotifyStringEvent is shown below. As indicated, this function takes two arguments.
+## The first argument is a string, passes as a C char* (c_char_p), carrying a progress message for example.
+##@code
+##def pluginIsProgressing(progress):
+##    print '\nPlugin progress:' + progress
+## #The user can assign this function as a plugin event to monitor the progress of the plugin as follows.
+## #Note, make sure you assign the event to a variable (c_event) so that the Python garbage
+## #collector doesn't delete it
+## c_event = NotifyEvent(myPluginFunction)
+## c_event = NotifyStringEvent(pluginIsProgressing)
+## assignOnProgressEvent(plugin, c_event)
+##@endcode
+## \ingroup plugins
+NotifyStringEvent  = CFUNCTYPE(None, c_char_p)
 
 ## \brief Create a new instance of a plugin manager.
 ## \brief A PluginManager manages a collection of plugins, loaded and unloaded by
@@ -132,9 +151,9 @@ NotifyIntEvent  = CFUNCTYPE(None, c_int)
 ##
 ## @code
 ## pm = rrPlugins.createPluginManager()
-## @endcode 
-## \htmlonly  <br/> 
-## \endhtmlonly 
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
 ## \ingroup plugin_manager
 
 rrpLib.createPluginManager.restype = c_void_p
@@ -157,10 +176,10 @@ def freePluginManager(pm):
 ## \param pm Handle to a PluginManager instance
 ## \return Returns true if Plugins are loaded, false otherwise
 ##
-## @code sucess = rrPlugins.loadPlugins (pm) 
+## @code sucess = rrPlugins.loadPlugins (pm)
 ## @endcode
-## \htmlonly  <br/> 
-## \endhtmlonly 
+## \htmlonly  <br/>
+## \endhtmlonly
 ## \ingroup plugin_manager
 ##
 rrpLib.loadPlugins.restype = c_bool
@@ -168,7 +187,7 @@ def loadPlugins(pm):
     return rrpLib.loadPlugins(pm)
 
 ##
-## \brief Unload all plugins. 
+## \brief Unload all plugins.
 ## \param pm Handle to a PluginManager instance
 ## \return Returns true if Plugins are unloaded succesfully, false otherwise
 ##
@@ -181,15 +200,15 @@ def unLoadPlugins(pm):
 ##
 ## \brief Load a particular plugin
 ## \param pm Handle to a PluginManager instance
-## \param pluginName Name of the plugin to load. The plugin name is the plugin's shared library name, without path and extension. 
+## \param pluginName Name of the plugin to load. The plugin name is the plugin's shared library name, without path and extension.
 ## The library names for the plugins can be obtained by calling getPluginNames()
 ## \return Returns a handle to a plugin, None if unsuccesful
 ##
 ## @code
 ## lmPlugin = rrPlugins.loadPlugin(pm, "rrp_lm")
-## @endcode 
-## \htmlonly  <br/> 
-## \endhtmlonly 
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
 ## \ingroup plugin_manager
 ##
 def loadPlugin(pm, pluginName):
@@ -221,9 +240,9 @@ def getNumberOfPlugins(pm):
 ## names = rrPlugins.getPluginNames(pm)
 ## print names
 ## ['AddNoise', 'Levenberg-Marquardt']
-## @endcode 
-## \htmlonly  <br/> 
-## \endhtmlonly 
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
 ## \ingroup plugin_manager
 rrpLib.getPluginNames.restype = c_char_p
 def getPluginNames(pm):
@@ -231,7 +250,7 @@ def getPluginNames(pm):
     res = names
     rrpLib.freeText(c_char_p(names))
     if not res:
-        return list()    
+        return list()
     return res.split(",")
 
 ## \brief Function to retrieve the library names of all currently loaded plugins.
@@ -242,15 +261,15 @@ def getPluginNames(pm):
 ## names = rrPlugins.getPluginLibraryNames(pm)
 ## print names
 ## ['rrp_add_noise', 'rrp_lm']
-## @endcode 
-## \htmlonly  <br/> 
-## \endhtmlonly 
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
 ## \ingroup plugin_manager
 rrpLib.getPluginLibraryNames.restype = c_char_p
 def getPluginLibraryNames(pm):
     names = rrpLib.getPluginLibraryNames(pm)
     if not names:
-        return list()    
+        return list()
     return names.split(",")
 
 ## \brief getFirstPlugin retrieves the "first" plugin in the plugin managers internal list of plugins.
@@ -308,9 +327,9 @@ def getPlugin(pm, pluginName):
 ##
 ## @code
 ## name = rrPlugins.getPluginName(pluginHandle)
-## @endcode 
-## \htmlonly  <br/> 
-## \endhtmlonly 
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
 ## \ingroup plugins
 rrpLib.getPluginName.restype = c_char_p
 def getPluginName(pluginHandle):
@@ -341,9 +360,9 @@ def getPluginInfo(pluginHandle):
 ##    output.write(manual)
 ## os.system('start ' + outFName)
 ##
-## @endcode 
-## \htmlonly  <br/> 
-## \endhtmlonly 
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
 ## \ingroup plugins
 rrpLib.getPluginManualAsPDF.restype =  POINTER(c_ubyte)
 def getPluginManualAsPDF(pluginHandle):
@@ -364,9 +383,9 @@ def getPluginManualNrOfBytes(pluginHandle):
 ## @code
 ## success = displayPluginManual(pluginHandle)
 ##
-## @endcode 
-## \htmlonly  <br/> 
-## \endhtmlonly 
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
 ## \ingroup plugins
 def displayPluginManual(pluginHandle):
     ptr = getPluginManualAsPDF(pluginHandle)
@@ -379,8 +398,8 @@ def displayPluginManual(pluginHandle):
     print outFName
     with open(outFName, 'wb') as output:
       output.write(manual)
-    os.system('start ' + outFName) 
-    
+    os.system('start ' + outFName)
+
 ## \brief Assign a roadrunner instance handle for the plugin to use.
 ##    A plugin may use an externally created roadrunner instance for its internal work.
 ##  \param pluginHandle Handle to a plugin
@@ -422,7 +441,7 @@ def getPluginStatus(pluginHandle):
 
 ## \brief Returns a plugins result, as a string. This is plugin dependent, and a plugin designer may, or may not, implement
 ## this function. See the plugin documentation for details.
-## \note If a plugin wants to returns specific result, e.g. an Array, or a a float, these are better communicated 
+## \note If a plugin wants to returns specific result, e.g. an Array, or a a float, these are better communicated
 ## through the use of Plugin Parameters.
 ## \param pluginHandle Handle to a plugin
 ## \return Returns a plugins result if available. None otherwise
@@ -439,9 +458,9 @@ rrpLib.resetPlugin.restype = c_bool
 def resetPlugin(pluginHandle):
     return rrpLib.resetPlugin(pluginHandle)
 
-## \brief Check if a plugin is actively working. This function is used when the work in the plugin is 
+## \brief Check if a plugin is actively working. This function is used when the work in the plugin is
 ## executed in a thread (see executeEx). The isPluginWorking will return true as long work is being active
-## and false when the work is done. This is useful in UI environments. Also, see the various event types on 
+## and false when the work is done. This is useful in UI environments. Also, see the various event types on
 ## how to get status back from a plugin during its execution.
 ## \param pluginHandle Handle to a plugin
 ## \return Returns true or false indicating if the plugin is busy or not
@@ -459,7 +478,7 @@ rrpLib.terminateWork.restype = c_bool
 def terminateWork(pluginHandle):
     return rrpLib.terminateWork(pluginHandle)
 
-## \brief Check if the work of a plugin is currently being terminated. This function is useful when a plugin is executed in a thread. 
+## \brief Check if the work of a plugin is currently being terminated. This function is useful when a plugin is executed in a thread.
 ## \param pluginHandle Handle to the plugin
 ## \return Returns true or false indicating if the work within the plugin is in the process of being terminated
 ## \ingroup plugins
@@ -544,9 +563,9 @@ def getListOfPluginParameterNames(pluginHandle):
     paraNames =  rrpLib.getListOfPluginParameterNames(pluginHandle)
     if not paraNames:
         return list()
-    else:        
-        names = paraNames.split(',')     
-        return names 
+    else:
+        names = paraNames.split(',')
+        return names
 
 ## \brief Clear a list of parameters. Some parameters exposed by plugins are lists that can hold other parameters. New parameter can be
 ## added to these lists. clearParameterList can be used to clear the list is a new list needs to be constructed.
@@ -571,11 +590,11 @@ def getNamesFromParameterList(paraMeterHandle):
     paras = rrpLib.getNamesFromParameterList(listHandle)
     if not paras:
         return list()
-    else:        
-        names = paras.split(',')     
-        return names            
+    else:
+        names = paras.split(',')
+        return names
 
-## \brief Get a the properties of a plugins in xml format. 
+## \brief Get a the properties of a plugins in xml format.
 ## \param pluginHandle Handle to a plugin
 ## \return Returns a string on success, None otherwise
 ## \ingroup plugin_parameters
@@ -606,7 +625,7 @@ def getNextParameter(paraListHandle):
 def getPluginParameter(pluginHandle, parameterName):
     return rrpLib.getPluginParameter(pluginHandle, parameterName)
 
-## \brief Set the value of a PluginParameter 
+## \brief Set the value of a PluginParameter
 ## \param pluginHandle Handle to a plugin
 ## \param parameterName Name of parameter
 ## \param paraValue Value of parameter
@@ -618,28 +637,28 @@ def setPluginParameter(pluginHandle, parameterName, paraValue):
     if paraHandle:
         paraType = getParameterType(paraHandle)
         if paraType == 'bool':
-            return setBoolParameter(paraHandle, paraValue)          
+            return setBoolParameter(paraHandle, paraValue)
         if paraType == 'int':
             return setIntParameter(paraHandle, paraValue)
         if paraType == 'double':
             return setDoubleParameter(paraHandle, paraValue)
         if paraType == 'string':
-            return setStringParameter(paraHandle, paraValue)            
+            return setStringParameter(paraHandle, paraValue)
         if paraType == 'std::string': #Behaves the same in the backend
-            return setStringParameter(paraHandle, paraValue)            
+            return setStringParameter(paraHandle, paraValue)
         if paraType == 'listOfParameters':
-            return setListParameter(paraHandle, paraValue)                
+            return setListParameter(paraHandle, paraValue)
         if paraType == 'roadRunnerData': #The value of this is a handle
             return setRoadRunnerDataParameter(paraHandle, paraValue)
         if paraType == 'StringList':
-            return setParameterByString(paraHandle, paraValue)                                 
+            return setParameterByString(paraHandle, paraValue)
         else:
            raise TypeError ('Cannot set the value of such parameter')
     else:
-           raise ('Bad Handle')                        
+           raise ('Bad Handle')
     return False
 
-## \brief Set the value of a Parameter 
+## \brief Set the value of a Parameter
 ## \param parameter handle Handle to a parameter
 ## \param paraValue Value of parameter
 ## \return true if successful, false otherwise
@@ -648,25 +667,25 @@ def setParameter(paraHandle, paraValue):
     if paraHandle:
         paraType = getParameterType(paraHandle)
         if paraType == 'bool':
-            return setBoolParameter(paraHandle, paraValue)          
+            return setBoolParameter(paraHandle, paraValue)
         if paraType == 'int':
             return setIntParameter(paraHandle, paraValue)
         if paraType == 'double':
             return setDoubleParameter(paraHandle, paraValue)
         if paraType == 'string':
-            return setStringParameter(paraHandle, paraValue)            
+            return setStringParameter(paraHandle, paraValue)
         if paraType == 'std::string': #Behaves the same in the backend
-            return setStringParameter(paraHandle, paraValue)            
+            return setStringParameter(paraHandle, paraValue)
         if paraType == 'listOfParameters':
-            return setListParameter(paraHandle, paraValue)                
+            return setListParameter(paraHandle, paraValue)
         if paraType == 'roadRunnerData': #The value of this is a handle
             return setRoadRunnerDataParameter(paraHandle, paraValue)
         if paraType == 'StringList':
-            return setParameterByString(paraHandle, paraValue)                                 
+            return setParameterByString(paraHandle, paraValue)
         else:
            raise TypeError ('Cannot set the value of such parameter')
     else:
-           raise ('Bad Handle')                        
+           raise ('Bad Handle')
     return False
 
 ## \brief Set the description of a parameter
@@ -686,7 +705,7 @@ def setParameterDescription(paraHandle, descr):
 rrpLib.setParameterHint.restype = c_bool
 def setParameterHint(paraHandle, descr):
     return rrpLib.setParameterHint(paraHandle, descr)
-    
+
 ## \brief Create a parameter of type "type" with a name and hint property
 ##  Valid types include: 'bool', 'int', 'double', 'string', and 'listOfParameters'
 ## \param name The parameters name as a string
@@ -697,14 +716,14 @@ def setParameterHint(paraHandle, descr):
 ##
 ## @code
 ## parameterHandle = rrPlugins.createParameter ("k1", string", "A message")
-##  
+##
 ##parameterHandle = rrPlugins.createParameter ("k1", "double", "A rate constant", 0.3)
 ## @endcode
-## \htmlonly  <br/> 
-## \endhtmlonly 
+## \htmlonly  <br/>
+## \endhtmlonly
 ## \ingroup plugin_parameters
 rrpLib.createParameter.restype = c_void_p
-def createParameter(name, the_type, hint="", value=None):    
+def createParameter(name, the_type, hint="", value=None):
     if value == None:
        return rrpLib.createParameter(name, the_type, hint, value)
     else:
@@ -718,15 +737,15 @@ def createParameter(name, the_type, hint="", value=None):
         elif the_type is "float":
            setDoubleParameter (ptr, value)
         elif the_type is "double":
-           setDoubleParameter (ptr, value)           
+           setDoubleParameter (ptr, value)
         elif the_type is "string":
            setStringParameter (ptr, value)
         elif the_type is "std::string":
            setStringParameter (ptr, value)
-           
+
         else:
-            print "Error: Can't set the value of parameter with type:" + the_type     
-        return ptr     
+            print "Error: Can't set the value of parameter with type:" + the_type
+        return ptr
 
 ## \brief Free memory for a parameter
 ## \param paraHandle Handle to a Parameter instance
@@ -737,11 +756,11 @@ def freeParameter(paraHandle):
     return rrpLib.freeParameter(paraHandle)
 
 
-## \brief Add a parameter to a list of parameters. 
+## \brief Add a parameter to a list of parameters.
 ## Some plugins may have parameters that
-## require list of parameters to be specified. For example when deciding what kinetic parameters to fit in a model, the list 
+## require list of parameters to be specified. For example when deciding what kinetic parameters to fit in a model, the list
 ## of kinetic parameters can be pass to the plugin as a list. This method can be used to add the names of the kinetic parameters
-## to the list. 
+## to the list.
 ## \param list A Handle to a Parameter with type listOfParameters
 ## \param paraHandle Handle to the parameter to add to the list(see createParameter)
 ## \return Returns a Boolean indicating success
@@ -751,12 +770,12 @@ def freeParameter(paraHandle):
 ## newParameter = createParameter("k1", "double", "A Hint", 0.2)
 ## addParameterToList(paraList, newParameter)
 ## @endcode
-## \htmlonly  <br/> 
-## \endhtmlonly 
+## \htmlonly  <br/>
+## \endhtmlonly
 ## \ingroup plugin_parameters
 rrpLib.addParameterToList.restype = c_bool
 def addParameterToList(paraHandle, addMe):
-    #Make sure the parameter is of type list    
+    #Make sure the parameter is of type list
     if getParameterType(paraHandle) == 'listOfParameters':
         listHandle = getParameterValue(paraHandle)
         return rrpLib.addParameterToList(listHandle, addMe)
@@ -796,8 +815,8 @@ def getParameterValueAsString(paraHandle):
 ## @code
 ## parameterHandle = rrPlugins.getParameterValueHandle (parhandle)
 ## @endcode
-## \htmlonly  <br/> 
-## \endhtmlonly 
+## \htmlonly  <br/>
+## \endhtmlonly
 ## \ingroup plugin_parameters
 rrpLib.getParameterValueHandle.restype = c_void_p
 def getParameterValueHandle(paraHandle):
@@ -838,7 +857,7 @@ def getBoolParameter (paraHandle):
         if rrpLib.getBoolParameter (paraHandle, byref(val)) == True:
             return val.value
         else:
-            raise ('Parameter value could not be retrieved')     
+            raise ('Parameter value could not be retrieved')
     else:
        raise TypeError ('Parameter is not a Boolean type')
 
@@ -862,10 +881,10 @@ def getIntParameter (paraHandle):
         if rrpLib.getIntParameter (paraHandle, byref(val)) == True:
             return val.value
         else:
-            raise ('Parameter value could not be retrieved')            
+            raise ('Parameter value could not be retrieved')
     else:
        raise TypeError ('Parameter is not an integer type')
-    
+
 ## \brief Set an integer parameter
 ## \param paraHandle to a Parameter instance
 ## \param value to assign to the parameter.
@@ -887,10 +906,10 @@ def getDoubleParameter (paraHandle):
         if rrpLib.getDoubleParameter (paraHandle, byref(val)) == True:
             return val.value
         else:
-            raise ('Parameter value could not be retrieved')            
+            raise ('Parameter value could not be retrieved')
     else:
        raise TypeError ('Parameter is not a double type')
-    
+
 ## \brief Set the value for a double parameter
 ## \param paraHandle Is a parameter instance
 ## \param value to assign to the parameter.
@@ -903,7 +922,7 @@ def setDoubleParameter(paraHandle, value):
 ## \brief Get the string value for a parameter
 ## \param paraHandle to a parameter instance
 ## \return Returns a string value. Throws an exception if the parameter type is not a string
-## \ingroup plugin_parameters 
+## \ingroup plugin_parameters
 rrpLib.getStringParameter.restype = c_bool
 def getStringParameter (paraHandle):
     if getParameterType (paraHandle) == "string" or getParameterType (paraHandle) == "std::string":
@@ -911,10 +930,10 @@ def getStringParameter (paraHandle):
         if rrpLib.getStringParameter (paraHandle, byref(val)) == True:
             return val.value
         else:
-            raise ('Parameter value could not be retrieved')       
+            raise ('Parameter value could not be retrieved')
     else:
        raise TypeError ('Parameter is not a string type')
-    
+
 ## \brief Set a string parameter
 ## \param paraHandle Handle to a Parameter instance
 ## \param value Value to assign to the parameter.
@@ -927,14 +946,14 @@ def setStringParameter(paraHandle, value):
 ## \brief Get the list value for a parameter
 ## \param paraHandle to a parameter instance
 ## \return Returns a handle to a ListParameter. Throws an exception of the parameter type is not a list of parameters
-## \ingroup plugin_parameters 
+## \ingroup plugin_parameters
 rrpLib.getListParameter.restype = c_bool
 def getListParameter (paraHandle):
     if getParameterType (paraHandle) == "listOfParameters":
         return getParameterValueHandle(paraHandle)
     else:
        raise TypeError ('Parameter is not a list type')
-    
+
 ## \brief Set a list parameter
 ## \param paraHandle to a Parameter instance
 ## \param value Value to assign to the parameter (must be a handle to a Parameter of listOfParameters.
@@ -984,10 +1003,10 @@ def getParameter(paraHandle):
     if paraType == 'string':
         return getParameterValueAsString(paraHandle)
     if paraType == 'listOfParameters':
-        return getParameterValueHandle(paraHandle)    
+        return getParameterValueHandle(paraHandle)
     if paraType == 'roadRunnerData': #The value of this is a handle
-        ptr = getParameterValueHandle(paraHandle)        
-        return ptr             
+        ptr = getParameterValueHandle(paraHandle)
+        return ptr
     else:
        raise TypeError ('Parameter is not a string type')
 
@@ -1015,15 +1034,15 @@ def getParameterValue(paraHandle):
     if paraType == 'string':
         return getParameterValueAsString(paraHandle)
     if paraType == 'listOfParameters':
-        return getParameterValueHandle(paraHandle)    
+        return getParameterValueHandle(paraHandle)
     if paraType == 'roadRunnerData': #The value of this is a handle
-        ptr = getParameterValueHandle(paraHandle)        
-        return ptr             
+        ptr = getParameterValueHandle(paraHandle)
+        return ptr
     else:
        raise TypeError ('Parameter is not a string type')
 
 ## \brief Retrieve a handle to RoadRunners internal data object
-## \param rrInstance A RoadRunner instance, as returned from roadrunner.RoadRunner() 
+## \param rrInstance A RoadRunner instance, as returned from roadrunner.RoadRunner()
 ## \return Returns a handle to roadrunners internal data object
 ## \ingroup utilities
 def getRoadRunnerDataHandle(rrInstance):
@@ -1048,27 +1067,27 @@ def getNumpyData(rrDataHandle):
                 else:
                     print "problem"
     #resultArray = np.append(resultArray, colHeader.split(","))
-    #Not sure how to append the col names.                    
+    #Not sure how to append the col names.
     return resultArray
 
 def plotRoadRunnerData(data, colHeaders):
     nrCols = data.shape[1]
     nrRows = data.shape[0]
-     
+
     if len(colHeaders) < 1:
         print "bad data"
         return
     xlbl = colHeaders[0]
     nrOfSeries = nrCols -1
-    x = data[:,0]  
-    
+    x = data[:,0]
+
     for serie in range(nrOfSeries):
         ySeries = np.zeros([nrRows])
         ySeries = data[:,serie + 1]
-        plot.plot(x, ySeries, "", label=colHeaders[serie +1])      
-              
-    plot.legend(bbox_to_anchor=(1.05, 1), loc=1, borderaxespad=0.)    
-    plot.xlabel(xlbl)    
+        plot.plot(x, ySeries, "", label=colHeaders[serie +1])
+
+    plot.legend(bbox_to_anchor=(1.05, 1), loc=1, borderaxespad=0.)
+    plot.xlabel(xlbl)
     plot.ylabel('Concentration (moles/L)')
     plot.show()
 ## \brief Get column header in roadrunner data
@@ -1081,40 +1100,40 @@ def getRoadRunnerDataColumnHeader(rrDataHandle):
     hdr = rrpLib.getRoadRunnerDataColumnHeader(rrDataHandle)
     res = hdr
     rrpLib.freeText(res)
-    return hdr.split(',') 
+    return hdr.split(',')
 
 
 ## \brief Write RoadRunnerData to a file
 ## \param rrDataHandle A handle to roadunnerdata
 ## \param fName Name of output file, including path. If no path is given, the file is written to the
-## current working directory 
+## current working directory
 ## \return Returns True or false indicating result
 ## \ingroup utilities
 rrpLib.writeRoadRunnerDataToFile.restype = c_bool
-def writeRoadRunnerData(rrDataHandle, fName):    
+def writeRoadRunnerData(rrDataHandle, fName):
     return rrpLib.writeRoadRunnerDataToFile(rrDataHandle, fName)
 
 
 ## \brief Read RoadRunnerData from a file
 ## \param rrDataHandle A handle to roadunnerdata
-## \param fName Name of input file, including path. If no path is given, the file is read 
-## in current working directory 
+## \param fName Name of input file, including path. If no path is given, the file is read
+## in current working directory
 ## \return Returns True or false indicating result
 ## \ingroup utilities
 rrpLib.readRoadRunnerDataFromFile.restype = c_bool
-def readRoadRunnerData(rrDataHandle, fName):    
+def readRoadRunnerData(rrDataHandle, fName):
     return rrpLib.readRoadRunnerDataFromFile(rrDataHandle, fName)
 
 ## \brief Create RoadRunnerData from a file
-## \param fName Name of input file, including path. If no path is given, the file is read 
-## in current working directory 
+## \param fName Name of input file, including path. If no path is given, the file is read
+## in current working directory
 ## \return Returns a handle to RoadRunner data if successful, None otherwise
 ## \note Use the freeRoadRunnerData to free memory allocated by the returned data
 ## \ingroup utilities
 rrpLib.createRoadRunnerData.restype = c_void_p
 def createRoadRunnerDataFromFile(fName):
     #Create a RoadRunner data object
-    rrDataHandle = rrpLib.createRoadRunnerData(0,0,"")       
+    rrDataHandle = rrpLib.createRoadRunnerData(0,0,"")
     if rrpLib.readRoadRunnerDataFromFile(rrDataHandle, fName) == False:
         print 'Failed to read data'
     return rrDataHandle
@@ -1134,12 +1153,12 @@ def readAllText(fName):
     file.close()
     return str
 
-## \brief Free RoadRunnerData 
-## \param dataHandle Handle to a roadrunner data object 
+## \brief Free RoadRunnerData
+## \param dataHandle Handle to a roadrunner data object
 ## \return Returns True or false indicating result
 ## \ingroup utilities
 rrpLib.freeRoadRunnerData.restype = c_bool
-def freeRoadRunnerData(rrDataHandle):      
+def freeRoadRunnerData(rrDataHandle):
     return rrpLib.freeRoadRunnerData(rrDataHandle)
 
 ## \brief Get last (API) error. This returns the last error if any.
@@ -1166,9 +1185,9 @@ def unLoadAPI():
 # The above code produces the following output:
 #@code
 ##*** Python 2.7.3 (default, Apr 10 2012, 23:31:26) [MSC v.1500 32 bit (Intel)] on win32. ***
-##>>> 
+##>>>
 ##*** Remote Interpreter Reinitialized  ***
-##>>> 
+##>>>
 ##The plugin manager will look for plugins in the following folder: R:\installs\vs_debug\plugins
 ##Number of Plugins: 2
 ##Plugin Names: ['AddNoise', 'Levenberg-Marquardt']
@@ -1182,13 +1201,13 @@ def unLoadAPI():
 ##PluginParameters: ['NoiseType', 'Sigma', 'InputData']
 ##True
 ##done
-##>>> 
+##>>>
 #@endcode
 #    \section plugins_overview Overview
 #    The libRoadRunner Plugin API is centered around three important concepts:
-#    - A Plugin Manager 
-#    - Plugins 
-#    - Plugin Parameters 
+#    - A Plugin Manager
+#    - Plugins
+#    - Plugin Parameters
 #
 #    \section plugins_usage How to use plugins
 #    A typical use case of the Plugin API may be as follows:
@@ -1207,10 +1226,10 @@ def unLoadAPI():
 #
 # A single plugin may support of up to three event functions. The intended use of these functions are to signal the events of the following:
 #   -# Plugin Initialization
-#   -# Plugin Progress 
-#   -# Plugin Finalization 
+#   -# Plugin Progress
+#   -# Plugin Finalization
 #
-# Each event function support up to two opaque data parameters. The plugin documentation needs to provide the exact type of these arguments. 
+# Each event function support up to two opaque data parameters. The plugin documentation needs to provide the exact type of these arguments.
 # In it simplest form, a plugin may choose to define an event function taking no arguments at all.
 # Below are listed a few properties, characteristics of events in the RoadRunner Plugin framework.
 #   -# A plugin event is a regular function defined by the client of the plugin.
@@ -1220,7 +1239,7 @@ def unLoadAPI():
 #   -# Assigning events is optional. A plugins internal work should not be affected wether an event is assigned or not.
 #   -# Plugin events are blocking functions. If the work in a plugin is executed in a thread, see executeEx, the plugin event
 #   will be executed in the same thread as the plugin worker. Depending on your environment and if the plugin event function is executed in a separate
-# thread, regular use of thread synchronization measuress may be needed in order to not create an unstable system. 
+# thread, regular use of thread synchronization measuress may be needed in order to not create an unstable system.
 #
 #   See the examples page that provide example code on how to use plugins, parameters and event functions.
 #    \section plugins_writing How to write plugins
@@ -1240,7 +1259,7 @@ def unLoadAPI():
 # 1. Create a plugin manager first
 #
 # 2. Load the plugins using loadPlugins (all) or loadPlugin (specific one)
-# 
+#
 # 3. Obtain the plugin handle using getPlugin or directly from loadPlugin (singular)
 #
 # 4. Using the plugin handle, set values to the plugin parameters
@@ -1255,8 +1274,8 @@ def unLoadAPI():
 # \brief Plugins Parameter related functions
 # The plugin system supports parameter objects, these objects contain a variety of information about a given parameter, these include:
 # the name, value, type, hint, and a description. The following types are currently supported, Booleans, integers, doubles, strings,
-# list of parameter objects and the roadRunner data array format. Parameters can also be grouped into convenient categories which can be useful 
-# for GUI applications. Every plugin exposes as a set of parameters than can be inspected and set by a host application. 
+# list of parameter objects and the roadRunner data array format. Parameters can also be grouped into convenient categories which can be useful
+# for GUI applications. Every plugin exposes as a set of parameters than can be inspected and set by a host application.
 # The list of plugin parameters will be called the pluginParameters. Within the pluginParameters are individual parameter entries.
 # As already aluded to, these parameter entries can store a variety of different data types, incuding additional lists of parameters. Such lists
 # are popoluated by creating new parameters using the createParameter method and then added to the list using the addParameterToList method.

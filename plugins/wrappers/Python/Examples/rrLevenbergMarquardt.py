@@ -2,6 +2,10 @@ import matplotlib.pyplot as plot
 from numpy import *
 from rrPlugins_CAPI import *
 
+##========== LMFIT EVENT FUNCTIONS ==================
+def pluginIsProgressing(progressMessage):
+    print progressMessage
+##===================================================
 #Create a plugin manager
 pm = createPluginManager()
 
@@ -11,6 +15,11 @@ lmPlugin = loadPlugin(pm, "rrp_lm")
 if not lmPlugin:
     print getLastError()
     exit()
+
+#Assign event handlers
+progressEvent =  NotifyStringEvent(pluginIsProgressing)
+assignOnProgressEvent(lmPlugin, progressEvent)
+
 
 #Read in the data to fit
 rrDataHandle = createRoadRunnerDataFromFile("testData.dat")
@@ -47,14 +56,14 @@ print getPluginStatus(lmPlugin)
 
 #Execute lmfit plugin
 res = executePluginEx(lmPlugin)
-   
+
 print '=========================== Levenberg-Marquardt report after minimization '
 print getPluginStatus(lmPlugin)
 
 #Input Data
 npData = getNumpyData(rrDataHandle)
 
-x = npData[:,0] #result['time']
+x = npData[:,0]
 y1Input = npData[:,1]
 y2Input = npData[:,2]
 
@@ -82,5 +91,7 @@ plot.plot(x, s2Residual, 'xb', label="S2 Residual")
 
 plot.legend(bbox_to_anchor=(1.05, 1), loc=1, borderaxespad=0.)
 plot.show()
+
+print '=========== Minimization Result Follows\n' + getPluginResult(lmPlugin)
 unLoadPlugins(pm)
 print "done"

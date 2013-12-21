@@ -46,7 +46,7 @@ aSigma = getParameterValueAsString(sigmaHandle)
 print 'Current sigma is ' + aSigma
 
 #set size of noise
-setParameterByString(sigmaHandle, '0.01')
+setParameter(sigmaHandle, 0.02)
 
 cb_func1 =  NotifyEvent(pluginStarted)
 assignOnStartedEvent(plugin,  cb_func1)

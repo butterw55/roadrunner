@@ -9,6 +9,7 @@ rrPluginDocumentation.py
 rrPluginParameters.py
 rrPluginParameterLists.py
 rrLevenbergMarquardt.py
+rrLevenbergMarquardtShortVersion.py
 rrNoisePlugin.py
 rrTwoPlugins.py
 rrCreateNoisyData.py
