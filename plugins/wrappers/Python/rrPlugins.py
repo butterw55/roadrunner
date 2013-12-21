@@ -125,8 +125,8 @@ class Plugin:
     def execute (self):
         return rrp.executePlugin (self.plugin)
 
-    def executeEx (self):
-        return rrp.executePluginEx (self.plugin)
+    def executeEx (self, inThread):
+        return rrp.executePluginEx (self.plugin, inThread)
 
     def plotTimeSeriesHandle (self, dataSeries):
         if (isinstance (dataSeries, DataSeries)):
