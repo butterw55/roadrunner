@@ -15,6 +15,8 @@ using rr::RoadRunnerData;
 
 class LMWorker : public Poco::Runnable
 {
+    friend LM;
+
     protected:
         rr::RoadRunner             *mRRI;
 

@@ -47,28 +47,26 @@ void AddNoiseWorker::run()
         mTheHost.mWorkStartedEvent(NULL, mTheHost.mWorkStartedData2);
     }
 
-//    if(mTheHost.mData.getValue())
-    //{
-        RoadRunnerData& data = (mTheHost.mData.getValueReference());
-        Noise noise(0, mTheHost.mSigma.getValue());
-        noise.randomize();
+    RoadRunnerData& data = (mTheHost.mData.getValueReference());
+    Noise noise(0, mTheHost.mSigma.getValue());
+    noise.randomize();
 
-        for(int row = 0; row < data.rSize(); row++)
+    for(int row = 0; row < data.rSize(); row++)
+    {
+        for(int col = 0; col < data.cSize() - 1; col++)
         {
-            for(int col = 0; col < data.cSize() - 1; col++)
-            {
-                double yData = data(row, col + 1) + noise.getNoise();
-                data(row, col + 1) = yData;
-            }
-
-            if(mTheHost.mWorkProgressEvent)
-            {
-                int progress = (int) (row * 100.0) /(data.rSize() -1.0) ;
-                mTheHost.mWorkProgressEvent((void*) progress,  mTheHost.mWorkProgressData2);
-            }
+            double yData = data(row, col + 1) + noise.getNoise();
+            data(row, col + 1) = yData;
         }
-//    }
 
+        if(mTheHost.mWorkProgressEvent)
+        {
+            int progress = (int) (row * 100.0) /(data.rSize() -1.0) ;
+            
+            //The progress is communicated to the client as an INTEGER
+            mTheHost.mWorkProgressEvent((void*) progress,  mTheHost.mWorkProgressData2);
+        }
+    }
 
     if(mTheHost.mWorkFinishedEvent)
     {

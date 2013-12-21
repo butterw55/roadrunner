@@ -2,7 +2,6 @@
 #include "rrRoadRunnerData.h"
 #include "rrLogger.h"
 #include "LMWorker.h"
-//#include "noise.h"
 #include "lm.h"
 #include "lib/lmmin.h"
 #include "rrStringUtils.h"
@@ -75,7 +74,7 @@ void LMWorker::run()
 
     if(mTheHost.mWorkProgressEvent)
     {
-        mTheHost.mWorkProgressEvent(mTheHost.mWorkProgressData1, NULL);
+        mTheHost.mWorkProgressEvent(mTheHost.mWorkProgressData1, mTheHost.mWorkProgressData2);
     }
 
     //This is the library function doing the minimization..

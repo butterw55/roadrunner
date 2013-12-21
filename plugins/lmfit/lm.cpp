@@ -29,6 +29,7 @@ mOutputParameterList(       Parameters(),           "OutputParameterList",      
 mObservedDataSelectionList( StringList(),           "ExperimentalDataSelectionList",        "Experimental data selection list"),
 mModelDataSelectionList(    StringList(),           "FittedDataSelectionList",              "Fitted data selection list"),
 mNorm(                      -1.0,                   "Norm",                                 "Norm of fitting. An estimate of goodness of fit"),
+mNrOfIter(                  -1,                     "NrOfIter",                             "Number of iterations"),
 mLMWorker(*this)
 {
     mVersion = "1.0";
@@ -42,11 +43,14 @@ mLMWorker(*this)
     mLMFit.addParameter(&mObservedDataSelectionList);
     mLMFit.addParameter(&mModelDataSelectionList);
     mLMFit.addParameter(&mNorm);
+    mLMFit.addParameter(&mNrOfIter);
     mCapabilities.add(mLMFit);
-
     //Allocate model and Residuals data
     mResidualsData.setValue(new RoadRunnerData());
     mModelData.setValue(new RoadRunnerData());
+    
+    //Setup so the Norm parameter is a reference of the NORM parameter in the lmDataStructure
+    mNorm.getValueReference() = mLMWorker.mLMData.mNorm;
 }
 
 LM::~LM()

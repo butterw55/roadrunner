@@ -6,8 +6,9 @@ import numpy as np
 import roadrunner
 import tempfile
 import time
-from ctypes import *
 import matplotlib.pyplot as plot
+from ctypes import *
+from findSharedLib import *
 
 """
 CTypes Python Bindings to the RoadRunner Plugin API.
@@ -17,12 +18,18 @@ Currently this is a fairly raw implementation with few Pythonic refinements
 
 __version__ = "1.0.0"
 
-# Get current folder and construct an absolute path to
-# the plugins.
-dirPath = os.path.dirname(os.path.realpath(__file__))
-gDefaultPluginsPath  = os.path.split(dirPath)[0]
+# Get folder of where rrplugins_CAPI shared library is installed and construct an absolute path to
+# the plugins from that.
 
 sharedLib='rrplugins_c_api'
+dirPath = getPathToParentFolderOf(sharedLib)
+
+if os.path.exists(dirPath):
+    gDefaultPluginsPath  = dirPath + os.sep + 'plugins'
+else:
+    print '==== WARNING: Roadrunner plugin folder could not be found =====\n'        
+    gDefaultPluginsPath = ''    
+
 rrpLib=None
 try:
     if sys.platform.startswith('win32'):
@@ -84,9 +91,10 @@ class ParameterObject:
     handle = property (__getHandle)
 
 
+## PASSING DATA TO EVENT HANDLERS
+
 #=======================rrp_api========================#
 #Type of plugin events, first argument is return type
-
 ## \brief Plugin function event type definition
 ## This is a helper object that a client can use as an argument to a roadrunner plugin.
 ## The exact number of plugins functions required arguments, and their type, is plugin dependent. A client of the
@@ -155,6 +163,9 @@ NotifyStringEvent  = CFUNCTYPE(None, c_char_p)
 ## \htmlonly  <br/>
 ## \endhtmlonly
 ## \ingroup plugin_manager
+
+NotifyPluginEvent = CFUNCTYPE(None, c_char_p, c_void_p)
+
 
 rrpLib.createPluginManager.restype = c_void_p
 def createPluginManager(pluginDir = None):

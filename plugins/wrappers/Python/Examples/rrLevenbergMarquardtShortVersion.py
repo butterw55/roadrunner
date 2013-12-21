@@ -1,18 +1,29 @@
 from rrPlugins_CAPI import *
+import ctypes
 import rrPlugins as rrp
 
 lm = rrp.Plugin ("rrp_lm")
 ##========== LMFIT EVENT FUNCTIONS ==================
-def pluginIsProgressing(progressMessage):
-    print progressMessage
-progressEvent =  NotifyStringEvent(pluginIsProgressing)
-assignOnProgressEvent(lm.plugin, progressEvent)
+def pluginIsProgressing(msg, lmP):
+    print msg    
+    # The plugin don't know what a python object is. 
+    # We need to cast it here, to a proper python object   
+    lmObject = cast(lmP, ctypes.py_object).value 
+    print 'ParaList:' + `lm.getParameter("SBML")`
+    print 'Norm = ' + `lmObject.getParameter("Norm")`
+    print 'Nr of Iterations = ' + `lmObject.getParameter("NrOfIter")`
+   
+progressEvent =  NotifyPluginEvent(pluginIsProgressing)
+theId = id(lm)
+#In the assignOnProgress, we pass the identity of the plugin as last argument.
+#It is later on retrieved in the plugin Event handler, see above 
+assignOnProgressEvent(lm.plugin, progressEvent, None, theId)
 ##===================================================
 
 experimentalData = lm.loadDataSeries ("testData.dat")
 
 lm.setParameter ("ExperimentalData", experimentalData)
-lm.setParameter ("SBML", lm.readAllText("../../models/sbml_test_0001.xml"))
+lm.setParameter ("SBML", lm.readAllText("sbml_test_0001.xml"))
 
 # Add the parameters that we're going to fit and the initial value
 lm.setParameter ("InputParameterList", ["k1", 0.2])

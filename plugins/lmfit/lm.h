@@ -31,7 +31,7 @@ class LM : public CPPPlugin
         Parameter<StringList>                   mObservedDataSelectionList;     //Species selection list for observed data
         Parameter<StringList>                   mModelDataSelectionList;        //Species selection list for observed data
         Parameter<double>                       mNorm;                          //Part of minimization result
-
+        Parameter<int>                          mNrOfIter;                      //Part of minimization result
         //Utility functions for the thread
         string                                  getTempFolder();
         string                                  getSBML();

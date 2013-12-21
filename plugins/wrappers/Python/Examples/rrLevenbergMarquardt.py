@@ -1,10 +1,12 @@
 import matplotlib.pyplot as plot
 from numpy import *
+from rrPlugins import *
 from rrPlugins_CAPI import *
 
 ##========== LMFIT EVENT FUNCTIONS ==================
-def pluginIsProgressing(progressMessage):
-    print progressMessage
+def pluginIsProgressing(Plugin):
+    #This is a lmfit plugin
+    print 'hello'
 ##===================================================
 #Create a plugin manager
 pm = createPluginManager()
@@ -27,7 +29,13 @@ rrDataHandle = createRoadRunnerDataFromFile("testData.dat")
 #==== Setup the plugin for minimization ==========
 
 #set input sbml model
-sbml = getText("../../models/sbml_test_0001.xml")
+modelFolder='../../models'
+model = "sbml_test_0001.xml" 
+if os.path.exists(modelFolder):
+    sbml = getText(modelFolder + os.sep + model)
+else:
+    sbml = getText(model)    
+
 setPluginParameter(lmPlugin, "SBML", sbml)
 
 #See documentation for available parameters
