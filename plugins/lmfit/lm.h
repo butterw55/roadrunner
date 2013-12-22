@@ -32,7 +32,19 @@ class LM : public CPPPlugin
         Parameter<StringList>                   mModelDataSelectionList;        //Species selection list for observed data
         Parameter<double>                       mNorm;                          //Part of minimization result
         Parameter<int>                          mNrOfIter;                      //Part of minimization result
-        //Utility functions for the thread
+        
+        //LMFIT Tuning parameters
+        Parameter<double>                       ftol;       /* relative error desired in the sum of squares. */
+        Parameter<double>                       xtol;       /* relative error between last two approximations. */
+        Parameter<double>                       gtol;       /* orthogonality desired between fvec and its derivs. */
+        Parameter<double>                       epsilon;    /* step used to calculate the jacobian. */
+        Parameter<double>                       stepbound;  /* initial bound to steps in the outer loop. */
+        Parameter<int>                          maxcall;    /* maximum number of iterations. */
+        Parameter<int>                          scale_diag; /* UNDOCUMENTED, TESTWISE automatical diag rescaling? */
+        Parameter<int>                          printflags; /* OR'ed to produce more noise */
+		
+		
+		//Utility functions for the thread
         string                                  getTempFolder();
         string                                  getSBML();
 

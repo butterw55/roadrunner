@@ -67,7 +67,16 @@ void LMWorker::run()
     //Some parameters to the Algorithm..
     lm_status_struct status;
     lm_control_struct control = lm_control_double;
-    control.printflags = 3;
+    //Set defaults from Plugin
+
+    control.ftol                    =       *(double*)  mTheHost.ftol.getValueHandle();
+    control.xtol                    =       *(double*)  mTheHost.xtol.getValueHandle();
+    control.gtol                    =       *(double*)  mTheHost.gtol.getValueHandle();
+    control.epsilon                 =       *(double*)  mTheHost.epsilon.getValueHandle();
+    control.stepbound               =       *(double*)  mTheHost.stepbound.getValueHandle();
+    control.maxcall                 =       *(int*)     mTheHost.maxcall.getValueHandle();
+    control.scale_diag              =       *(int*)     mTheHost.scale_diag.getValueHandle();
+    control.printflags              =       *(int*)     mTheHost.printflags.getValueHandle();
 
     //Setup data structures
     setup();

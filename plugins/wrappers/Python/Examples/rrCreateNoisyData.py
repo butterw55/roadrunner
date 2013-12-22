@@ -9,7 +9,7 @@ noisePlugin = loadPlugin(pm, "rrp_add_noise")
 
 #Create a roadrunner instance
 rr = roadrunner.RoadRunner()
-rr.load("../../models/sbml_test_0001.xml")
+rr.load("sbml_test_0001.xml")
 
 #Generate data
 rr.simulate(0, 10, 511) #Want 512 points

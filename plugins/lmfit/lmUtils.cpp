@@ -80,7 +80,7 @@ void ui_printout(   int n_par,
                     int printflags,
                     int iflag,          //iflag : 0 (init) 1 (outer loop) 2(inner loop) -1(terminated)
                     int iter,           //iter  : outer loop counter
-                    int nfev)            //nfev  : number of calls to *evaluate
+                    int nfev)           //nfev  : number of calls to *evaluate
 {
     if( !printflags )
         return;
@@ -144,7 +144,6 @@ void ui_printout(   int n_par,
         myData->mLMData.mProgressEvent((void*) passMsg, myData->mLMData.mProgressEventContextData);
         delete [] passMsg;
     }
-
 }
 
 }

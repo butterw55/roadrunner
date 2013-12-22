@@ -10,6 +10,14 @@
 #include "lmfit_doc.h"
 //---------------------------------------------------------------------------
 
+//Below defines are from the LMFIT lib.. convert to constants later on
+/* machine-dependent constants from float.h */
+#define LM_MACHEP     DBL_EPSILON   /* resolution of arithmetic */
+#define LM_DWARF      DBL_MIN       /* smallest nonzero number */
+#define LM_SQRT_DWARF sqrt(DBL_MIN) /* square should not underflow */
+#define LM_SQRT_GIANT sqrt(DBL_MAX) /* square should not overflow */
+#define LM_USERTOL    30*LM_MACHEP  /* users are recommended to require this */
+
 namespace lmfit
 {
 using namespace rr;
@@ -31,7 +39,18 @@ mModelDataSelectionList(    StringList(),           "FittedDataSelectionList",  
 mNorm(                      -1.0,                   "Norm",                                 "Norm of fitting. An estimate of goodness of fit"),
 mNrOfIter(                  -1,                     "NrOfIter",                             "Number of iterations"),
 mLMWorker(*this),
-mLMData(mLMWorker.mLMData)
+mLMData(mLMWorker.mLMData),
+
+
+ftol(                      LM_USERTOL,              "ftol"       ,                           " relative error desired in the sum of squares. "),
+xtol(                      LM_USERTOL,              "xtol"       ,                           " relative error between last two approximations. "),
+gtol(                      LM_USERTOL,              "gtol"       ,                           " orthogonality desired between fvec and its derivs. "),
+epsilon(                   LM_USERTOL,              "epsilon"    ,                           " step used to calculate the jacobian. "),
+stepbound(                 100.,                    "stepbound"  ,                           " initial bound to steps in the outer loop. "),
+maxcall(                   100,                     "maxcall"    ,                           " maximum number of iterations. "),
+scale_diag(                1,                       "scale_diag" ,                           " UNDOCUMENTED, TESTWISE automatical diag rescaling? "),
+printflags(                0,                       "printflags" ,                           " OR'ed to produce more noise ")
+
 {
     mVersion = "1.0";
     //Setup the plugins capabilities
@@ -45,6 +64,18 @@ mLMData(mLMWorker.mLMData)
     mLMFit.addParameter(&mModelDataSelectionList);
     mLMFit.addParameter(&mNorm);
     mLMFit.addParameter(&mNrOfIter);
+
+    //Add the lmfit parameters
+
+    mLMFit.addParameter(&ftol);
+    mLMFit.addParameter(&xtol);
+    mLMFit.addParameter(&gtol);
+    mLMFit.addParameter(&epsilon);
+    mLMFit.addParameter(&stepbound);
+    mLMFit.addParameter(&maxcall);
+    mLMFit.addParameter(&scale_diag);
+    mLMFit.addParameter(&printflags);
+
     mCapabilities.add(mLMFit);
     //Allocate model and Residuals data
     mResidualsData.setValue(new RoadRunnerData());
