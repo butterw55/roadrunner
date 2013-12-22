@@ -78,7 +78,7 @@ void LMWorker::run()
     control.scale_diag              =       *(int*)     mTheHost.scale_diag.getValueHandle();
     control.printflags              =       *(int*)     mTheHost.printflags.getValueHandle();
 
-    control.printflags = 3;
+    //control.printflags = 3;
     //Setup data structures
     setup();
 

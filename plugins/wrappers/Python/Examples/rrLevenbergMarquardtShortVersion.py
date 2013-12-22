@@ -5,7 +5,7 @@ import rrPlugins as rrp
 lm = rrp.Plugin ("rrp_lm")
 ##========== LMFIT EVENT FUNCTIONS ==================
 def pluginIsProgressing(msg, lmP):
-    #print msg #Uncomment if more info is wanted
+    print msg #Uncomment if more info is wanted
     # The plugin don't know what a python object is.
     # We need to cast it here, to a proper python object
     lmObject = cast(lmP, ctypes.py_object).value
@@ -19,10 +19,14 @@ theId = id(lm)
 assignOnProgressEvent(lm.plugin, progressEvent, None, theId)
 ##===================================================
 
+#Set a lmfit parametere. Printflags control the output in the callback message
+lm.setParameter("printflags", 2)
+
 experimentalData = lm.loadDataSeries ("testData.dat")
 
 lm.setParameter ("ExperimentalData", experimentalData)
 lm.setParameter ("SBML", lm.readAllText("sbml_test_0001.xml"))
+
 
 # Add the parameters that we're going to fit and the initial value
 lm.setParameter ("InputParameterList", ["k1", 0.2])
@@ -55,6 +59,9 @@ rrp.plot (experimentalData[:,[0,2]], myColor="blue", myLinestyle="", myMarker="*
 rrp.plt.show()
 
 #print getPluginResult(lm.plugin)
+
+#Observe that getPluginProperties prings out the value for each parameter, including the parameters that are RoadRunnerData
+#print getPluginPropertiesAsXML(lm.plugin)
 
 
 
