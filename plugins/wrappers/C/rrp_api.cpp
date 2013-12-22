@@ -199,6 +199,30 @@ char* rrp_cc getPluginName(RRPluginHandle handle)
     catch_ptr_macro
 }
 
+char* rrp_cc getPluginCategory(RRPluginHandle handle)
+{
+    start_try
+        Plugin* aPlugin = castToPlugin(handle);
+        return rr::createText(aPlugin->getCategory());
+    catch_ptr_macro
+}
+
+char* rrp_cc getPluginDescription(RRPluginHandle handle)
+{
+    start_try
+        Plugin* aPlugin = castToPlugin(handle);
+    return rr::createText(aPlugin->getDescription());
+    catch_ptr_macro
+}
+
+char* rrp_cc getPluginHint(RRPluginHandle handle)
+{
+    start_try
+        Plugin* aPlugin = castToPlugin(handle);
+    return rr::createText(aPlugin->getHint());
+    catch_ptr_macro
+}
+
 RRParametersHandle rrp_cc getPluginParameters(RRPluginHandle handle)
 {
     start_try

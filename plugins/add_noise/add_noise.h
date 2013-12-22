@@ -23,7 +23,7 @@ class AddNoise : public CPPPlugin
         Capability                  mAddNoise;
         Parameter<int>              mNoiseType;
         Parameter<double>           mSigma;
-        Parameter<RoadRunnerData>  mData;
+        Parameter<RoadRunnerData>   mData;
         AddNoiseWorker              mAddNoiseWorker;
 
     public:

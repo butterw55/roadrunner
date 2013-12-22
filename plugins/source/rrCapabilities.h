@@ -129,7 +129,7 @@ class PLUGINS_API_DECLSPEC Capabilities
 //        */
 //        string                          mDescription;
         mutable
-        vector<Capability*>             mCapabilities;
+        vector<Capability*>             mProperties;
 
 };
 

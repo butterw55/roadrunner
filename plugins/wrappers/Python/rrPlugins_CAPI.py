@@ -316,6 +316,57 @@ rrpLib.getPluginName.restype = c_char_p
 def getPluginName(pluginHandle):
     return rrpLib.getPluginName(pluginHandle)
 
+## \brief Get the Category of a Plugin. This is assigned by the pluging developer
+## \param pluginHandle Handle to a plugin
+## \return Returns a string if successful, None otherwise
+##
+## @code
+## name = rrPlugins.getPluginCategory(pluginHandle)
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
+## \ingroup plugins
+rrpLib.getPluginCategory.restype = c_char_p
+def getPluginCategory(pluginHandle):
+    data =  rrpLib.getPluginCategory(pluginHandle)
+    res = data
+    rrpLib.freeText(data)
+    return res
+
+## \brief Get the Description of a Plugin. This is assigned by the pluging developer
+## \param pluginHandle Handle to a plugin
+## \return Returns a string if successful, None otherwise
+##
+## @code
+## name = rrPlugins.getPluginDescription(pluginHandle)
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
+## \ingroup plugins
+rrpLib.getPluginDescription.restype = c_char_p
+def getPluginDescription(pluginHandle):
+    data =  rrpLib.getPluginDescription(pluginHandle)
+    res = data
+    rrpLib.freeText(data)
+    return res
+
+## \brief Get a plugins Hint. A plugins hint is a short description on what the plugin is doing.This is assigned by the pluging developer
+## \param pluginHandle Handle to a plugin
+## \return Returns a string if successful, None otherwise
+##
+## @code
+## name = rrPlugins.getPluginHint(pluginHandle)
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
+## \ingroup plugins
+rrpLib.getPluginHint.restype = c_char_p
+def getPluginHint(pluginHandle):
+    data =  rrpLib.getPluginHint(pluginHandle)
+    res = data
+    rrpLib.freeText(data)
+    return res
+
 ## \brief Returns information about a Plugin.
 ## \param pluginHandle Handle to a plugin
 ## \return Returns information as a string for the plugin, None otherwise
