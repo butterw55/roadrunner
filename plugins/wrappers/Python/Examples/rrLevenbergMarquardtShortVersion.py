@@ -30,6 +30,7 @@ lm.setParameter ("InputParameterList", ["k1", 0.2])
 lm.setParameter("FittedDataSelectionList", "[S1] [S2]")
 lm.setParameter("ExperimentalDataSelectionList", "[S1] [S2]")
 
+print getListOfPluginParameterNames(lm.plugin)
 # Execute lmfit plugin
 res = lm.execute()
 
