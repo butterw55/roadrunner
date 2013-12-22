@@ -8,7 +8,7 @@ import tempfile
 import time
 import matplotlib.pyplot as plot
 from ctypes import *
-from findSharedLib import *
+from rrPluginUtils import *
 
 """
 CTypes Python Bindings to the RoadRunner Plugin API.
@@ -27,8 +27,8 @@ dirPath = getPathToParentFolderOf(sharedLib)
 if os.path.exists(dirPath):
     gDefaultPluginsPath  = dirPath + os.sep + 'plugins'
 else:
-    print '==== WARNING: Roadrunner plugin folder could not be found =====\n'        
-    gDefaultPluginsPath = ''    
+    print '==== WARNING: Roadrunner plugin folder could not be found =====\n'
+    gDefaultPluginsPath = ''
 
 rrpLib=None
 try:

@@ -81,7 +81,8 @@ void LMWorker::run()
     lmmin(  mLMData.nrOfParameters,
             mLMData.parameters,
             mLMData.nrOfResiduePoints,
-            (const void*) &mLMData,
+            //(const void*) &mLMData,
+			(const void*) &mTheHost,
             evaluate,
             &control,
             &status,
@@ -251,8 +252,9 @@ void evaluate(const double *par,       //Parameter vector
               int          *infoIndex  //Index into info message array
 )
 {
-    const lmDataStructure *myData = (const lmDataStructure*)userData;
-
+    const LM *thePlugin = (const LM*) userData;
+	const lmDataStructure* myData = &(thePlugin->mLMData);
+	
     //Check if user have asked for termination..
     if(isBeingTerminated(myData->mLMPlugin))
     {

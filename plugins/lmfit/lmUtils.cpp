@@ -4,6 +4,7 @@
 #include "rrUtils.h"
 #include "rrLogger.h"
 #include "lmUtils.h"
+#include "lm.h"
 #include "lib/lmmin.h"
 //---------------------------------------------------------------------------
 
@@ -84,8 +85,8 @@ void ui_printout(   int n_par,
     if( !printflags )
         return;
 
-    const lmDataStructure *myData = (const lmDataStructure*) userData;
-
+    const LM *myDataConst = static_cast<const LM*>(userData);
+	LM* myData = const_cast<LM*>(myDataConst);
     stringstream ss;
 
     if( printflags & 1 )
@@ -135,10 +136,12 @@ void ui_printout(   int n_par,
 
     //Event to UI, with progress data
     string msg = ss.str();
-    if(myData->mProgressEvent)
+    if(myData->mLMData.mProgressEvent)
     {
+		myData->mNorm.setValue(lm_enorm(m_dat, fvec));
+		myData->mNrOfIter.setValue(nfev);
         char* passMsg = createText(msg);
-        myData->mProgressEvent((void*) passMsg, myData->mProgressEventContextData);
+        myData->mLMData.mProgressEvent((void*) passMsg, myData->mLMData.mProgressEventContextData);
         delete [] passMsg;
     }
 

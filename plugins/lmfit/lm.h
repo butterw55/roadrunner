@@ -20,12 +20,12 @@ class LM : public CPPPlugin
 {
     friend class LMWorker;
 
-    protected:
+    public:
         Capability                              mLMFit;        
         Parameter<string>                       mSBML;                          //This is the model
-        Parameter<RoadRunnerData>              mObservedData;
-        Parameter<RoadRunnerData>              mModelData;
-        Parameter<RoadRunnerData>              mResidualsData;
+        Parameter<RoadRunnerData>				mObservedData;
+        Parameter<RoadRunnerData>				mModelData;
+        Parameter<RoadRunnerData>				mResidualsData;
         Parameter<Parameters>                   mInputParameterList;            //Parameters to fit
         Parameter<Parameters>                   mOutputParameterList;           //Parameters that was fitted
         Parameter<StringList>                   mObservedDataSelectionList;     //Species selection list for observed data
@@ -38,7 +38,7 @@ class LM : public CPPPlugin
 
         //The worker is doing the work
         LMWorker                                mLMWorker;
-
+		lmDataStructure							&mLMData;        //LevenbergMarq.. data structure
     public:
                                                 LM(RoadRunner* aRR = NULL);
                                                ~LM();

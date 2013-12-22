@@ -30,7 +30,8 @@ mObservedDataSelectionList( StringList(),           "ExperimentalDataSelectionLi
 mModelDataSelectionList(    StringList(),           "FittedDataSelectionList",              "Fitted data selection list"),
 mNorm(                      -1.0,                   "Norm",                                 "Norm of fitting. An estimate of goodness of fit"),
 mNrOfIter(                  -1,                     "NrOfIter",                             "Number of iterations"),
-mLMWorker(*this)
+mLMWorker(*this),
+mLMData(mLMWorker.mLMData)
 {
     mVersion = "1.0";
     //Setup the plugins capabilities
@@ -54,13 +55,7 @@ mLMWorker(*this)
 }
 
 LM::~LM()
-{
-    //DE allocate data        
-//    RoadRunnerData* data = mResidualsData.getValue();
-//    delete data;
-//    data =  mModelData.getValue();
-//    delete data;
-}
+{}
 
 bool LM::isWorking()
 {

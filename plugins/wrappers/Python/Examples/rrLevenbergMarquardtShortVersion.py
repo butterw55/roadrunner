@@ -5,18 +5,17 @@ import rrPlugins as rrp
 lm = rrp.Plugin ("rrp_lm")
 ##========== LMFIT EVENT FUNCTIONS ==================
 def pluginIsProgressing(msg, lmP):
-    print msg    
-    # The plugin don't know what a python object is. 
-    # We need to cast it here, to a proper python object   
-    lmObject = cast(lmP, ctypes.py_object).value 
-    print 'ParaList:' + `lm.getParameter("SBML")`
-    print 'Norm = ' + `lmObject.getParameter("Norm")`
-    print 'Nr of Iterations = ' + `lmObject.getParameter("NrOfIter")`
-   
+    #print msg #Uncomment if more info is wanted
+    # The plugin don't know what a python object is.
+    # We need to cast it here, to a proper python object
+    lmObject = cast(lmP, ctypes.py_object).value
+    print 'Iterations = ' + `lmObject.getParameter("NrOfIter")` + '\tNorm = ' + `lmObject.getParameter("Norm")`
+
 progressEvent =  NotifyPluginEvent(pluginIsProgressing)
 theId = id(lm)
+
 #In the assignOnProgress, we pass the identity of the plugin as last argument.
-#It is later on retrieved in the plugin Event handler, see above 
+#It is later on retrieved in the plugin Event handler, see above
 assignOnProgressEvent(lm.plugin, progressEvent, None, theId)
 ##===================================================
 
@@ -54,7 +53,7 @@ rrp.plot (experimentalData[:,[0,1]], myColor="red", myLinestyle="", myMarker="*"
 rrp.plot (experimentalData[:,[0,2]], myColor="blue", myLinestyle="", myMarker="*", myLabel="S2 Data")
 rrp.plt.show()
 
-print getPluginResult(lm.plugin)
+#print getPluginResult(lm.plugin)
 
 
 
