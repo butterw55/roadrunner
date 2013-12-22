@@ -6,9 +6,8 @@ import numpy as np
 import roadrunner
 import tempfile
 import time
-import matplotlib.pyplot as plot
 from ctypes import *
-from rrPluginUtils import *
+import matplotlib.pyplot as plot
 
 """
 CTypes Python Bindings to the RoadRunner Plugin API.
@@ -18,18 +17,12 @@ Currently this is a fairly raw implementation with few Pythonic refinements
 
 __version__ = "1.0.0"
 
-# Get folder of where rrplugins_CAPI shared library is installed and construct an absolute path to
-# the plugins from that.
+# Get current folder and construct an absolute path to
+# the plugins.
+dirPath = os.path.dirname(os.path.realpath(__file__))
+gDefaultPluginsPath  = os.path.split(dirPath)[0]
 
 sharedLib='rrplugins_c_api'
-dirPath = getPathToParentFolderOf(sharedLib)
-
-if os.path.exists(dirPath):
-    gDefaultPluginsPath  = dirPath + os.sep + 'plugins'
-else:
-    print '==== WARNING: Roadrunner plugin folder could not be found =====\n'
-    gDefaultPluginsPath = ''
-
 rrpLib=None
 try:
     if sys.platform.startswith('win32'):
@@ -49,52 +42,51 @@ except:
 # p.value = 0.5
 # print p.name
 
-class ParameterObject:
-    _parameterHandle = -1
+#class ParameterObject:
+#    _parameterHandle = -1
 
-    def __getValue (self):
-        return getParameterValue (self._parameterHandle)
+#    def __getValue (self):
+#        return getParameterValue (self._parameterHandle)
 
-    def __setValue (self, value):
-       if type (value) is int:
-           setIntParameter (self._parameterHandle, value)
-       if type (value) is float:
-           setDoubleParameter (self._parameterHandle, value)
-       if type (value) is str:
-           setStringParameter (self._parameterHandle, value)
-    value = property (__getValue, __setValue)
+#    def __setValue (self, value):
+#       if type (value) is int:
+#           setIntParameter (self._parameterHandle, value)
+#       if type (value) is float:
+#           setDoubleParameter (self._parameterHandle, value)
+#       if type (value) is str:
+#           setStringParameter (self._parameterHandle, value)
+#    value = property (__getValue, __setValue)
 
-    def __getName (self):
-        return getParameterName(self._parameterHandle)
-    name = property (__getName)
+#    def __getName (self):
+#        return getParameterName(self._parameterHandle)
+#    name = property (__getName)
 
-    def __getHint (self):
-        return getParameterHint(self._parameterHandle)
-    hint = property (__getHint)
+#    def __getHint (self):
+#        return getParameterHint(self._parameterHandle)
+#    hint = property (__getHint)
 
-    def __getType (self):
-        return getParameterType(self._parameterHandle)
-    pType = property (__getType)
+#    def __getType (self):
+#        return getParameterType(self._parameterHandle)
+#    pType = property (__getType)
 
-    def __init__(self, name, hint, value):
-      if type (value) is int:
-        self._parameterHandle = createParameter (name, "int", hint)
-      if type (value) is float:
-        self._parameterHandle = createParameter (name, "double", hint)
-      if type (value) is str:
-        self._parameterHandle = createParameter (name, "string", hint)
-      self.__setValue (value)
+#    def __init__(self, name, hint, value):
+#      if type (value) is int:
+#        self._parameterHandle = createParameter (name, "int", hint)
+#      if type (value) is float:
+#        self._parameterHandle = createParameter (name, "double", hint)
+#      if type (value) is str:
+#        self._parameterHandle = createParameter (name, "string", hint)
+#      self.__setValue (value)
 
-    def __getHandle (self):
-        return self._parameterHandle
+#    def __getHandle (self):
+#        return self._parameterHandle
 
-    handle = property (__getHandle)
+#    handle = property (__getHandle)
 
-
-## PASSING DATA TO EVENT HANDLERS
 
 #=======================rrp_api========================#
 #Type of plugin events, first argument is return type
+
 ## \brief Plugin function event type definition
 ## This is a helper object that a client can use as an argument to a roadrunner plugin.
 ## The exact number of plugins functions required arguments, and their type, is plugin dependent. A client of the
@@ -116,7 +108,7 @@ NotifyEvent  = CFUNCTYPE(None)
 ## This is a helper object that a client can use as an argument to a roadrunner plugin.
 ## The exact number of plugins event functions required arguments, and their type is plugin dependent. A client of the
 ## the plugin need to get this information from plugin specific documentation. An example of
-## using this particular function, NotifyIntEvent is shown below. As indicated, this python function takes two arguments.
+## using this particular function, NotifyIntIntEvent is shown below. As indicated, this python function takes two arguments.
 ## The first argument is an integer, indicating progress (possibly a percentage), the second argument is not used in this particular case, but still required.
 ##@code
 ##def pluginIsProgressing(progress, dummy):
@@ -132,25 +124,6 @@ NotifyEvent  = CFUNCTYPE(None)
 ## \ingroup plugins
 NotifyIntEvent  = CFUNCTYPE(None, c_int)
 
-## \brief Plugin function event type definition
-## This is a helper object that a client can use as an argument to a roadrunner plugin.
-## The exact number of plugins event functions required arguments, and their type is plugin dependent. A client of the
-## the plugin need to get this information from plugin specific documentation. An example of
-## using this particular function, NotifyStringEvent is shown below. As indicated, this function takes two arguments.
-## The first argument is a string, passes as a C char* (c_char_p), carrying a progress message for example.
-##@code
-##def pluginIsProgressing(progress):
-##    print '\nPlugin progress:' + progress
-## #The user can assign this function as a plugin event to monitor the progress of the plugin as follows.
-## #Note, make sure you assign the event to a variable (c_event) so that the Python garbage
-## #collector doesn't delete it
-## c_event = NotifyEvent(myPluginFunction)
-## c_event = NotifyStringEvent(pluginIsProgressing)
-## assignOnProgressEvent(plugin, c_event)
-##@endcode
-## \ingroup plugins
-NotifyStringEvent  = CFUNCTYPE(None, c_char_p)
-
 ## \brief Create a new instance of a plugin manager.
 ## \brief A PluginManager manages a collection of plugins, loaded and unloaded by
 ##  the load and unload API functions respectively.
@@ -163,9 +136,6 @@ NotifyStringEvent  = CFUNCTYPE(None, c_char_p)
 ## \htmlonly  <br/>
 ## \endhtmlonly
 ## \ingroup plugin_manager
-
-NotifyPluginEvent = CFUNCTYPE(None, c_char_p, c_void_p)
-
 
 rrpLib.createPluginManager.restype = c_void_p
 def createPluginManager(pluginDir = None):
@@ -323,7 +293,7 @@ def getCurrentPlugin(pm):
 ## \brief Get the plugin handle for the named plugin
 ## \param pm Handle to a PluginManager instance
 ## \param pluginName A string that holds the name of the plugin
-## \return Returns a handle to a plugin, with name as supplied in the parameter pluginName.
+## \return Returns a handle to a plugin, with name as supplied in the property pluginName.
 ## Returns None if the plugin is not found
 ## \ingroup plugin_manager
 rrpLib.getPlugin.restype = c_void_p
@@ -453,7 +423,7 @@ def getPluginStatus(pluginHandle):
 ## \brief Returns a plugins result, as a string. This is plugin dependent, and a plugin designer may, or may not, implement
 ## this function. See the plugin documentation for details.
 ## \note If a plugin wants to returns specific result, e.g. an Array, or a a float, these are better communicated
-## through the use of Plugin Parameters.
+## through the use of Plugin properties.
 ## \param pluginHandle Handle to a plugin
 ## \return Returns a plugins result if available. None otherwise
 ## \ingroup plugins
@@ -556,49 +526,49 @@ rrpLib.getRRHandleFromPlugin.restype = c_void_p
 def getRRHandleFromPlugin(pluginHandle):
     return rrpLib.getRRHandleFromPlugin(pluginHandle)
 
-#================ Plugin Parameter functionality ======================
-## \brief Get a handle to the list of parameters for a plugin
+#================ Plugin Property functionality ======================
+## \brief Get a handle to the list of properties for a plugin
 ## \param pluginHandle Handle to a plugin
-## \return Returns a handle to a list of Parameters on success, None otherwise
-## \ingroup plugin_parameters
-rrpLib.getPluginParameters.restype = c_void_p
-def getPluginParameters(pluginHandle):
-    return rrpLib.getPluginParameters(pluginHandle)
+## \return Returns a handle to a list of Properties on success, None otherwise
+## \ingroup plugin_properties
+rrpLib.getPluginproperties.restype = c_void_p
+def getPluginproperties(pluginHandle):
+    return rrpLib.getPluginProperty(pluginHandle)
 
-## \brief Get a list of parameter names in a plugin
+## \brief Get a list of property names in a plugin
 ## \param pluginHandle Handle to a plugin
-## \return Returns the netire list of top level parameter names, None otherwise
-## \ingroup plugin_parameters
-rrpLib.getListOfPluginParameterNames.restype = c_char_p
-def getListOfPluginParameterNames(pluginHandle):
-    paraNames =  rrpLib.getListOfPluginParameterNames(pluginHandle)
-    if not paraNames:
+## \return Returns the netire list of top level property names, None otherwise
+## \ingroup plugin_properties
+rrpLib.getListOfPluginPropertyNames.restype = c_char_p
+def getListOfPluginpropertyNames(pluginHandle):
+    paraNames =  rrpLib.getListOfPluginPropertyNames(pluginHandle)
+    if not propertyNames:
         return list()
     else:
-        names = paraNames.split(',')
+        names = propertyNames.split(',')
         return names
 
-## \brief Clear a list of parameters. Some parameters exposed by plugins are lists that can hold other parameters. New parameter can be
-## added to these lists. clearParameterList can be used to clear the list is a new list needs to be constructed.
-## \param parasHandle Handle to a list of parameters
-## \return True or false, indicating result. The top level list of parameters in a plugin can not be cleared.
-## \ingroup plugin_parameters
-rrpLib.clearParameterList.restype = c_bool
-def clearParameterList(parameterListHandle):
-    handle = getParameterValueHandle(parameterListHandle)
-    return rrpLib.clearParameterList(handle)
+## \brief Clear a list of properties. Some properties exposed by plugins are lists that can hold other properties. New property can be
+## added to these lists. clearPropertyList can be used to clear the list is a new list needs to be constructed.
+## \param parasHandle Handle to a list of properties
+## \return True or false, indicating result. The top level list of properties in a plugin can not be cleared.
+## \ingroup plugin_properties
+rrpLib.clearPropertyList.restype = c_bool
+def clearPropertyList(propertyListHandle):
+    handle = getPropertyValueHandle(propertyListHandle)
+    return rrpLib.clearPropertyList(handle)
 
-## \brief If the parameter is a list, this method returns the list of parameter names in that list
-## \param parameterHandle Handle to a parameter
-## \return Returns names for all parameters in the list
-## \ingroup plugin_parameters
-rrpLib.getNamesFromParameterList.restype = c_char_p
-def getNamesFromParameterList(paraMeterHandle):
-    paraType = getParameterType(paraMeterHandle)
-    if paraType != 'listOfParameters':
-        raise 'That is not a valid list parameter'
-    listHandle = getParameterValueHandle(paraMeterHandle)
-    paras = rrpLib.getNamesFromParameterList(listHandle)
+## \brief If the property is a list, this method returns the list of property names in that list
+## \param propertyHandle Handle to a property
+## \return Returns names for all properties in the list
+## \ingroup plugin_properties
+rrpLib.getNamesFromPropertyList.restype = c_char_p
+def getNamesFromPropertyList(propertyMeterHandle):
+    paraType = getPropertyType(propertyMeterHandle)
+    if paraType != 'listOfProperties':
+        raise 'That is not a valid list property'
+    listHandle = getPropertyValueHandle(propertyMeterHandle)
+    paras = rrpLib.getNamesFromPropertyList(listHandle)
     if not paras:
         return list()
     else:
@@ -608,449 +578,448 @@ def getNamesFromParameterList(paraMeterHandle):
 ## \brief Get a the properties of a plugins in xml format.
 ## \param pluginHandle Handle to a plugin
 ## \return Returns a string on success, None otherwise
-## \ingroup plugin_parameters
+## \ingroup plugin_properties
 rrpLib.getPluginPropertiesAsXML.restype = c_char_p
 def getPluginPropertiesAsXML(pluginHandle):
     return rrpLib.getPluginPropertiesAsXML(pluginHandle)
 
-## \brief Get the 'first' parameter handle to a parameter in a list of parameters
-## \param paraListHandle Handle to a parameterListParameter
-## \return Returns a handle to a parameter. Returns None if not found
-## \ingroup plugin_parameters
-def getFirstParameter(paraListHandle):
-    handle = getParameterValueHandle(paraListHandle)
-    return rrpLib.getFirstParameter(handle)
+## \brief Get the 'first' property handle to a property in a list of properties
+## \param paraListHandle Handle to a propertyList
+## \return Returns a handle to a property. Returns None if not found
+## \ingroup plugin_properties
+def getFirstProperty(paraListHandle):
+    handle = getPropertyValueHandle(paraListHandle)
+    return rrpLib.getFirstProperty(handle)
 
-## \brief Get the 'next' parameter handle to a parameter in a list of parameters
-## \param paraListHandle Handle to a parameterList
-## \return Returns a handle to a parameter. Returns None if not found
-## \ingroup plugin_parameters
-def getNextParameter(paraListHandle):
-    return rrpLib.getNextParameter(paraListHandle)
+## \brief Get the 'next' property handle to a property in a list of properties
+## \param paraListHandle Handle to a propertyList
+## \return Returns a handle to a property. Returns None if not found
+## \ingroup plugin_properties
+def getNextProperty(propertyListHandle):
+    return rrpLib.getNextProperty(paraListHandle)
 
-## \brief Get a parameter handle to a parameter given the name of the parameter.
+## \brief Get a property handle to a property given the name of the property.
 ## \param pluginHandle Handle to a plugin
-## \param parameterName Name of the parameter
-## \return Returns a paraHandle to a parameter. Returns None if not found
-## \ingroup plugin_parameters
-def getPluginParameter(pluginHandle, parameterName):
-    return rrpLib.getPluginParameter(pluginHandle, parameterName)
+## \param propertyName Name of the property
+## \return Returns a propertyHandle to a property. Returns None if not found
+## \ingroup plugin_properties
+def getPluginProperty(pluginHandle, propertyName):
+    return rrpLib.getPluginProperty(pluginHandle, propertyName)
 
-## \brief Set the value of a PluginParameter
+## \brief Set the value of a PluginProperty
 ## \param pluginHandle Handle to a plugin
-## \param parameterName Name of parameter
-## \param paraValue Value of parameter
+## \param propertyName Name of property
+## \param propertyValue Value of property
 ## \return true if succesful, false otherwise
-## \ingroup plugin_parameters
-rrpLib.setPluginParameter.restype = c_bool
-def setPluginParameter(pluginHandle, parameterName, paraValue):
-    paraHandle = getPluginParameter(pluginHandle,parameterName)
-    if paraHandle:
-        paraType = getParameterType(paraHandle)
+## \ingroup plugin_properties
+rrpLib.setPluginProperty.restype = c_bool
+def setPluginProperty(pluginHandle, propertyName, propertyValue):
+    propertyHandle = getPluginProperty(pluginHandle, propertyName)
+    if propertyHandle:
+        paraType = getPropertyType(propertyHandle)
         if paraType == 'bool':
-            return setBoolParameter(paraHandle, paraValue)
+            return setBoolProperty(propertyHandle, propertyValue)
         if paraType == 'int':
-            return setIntParameter(paraHandle, paraValue)
+            return setIntProperty(propertyHandle, propertyValue)
         if paraType == 'double':
-            return setDoubleParameter(paraHandle, paraValue)
+            return setDoubleProperty(propertyHandle, propertyValue)
         if paraType == 'string':
-            return setStringParameter(paraHandle, paraValue)
+            return setStringProperty(propertyHandle, propertyValue)
         if paraType == 'std::string': #Behaves the same in the backend
-            return setStringParameter(paraHandle, paraValue)
-        if paraType == 'listOfParameters':
-            return setListParameter(paraHandle, paraValue)
+            return setStringProperty(propertyHandle, propertyValue)
+        if paraType == 'listOfProperties':
+            return setListProperty(propertyHandle, paraValue)
         if paraType == 'roadRunnerData': #The value of this is a handle
-            return setRoadRunnerDataParameter(paraHandle, paraValue)
+            return setRoadRunnerDataProperty (propertyHandle, propertyValue)
         if paraType == 'StringList':
-            return setParameterByString(paraHandle, paraValue)
+            return setPropertyByString(propertyHandle, paraValue)
         else:
-           raise TypeError ('Cannot set the value of such parameter')
+           raise TypeError ('Cannot set the value of such property')
     else:
            raise ('Bad Handle')
     return False
 
-## \brief Set the value of a Parameter
-## \param parameter handle Handle to a parameter
-## \param paraValue Value of parameter
+## \brief Set the value of a property
+## \param property handle Handle to a property
+## \param paraValue Value of property
 ## \return true if successful, false otherwise
-## \ingroup plugin_parameters
-def setParameter(paraHandle, paraValue):
-    if paraHandle:
-        paraType = getParameterType(paraHandle)
+## \ingroup plugin_properties
+def setProperty(propertyHandle, paraValue):
+    if propertyHandle:
+        paraType = getPropertyType(propertyHandle)
         if paraType == 'bool':
-            return setBoolParameter(paraHandle, paraValue)
+            return setBoolProperty(propertyHandle, paraValue)
         if paraType == 'int':
-            return setIntParameter(paraHandle, paraValue)
+            return setIntProperty(propertyHandle, paraValue)
         if paraType == 'double':
-            return setDoubleParameter(paraHandle, paraValue)
+            return setDoubleProperty(propertyHandle, paraValue)
         if paraType == 'string':
-            return setStringParameter(paraHandle, paraValue)
+            return setStringProperty(propertyHandle, paraValue)
         if paraType == 'std::string': #Behaves the same in the backend
-            return setStringParameter(paraHandle, paraValue)
-        if paraType == 'listOfParameters':
-            return setListParameter(paraHandle, paraValue)
+            return setStringProperty(propertyHandle, paraValue)
+        if paraType == 'listOfProperties':
+            return setListProperty(propertyHandle, paraValue)
         if paraType == 'roadRunnerData': #The value of this is a handle
-            return setRoadRunnerDataParameter(paraHandle, paraValue)
+            return setRoadRunnerDataProperty(propertyHandle, paraValue)
         if paraType == 'StringList':
-            return setParameterByString(paraHandle, paraValue)
+            return setPropertyByString(propertyHandle, paraValue)
         else:
-           raise TypeError ('Cannot set the value of such parameter')
+           raise TypeError ('Cannot set the value of such property')
     else:
            raise ('Bad Handle')
     return False
 
-## \brief Set the description of a parameter
-## \param paraHandle Handle to a Parameter instance
+## \brief Set the description of a Property
+## \param propertyHandle Handle to a Property instance
 ## \param descr String holding the description
 ## \return Returns true if successful, false otherwise
-## \ingroup plugin_parameters
-rrpLib.setParameterDescription.restype = c_bool
-def setParameterDescription(paraHandle, descr):
-    return rrpLib.setParameterDescription(paraHandle, descr)
+## \ingroup plugin_properties
+rrpLib.setPropertyDescription.restype = c_bool
+def setPropertyDescription(propertyHandle, descr):
+    return rrpLib.setPropertyDescription(propertyHandle, descr)
 
-## \brief Set the hint property of a parameter
-## \param paraHandle Handle to a Parameter instance
+## \brief Set the hint property of a Property
+## \param propertyHandle Handle to a Property instance
 ## \param descr String holding the hint text
 ## \return Returns true if successful, false otherwise
-## \ingroup plugin_parameters
-rrpLib.setParameterHint.restype = c_bool
-def setParameterHint(paraHandle, descr):
-    return rrpLib.setParameterHint(paraHandle, descr)
+## \ingroup plugin_properties
+rrpLib.setPropertyHint.restype = c_bool
+def setPropertyHint(propertyHandle, descr):
+    return rrpLib.setPropertyHint(propertyHandle, descr)
 
-## \brief Create a parameter of type "type" with a name and hint property
-##  Valid types include: 'bool', 'int', 'double', 'string', and 'listOfParameters'
-## \param name The parameters name as a string
-## \param the_type  The parameters type as string. Possible values: 'bool', 'int', 'double', 'string', and 'listOfParameters'
-## \param hint The parameters hint as a string.
-## \param value This is an optional argument to set the parameter (supports int, double and string).
-## \return Returns a handle to a new parameter, if succesful, None otherwise
+## \brief Create a Property of type "type" with a name and hint property
+##  Valid types include: 'bool', 'int', 'double', 'string', and 'listOfProperties'
+## \param name The properties name as a string
+## \param the_type  The properties type as string. Possible values: 'bool', 'int', 'double', 'string', and 'listOfProperties'
+## \param hint The properties hint as a string.
+## \param value This is an optional argument to set the Property (supports int, double and string).
+## \return Returns a handle to a new Property, if succesful, None otherwise
 ##
 ## @code
-## parameterHandle = rrPlugins.createParameter ("k1", string", "A message")
+## propertyHandle = rrPlugins.createProperty ("k1", string", "A message")
 ##
-##parameterHandle = rrPlugins.createParameter ("k1", "double", "A rate constant", 0.3)
+##propertyHandle = rrPlugins.createProperty ("k1", "double", "A rate constant", 0.3)
 ## @endcode
 ## \htmlonly  <br/>
 ## \endhtmlonly
-## \ingroup plugin_parameters
-rrpLib.createParameter.restype = c_void_p
-def createParameter(name, the_type, hint="", value=None):
+## \ingroup plugin_properties
+rrpLib.createProperty.restype = c_void_p
+def createProperty(name, the_type, hint="", value=None):
     if value == None:
-       return rrpLib.createParameter(name, the_type, hint, value)
+       return rrpLib.createProperty(name, the_type, hint, value)
     else:
         if the_type == 'string':    #Otherwise underlying string type will be char*, don't
             the_type = 'std::string'
-        ptr = rrpLib.createParameter(name, the_type, hint)
+        ptr = rrpLib.createProperty(name, the_type, hint)
         if the_type is "bool":
-           setBoolParameter (ptr, value)
+           setBoolProperty (ptr, value)
         elif the_type is "int":
-           setIntParameter (ptr, value)
+           setIntProperty (ptr, value)
         elif the_type is "float":
-           setDoubleParameter (ptr, value)
+           setDoubleProperty (ptr, value)
         elif the_type is "double":
-           setDoubleParameter (ptr, value)
+           setDoubleProperty (ptr, value)
         elif the_type is "string":
-           setStringParameter (ptr, value)
+           setStringProperty (ptr, value)
         elif the_type is "std::string":
-           setStringParameter (ptr, value)
+           setStringProperty (ptr, value)
 
         else:
-            print "Error: Can't set the value of parameter with type:" + the_type
+            print "Error: Can't set the value of Property with type:" + the_type
         return ptr
 
-## \brief Free memory for a parameter
-## \param paraHandle Handle to a Parameter instance
+## \brief Free memory for a Property
+## \param propertyHandle Handle to a Property instance
 ## \return Returns true if successful, false otherwise
-## \ingroup plugin_parameters
-rrpLib.freeParameter.restype = c_bool
-def freeParameter(paraHandle):
-    return rrpLib.freeParameter(paraHandle)
+## \ingroup plugin_properties
+rrpLib.freeProperty.restype = c_bool
+def freeProperty(propertyHandle):
+    return rrpLib.freeProperty(propertyHandle)
 
 
-## \brief Add a parameter to a list of parameters.
-## Some plugins may have parameters that
-## require list of parameters to be specified. For example when deciding what kinetic parameters to fit in a model, the list
-## of kinetic parameters can be pass to the plugin as a list. This method can be used to add the names of the kinetic parameters
+## \brief Add a Property to a list of Property.
+## Some plugins may have Property that
+## require list of Property to be specified. For example when deciding what kinetic Property to fit in a model, the list
+## of kinetic Property can be pass to the plugin as a list. This method can be used to add the names of the kinetic Property
 ## to the list.
-## \param list A Handle to a Parameter with type listOfParameters
-## \param paraHandle Handle to the parameter to add to the list(see createParameter)
+## \param list A Handle to a Property with type listOfProperty
+## \param propertyHandle Handle to the Property to add to the list(see createProperty)
 ## \return Returns a Boolean indicating success
 ##
 ## @code
-## paraList = getPluginParameter(plHandle, "SpeciesList");
-## newParameter = createParameter("k1", "double", "A Hint", 0.2)
-## addParameterToList(paraList, newParameter)
+## paraList = getPluginProperty(plHandle, "SpeciesList");
+## newProperty = createProperty("k1", "double", "A Hint", 0.2)
+## addPropertyToList(paraList, newProperty)
 ## @endcode
 ## \htmlonly  <br/>
 ## \endhtmlonly
-## \ingroup plugin_parameters
-rrpLib.addParameterToList.restype = c_bool
-def addParameterToList(paraHandle, addMe):
-    #Make sure the parameter is of type list
-    if getParameterType(paraHandle) == 'listOfParameters':
-        listHandle = getParameterValue(paraHandle)
-        return rrpLib.addParameterToList(listHandle, addMe)
+## \ingroup plugin_properties
+rrpLib.addPropertyToList.restype = c_bool
+def addPropertyToList(propertyHandle, addMe):
+    #Make sure the Property is of type list
+    if getPropertyType(propertyHandle) == 'listOfProperty':
+        listHandle = getPropertyValue(propertyHandle)
+        return rrpLib.addPropertyToList(listHandle, addMe)
     else:
         return false
 
-## \brief Set a parameter by a string
-## \param paraHandle to a Parameter instance
-## \param value Pointer to string holding the value to assign to the parameter, e.g. "0.01" to set a double to 0.01
+## \brief Set a Property by a string
+## \param propertyHandle to a Property instance
+## \param value Pointer to string holding the value to assign to the Property, e.g. "0.01" to set a double to 0.01
 ## \return Returns true if successful, false otherwise
-## \ingroup plugin_parameters
-rrpLib.setParameterByString.restype = c_bool
-def setParameterByString(paraHandle, value):
-    return rrpLib.setParameterByString(paraHandle, value)
+## \ingroup plugin_properties
+rrpLib.setPropertyByString.restype = c_bool
+def setPropertyByString(PropertyHandle, value):
+    return rrpLib.setPropertyByString(PropertyHandle, value)
 
-## \brief Get inforamtion on a parameter
-## \param paraHandle Handle to a parameter instance
-## \return Returns informational text about the parameter if successful, None otherwise
-## \ingroup plugin_parameters
-rrpLib.getParameterInfo.restype = c_char_p
-def getParameterInfo(paraHandle):
-    return rrpLib.getParameterInfo(paraHandle)
+## \brief Get inforamtion on a Property
+## \param propertyHandle Handle to a Property instance
+## \return Returns informational text about the Property if successful, None otherwise
+## \ingroup plugin_properties
+rrpLib.getPropertyInfo.restype = c_char_p
+def getPropertyInfo(propertyHandle):
+    return rrpLib.getPropertyInfo(propertyHandle)
 
-## \brief Get a parameter value in the form of a string
-## \param paraHandle to a Parameter instance
-## \return Returns the parameters value if successful, None otherwise
-## \ingroup plugin_parameters
-rrpLib.getParameterValueAsString.restype = c_char_p
-def getParameterValueAsString(paraHandle):
-    return rrpLib.getParameterValueAsString(paraHandle)
+## \brief Get a Property value in the form of a string
+## \param propertyHandle to a Property instance
+## \return Returns the Properties value if successful, None otherwise
+## \ingroup plugin_properties
+rrpLib.getPropertyValueAsString.restype = c_char_p
+def getPropertyValueAsString(propertyHandle):
+    return rrpLib.getPropertyValueAsString(propertyHandle)
 
-## \brief Get a handle to a parameter value. Such parameters could be any type, including a list of parameters.
-## Use getlistParameter(paraHandle) instead.
-## \param paraHandle to a Parameter instance
-## \return Returns a Handle to the parameter value if successful, None otherwise
+## \brief Get a handle to a Property value. Such properties could be any type, including a list of Properties.
+## Use getlistProperty(propertyaHandle) instead.
+## \param propertyHandle to a Property instance
+## \return Returns a Handle to the property value if successful, None otherwise
 #
 ## @code
-## parameterHandle = rrPlugins.getParameterValueHandle (parhandle)
+## propertyHandle = rrPlugins.getPropertyValueHandle (parhandle)
 ## @endcode
 ## \htmlonly  <br/>
 ## \endhtmlonly
-## \ingroup plugin_parameters
-rrpLib.getParameterValueHandle.restype = c_void_p
-def getParameterValueHandle(paraHandle):
-    return rrpLib.getParameterValueHandle(paraHandle)
+## \ingroup plugin_properties
+rrpLib.getPropertyValueHandle.restype = c_void_p
+def getPropertyValueHandle(propertyHandle):
+    return rrpLib.getPropertyValueHandle(propertyHandle)
 
-## \brief Get the name of a parameter
-## \param paraHandle to a Parameter instance
-## \return Returns the parameters name if successful, None otherwise
-## \ingroup plugin_parameters
-rrpLib.getParameterName.restype = c_char_p
-def getParameterName(paraHandle):
-    return rrpLib.getParameterName(paraHandle)
+## \brief Get the name of a Property
+## \param propertyHandle to a Property instance
+## \return Returns the Properties name if successful, None otherwise
+## \ingroup plugin_properties
+rrpLib.getPropertyName.restype = c_char_p
+def getPropertyName(propertyHandle):
+    return rrpLib.getPropertyName(propertyHandle)
 
-## \brief Get the hint text for a parameter
-## \param paraHandle to a Parameter instance
-## \return Returns the hint value for a parameter if successful, None otherwise
-## \ingroup plugin_parameters
-rrpLib.getParameterHint.restype = c_char_p
-def getParameterHint(paraHandle):
-    return rrpLib.getParameterHint(paraHandle)
+## \brief Get the hint text for a Property
+## \param propertyHandle to a Property instance
+## \return Returns the hint value for a Property if successful, None otherwise
+## \ingroup plugin_properties
+rrpLib.getPropertyHint.restype = c_char_p
+def getPropertyHint(propertyHandle):
+    return rrpLib.getPropertyHint(propertyHandle)
 
-## \brief Get the type of a parameter
-## \param paraHandle to a Parameter instance
-## \return Returns the parameters type as a string if successful, None otherwise
-## \ingroup plugin_parameters
-rrpLib.getParameterType.restype = c_char_p
-def getParameterType(paraHandle):
-    return rrpLib.getParameterType(paraHandle)
+## \brief Get the type of a property
+## \param propertyHandle to a Property instance
+## \return Returns the Properties type as a string if successful, None otherwise
+## \ingroup plugin_properties
+rrpLib.getPropertyType.restype = c_char_p
+def getPropertyType(propertyHandle):
+    return rrpLib.getPropertyType(propertyHandle)
 
-## \brief Get the Boolean value for a parameter
-## \param paraHandle to a Parameter instance
-## \return Returns a Boolean value. Throws an exception if the parameter type is not a Boolean
-## \ingroup plugin_parameters
-rrpLib.getBoolParameter.restype = c_bool
-def getBoolParameter (paraHandle):
-    if getParameterType (paraHandle) == "bool":
+## \brief Get the Boolean value for a property
+## \param propertyHandle to a property instance
+## \return Returns a Boolean value. Throws an exception if the property type is not a Boolean
+## \ingroup plugin_properties
+rrpLib.getBoolProperty.restype = c_bool
+def getBoolProperty (propertyHandle):
+    if getPropertyType (propertyHandle) == "bool":
         val = c_bool()
-        if rrpLib.getBoolParameter (paraHandle, byref(val)) == True:
+        if rrpLib.getBoolProperty (propertyHandle, byref(val)) == True:
             return val.value
         else:
-            raise ('Parameter value could not be retrieved')
+            raise ('Property value could not be retrieved')
     else:
-       raise TypeError ('Parameter is not a Boolean type')
+       raise TypeError ('Property is not a Boolean type')
 
-## \brief Set a boolean parameter
-## \param paraHandle to a Parameter instance
-## \param value to assign to the parameter.
+## \brief Set a boolean property
+## \param propertyHandle to a property instance
+## \param value to assign to the property.
 ## \return Returns true if successful, false otherwise
-## \ingroup plugin_parameters
-rrpLib.setBoolParameter.restype = c_bool
-def setBoolParameter(paraHandle, value):
-    return rrpLib.setBoolParameter(paraHandle, c_bool(value))
+## \ingroup plugin_properties
+rrpLib.setBoolProperty.restype = c_bool
+def setBoolProperty(propertyHandle, value):
+    return rrpLib.setBoolProperty (propertyHandle, c_bool(value))
 
-## \brief Get the integer value for a parameter
-## \param paraHandle to a parameter instance
-## \return Returns an integer value. Throws an exception if the parameter type is not an integer
-## \ingroup plugin_parameters
-rrpLib.getIntParameter.restype = c_int
-def getIntParameter (paraHandle):
-    if getParameterType (paraHandle) == "int":
+## \brief Get the integer value for a property
+## \param propertyHandle to a property instance
+## \return Returns an integer value. Throws an exception if the property type is not an integer
+## \ingroup plugin_properties
+rrpLib.getIntProperty.restype = c_int
+def getIntProperty (propertyHandle):
+    if getPropertyType (propertyHandle) == "int":
         val = c_int()
-        if rrpLib.getIntParameter (paraHandle, byref(val)) == True:
+        if rrpLib.getIntProperty (propertyHandle, byref(val)) == True:
             return val.value
         else:
-            raise ('Parameter value could not be retrieved')
+            raise ('Property value could not be retrieved')
     else:
-       raise TypeError ('Parameter is not an integer type')
+       raise TypeError ('Property is not an integer type')
 
-## \brief Set an integer parameter
-## \param paraHandle to a Parameter instance
-## \param value to assign to the parameter.
+## \brief Set an integer property
+## \param propertyHandle to a property instance
+## \param value to assign to the property.
 ## \return Returns true if successful, false otherwise
-## \ingroup plugin_parameters
-rrpLib.setIntParameter.restype = c_bool
-def setIntParameter(paraHandle, value):
-    return rrpLib.setIntParameter(paraHandle, c_int(value))
+## \ingroup plugin_properties
+rrpLib.setIntProperty.restype = c_bool
+def setIntProperty(propertyHandle, value):
+    return rrpLib.setIntProperty(propertyHandle, c_int(value))
 
 
-## \brief Get the double value for a parameter
-## \param paraHandle to a parameter instance
-## \return Returns a double value. Throws an exception if the parameter type is not a double
-## \ingroup plugin_parameters
-rrpLib.getDoubleParameter.restype = c_bool
-def getDoubleParameter (paraHandle):
-    if getParameterType (paraHandle) == "double":
+## \brief Get the double value for a property
+## \param propertyHandle to a property instance
+## \return Returns a double value. Throws an exception if the property type is not a double
+## \ingroup plugin_properties
+rrpLib.getDoubleProperty.restype = c_bool
+def getDoubleProperty (propertyHandle):
+    if getPropertyType (propertyHandle) == "double":
         val = c_double()
-        if rrpLib.getDoubleParameter (paraHandle, byref(val)) == True:
+        if rrpLib.getDoubleProperty (propertyHandle, byref(val)) == True:
             return val.value
         else:
-            raise ('Parameter value could not be retrieved')
+            raise ('Property value could not be retrieved')
     else:
-       raise TypeError ('Parameter is not a double type')
+       raise TypeError ('Property is not a double type')
 
-## \brief Set the value for a double parameter
-## \param paraHandle Is a parameter instance
-## \param value to assign to the parameter.
+## \brief Set the value for a double property
+## \param propertyHandle Is a property instance
+## \param value to assign to the property.
 ## \return Returns true if successful, false otherwise
-## \ingroup plugin_parameters
-rrpLib.setDoubleParameter.restype = c_bool
-def setDoubleParameter(paraHandle, value):
-    return rrpLib.setDoubleParameter(paraHandle, c_double(value))
+## \ingroup plugin_properties
+rrpLib.setDoubleProperty.restype = c_bool
+def setDoubleProperty(propertyHandle, value):
+    return rrpLib.setDoubleProperty(propertyHandle, c_double(value))
 
-## \brief Get the string value for a parameter
-## \param paraHandle to a parameter instance
-## \return Returns a string value. Throws an exception if the parameter type is not a string
-## \ingroup plugin_parameters
-rrpLib.getStringParameter.restype = c_bool
-def getStringParameter (paraHandle):
-    if getParameterType (paraHandle) == "string" or getParameterType (paraHandle) == "std::string":
+## \brief Get the string value for a property
+## \param propertyHandle to a property instance
+## \return Returns a string value. Throws an exception if the property type is not a string
+## \ingroup plugin_properties
+rrpLib.getStringProperty.restype = c_bool
+def getStringProperty (propertyHandle):
+    if getPropertyType (propertyHandle) == "string" or getPropertyType (propertyHandle) == "std::string":
         val = c_char_p()
-        if rrpLib.getStringParameter (paraHandle, byref(val)) == True:
+        if rrpLib.getStringProperty (propertyHandle, byref(val)) == True:
             return val.value
         else:
-            raise ('Parameter value could not be retrieved')
+            raise ('Property value could not be retrieved')
     else:
-       raise TypeError ('Parameter is not a string type')
+       raise TypeError ('Property is not a string type')
 
-## \brief Set a string parameter
-## \param paraHandle Handle to a Parameter instance
-## \param value Value to assign to the parameter.
+## \brief Set a string property
+## \param propertyHandle Handle to a Property instance
+## \param value Value to assign to the property.
 ## \return Returns true if successful, false otherwise
-## \ingroup plugin_parameters
-rrpLib.setStringParameter.restype = c_bool
-def setStringParameter(paraHandle, value):
-    return rrpLib.setStringParameter(paraHandle, c_char_p(value))
+## \ingroup plugin_properties
+rrpLib.setStringPropertyr.restype = c_bool
+def setStringProperty(propertyHandle, value):
+    return rrpLib.setStringProperty(propertyHandle, c_char_p(value))
 
-## \brief Get the list value for a parameter
-## \param paraHandle to a parameter instance
-## \return Returns a handle to a ListParameter. Throws an exception of the parameter type is not a list of parameters
-## \ingroup plugin_parameters
-rrpLib.getListParameter.restype = c_bool
-def getListParameter (paraHandle):
-    if getParameterType (paraHandle) == "listOfParameters":
-        return getParameterValueHandle(paraHandle)
+## \brief Get the list value for a property
+## \param propertyHandle to a property instance
+## \return Returns a handle to a ListProperty. Throws an exception of the property type is not a list of properties
+## \ingroup plugin_properties
+rrpLib.getListProperty.restype = c_bool
+def getListProperty (propertyHandle):
+    if getPropertyType (propertyHandle) == "listOfProperty":
+        return getPropertyValueHandle(propertyHandle)
     else:
-       raise TypeError ('Parameter is not a list type')
+       raise TypeError ('Property is not a list type')
 
-## \brief Set a list parameter
-## \param paraHandle to a Parameter instance
-## \param value Value to assign to the parameter (must be a handle to a Parameter of listOfParameters.
+## \brief Set a list Property
+## \param propertyHandle to a Property instance
+## \param value Value to assign to the property (must be a handle to a Property of listOfProperties.
 ## \return Returns true if successful, false otherwise
-## \ingroup plugin_parameters
-rrpLib.setListParameter.restype = c_bool
-def setListParameter(paraHandle, value):
-    handle = getParameterValueHandle(value)
-    return rrpLib.setListParameter(paraHandle, c_void_p(handle))
+## \ingroup plugin_properties
+rrpLib.setListProperty.restype = c_bool
+def setListProperty(propertyHandle, value):
+    handle = getPropertyValueHandle(value)
+    return rrpLib.setListProperty(propertyHandle, c_void_p(handle))
 
-## \brief Get the value of a roadRunnerData parameter
-## \param paraHandle A Handle to a parameter
-## \return Returns the value of the parameter if succesful, None otherwise
-## \ingroup plugin_parameters
-def getRoadRunnerDataParameter(paraHandle):
-        return getParameterValue(paraHandle)
+## \brief Get the value of a roadRunnerData property
+## \param propertyHandle A Handle to a property
+## \return Returns the value of the property if succesful, None otherwise
+## \ingroup plugin_properties
+def getRoadRunnerDataProperty(propertyHandle):
+        return getPropertyValue(propertyHandle)
 
-## \brief Set a roadRunnerData parameter
-## \param paraHandle Handle to a Parameter instance
-## \param value Value to assign to the parameter (must be a handle to roadRunnerData.
+## \brief Set a roadRunnerData property
+## \param propertyHandle Handle to a Property instance
+## \param value Value to assign to the property (must be a handle to roadRunnerData.
 ## \return Returns true if successful, false otherwise
-## \ingroup plugin_parameters
-rrpLib.setRoadRunnerDataParameter.restype = c_bool
-def setRoadRunnerDataParameter(paraHandle, value):
-    return rrpLib.setRoadRunnerDataParameter(paraHandle, c_void_p(value))
+## \ingroup plugin_properties
+rrpLib.setRoadRunnerDataProperty.restype = c_bool
+def setRoadRunnerDataProperty(propertyHandle, vProperty(propertyHandle, c_void_p(value))
 
-## \brief Get the value of a parameter.
-## \param paraHandle A Handle to a parameter
-## \return Returns the value of the parameter if succesful, None otherwise
-## \ingroup plugin_parameters
-def getParameter(paraHandle):
-    paraType = getParameterType(paraHandle)
+## \brief Get the value of a property.
+## \param propertyHandle A Handle to a property
+## \return Returns the value of the property if succesful, None otherwise
+## \ingroup plugin_properties
+def getProperty(propertyHandle):
+    paraType = getPropertyType(propertyHandle)
     if paraType == 'bool':
-        paraVoidPtr = getParameterValueHandle(paraHandle)
+        paraVoidPtr = getPropertyValueHandle(propertyHandle)
         ptr = cast(paraVoidPtr, POINTER(c_bool))
         return ptr[0]
     if paraType == 'int':
-        paraVoidPtr = getParameterValueHandle(paraHandle)
+        paraVoidPtr = getPropertyValueHandle(propertyHandle)
         ptr = cast(paraVoidPtr, POINTER(c_int))
         return ptr[0]
     if paraType == 'double':
-        paraVoidPtr = getParameterValueHandle(paraHandle)
+        paraVoidPtr = getPropertyValueHandle(propertyHandle)
         ptr = cast(paraVoidPtr, POINTER(c_double))
         return ptr[0]
     if paraType == 'std::string':
-        return getParameterValueAsString(paraHandle)
+        return getPropertyValueAsString(propertyHandle)
     if paraType == 'string':
-        return getParameterValueAsString(paraHandle)
-    if paraType == 'listOfParameters':
-        return getParameterValueHandle(paraHandle)
+        return getPropertyValueAsString(propertyHandle)
+    if paraType == 'listOfProperties':
+        return getPropertyValueHandle(propertyHandle)
     if paraType == 'roadRunnerData': #The value of this is a handle
-        ptr = getParameterValueHandle(paraHandle)
+        ptr = getPropertyValueHandle(propertyHandle)
         return ptr
     else:
-       raise TypeError ('Parameter is not a string type')
+       raise TypeError ('Property is not a string type: ', paraType)
 
-## \brief Get the value of a parameter.
-## \param paraHandle A Handle to a parameter
-## \return Returns the value of the parameter if succesful, None otherwise
-## \note Legacy function. Use getParameter() instead.
-## \ingroup plugin_parameters
-def getParameterValue(paraHandle):
-    paraType = getParameterType(paraHandle)
+## \brief Get the value of a property.
+## \param propertyHandle A Handle to a property
+## \return Returns the value of the property if succesful, None otherwise
+## \note Legacy function. Use getProperty() instead.
+## \ingroup plugin_properties
+def getPropertyValue(propertyHandle):
+    paraType = getPropertyType(propertyHandle)
     if paraType == 'bool':
-        paraVoidPtr = getParameterValueHandle(paraHandle)
+        paraVoidPtr = getPropertyValueHandle(propertyHandle)
         ptr = cast(paraVoidPtr, POINTER(c_bool))
         return ptr[0]
     if paraType == 'int':
-        paraVoidPtr = getParameterValueHandle(paraHandle)
+        paraVoidPtr = getPropertyValueHandle(propertyHandle)
         ptr = cast(paraVoidPtr, POINTER(c_int))
         return ptr[0]
     if paraType == 'double':
-        paraVoidPtr = getParameterValueHandle(paraHandle)
+        paraVoidPtr = getPropertyValueHandle(propertyHandle)
         ptr = cast(paraVoidPtr, POINTER(c_double))
         return ptr[0]
     if paraType == 'std::string':
-        return getParameterValueAsString(paraHandle)
+        return getPropertyValueAsString(propertyHandle)
     if paraType == 'string':
-        return getParameterValueAsString(paraHandle)
-    if paraType == 'listOfParameters':
-        return getParameterValueHandle(paraHandle)
+        return getPropertyValueAsString(propertyHandle)
+    if paraType == 'listOfProperties':
+        return getPropertyValueHandle(propertyHandle)
     if paraType == 'roadRunnerData': #The value of this is a handle
-        ptr = getParameterValueHandle(paraHandle)
+        ptr = getPropertyValueHandle(propertyHandle)
         return ptr
     else:
-       raise TypeError ('Parameter is not a string type')
+       raise TypeError ('Property is not a string type')
 
 ## \brief Retrieve a handle to RoadRunners internal data object
 ## \param rrInstance A RoadRunner instance, as returned from roadrunner.RoadRunner()
@@ -1209,7 +1178,7 @@ def unLoadAPI():
 ##Version.......................1.0
 ##Copyright.....................Totte Karlsson, Herbert Sauro, Systems Biology, UW 2012
 ##
-##PluginParameters: ['NoiseType', 'Sigma', 'InputData']
+##PluginProperties: ['NoiseType', 'Sigma', 'InputData']
 ##True
 ##done
 ##>>>
@@ -1218,7 +1187,7 @@ def unLoadAPI():
 #    The libRoadRunner Plugin API is centered around three important concepts:
 #    - A Plugin Manager
 #    - Plugins
-#    - Plugin Parameters
+#    - Plugin Properties
 #
 #    \section plugins_usage How to use plugins
 #    A typical use case of the Plugin API may be as follows:
@@ -1226,12 +1195,12 @@ def unLoadAPI():
 #    -# Client creates a PluginManager.
 #    -# Client load plugins using the Plugin Manager.
 #    -# Client get a handle to a plugin.
-#    -# Client get a handle to a specific parameter in the plugin.
-#    -# Client set the value of the parameter.
+#    -# Client get a handle to a specific property in the plugin.
+#    -# Client set the value of the property.
 #    -# Client excutes the plugin.
-#    -# Client retrieve the value of a plugins parameter, e.g. a "result" parameter.
+#    -# Client retrieve the value of a plugins property, e.g. a "result" property.
 #   \subsection pluginEvents PluginEvent functionality
-# In addition to data parameters that communicate data between a client and the plugin, the framework also support for a variety of  plugin event functions.
+# In addition to data properties that communicate data between a client and the plugin, the framework also support for a variety of  plugin event functions.
 # In short, an event is a regular function that is defined and implemented by the client of a plugin, but executed from within the plugin, during the plugins
 # execution.
 #
@@ -1240,7 +1209,7 @@ def unLoadAPI():
 #   -# Plugin Progress
 #   -# Plugin Finalization
 #
-# Each event function support up to two opaque data parameters. The plugin documentation needs to provide the exact type of these arguments.
+# Each event function support up to two opaque data properties. The plugin documentation needs to provide the exact type of these arguments.
 # In it simplest form, a plugin may choose to define an event function taking no arguments at all.
 # Below are listed a few properties, characteristics of events in the RoadRunner Plugin framework.
 #   -# A plugin event is a regular function defined by the client of the plugin.
@@ -1252,7 +1221,7 @@ def unLoadAPI():
 #   will be executed in the same thread as the plugin worker. Depending on your environment and if the plugin event function is executed in a separate
 # thread, regular use of thread synchronization measuress may be needed in order to not create an unstable system.
 #
-#   See the examples page that provide example code on how to use plugins, parameters and event functions.
+#   See the examples page that provide example code on how to use plugins, properties and event functions.
 #    \section plugins_writing How to write plugins
 #    \note Writing plugins in Python is not yet supported
 #
@@ -1273,24 +1242,24 @@ def unLoadAPI():
 #
 # 3. Obtain the plugin handle using getPlugin or directly from loadPlugin (singular)
 #
-# 4. Using the plugin handle, set values to the plugin parameters
+# 4. Using the plugin handle, set values to the plugin properties
 #
 # 5. Run the plugin method execute(pluginHandle)
 #
-# 6. Retrieve results from plugin parameters
+# 6. Retrieve results from plugin properties
 # \defgroup plugins Plugin Functions
 # \brief Functions operating on Plugin Handles.
 #
-# \defgroup plugin_parameters Plugin Parameters
-# \brief Plugins Parameter related functions
-# The plugin system supports parameter objects, these objects contain a variety of information about a given parameter, these include:
+# \defgroup plugin_properties Plugin Properties
+# \brief Plugins Property related functions
+# The plugin system supports property objects, these objects contain a variety of information about a given property, these include:
 # the name, value, type, hint, and a description. The following types are currently supported, Booleans, integers, doubles, strings,
-# list of parameter objects and the roadRunner data array format. Parameters can also be grouped into convenient categories which can be useful
-# for GUI applications. Every plugin exposes as a set of parameters than can be inspected and set by a host application.
-# The list of plugin parameters will be called the pluginParameters. Within the pluginParameters are individual parameter entries.
-# As already aluded to, these parameter entries can store a variety of different data types, incuding additional lists of parameters. Such lists
-# are popoluated by creating new parameters using the createParameter method and then added to the list using the addParameterToList method.
-# In the followng a paraHandle points to a single parameter object.
+# list of property objects and the roadRunner data array format. Properties can also be grouped into convenient categories which can be useful
+# for GUI applications. Every plugin exposes as a set of properties than can be inspected and set by a host application.
+# The list of plugin properties will be called the pluginProperties. Within the pluginProperties are individual property entries.
+# As already aluded to, these property entries can store a variety of different data types, incuding additional lists of properties. Such lists
+# are popoluated by creating new properties using the createProperty method and then added to the list using the addPropertyToList method.
+# In the followng a propertyHandle points to a single property object.
 #
 # \defgroup utilities Utility Functions
 # \brief Functions to help and assist in the use of the Plugins framework
@@ -1305,12 +1274,12 @@ def unLoadAPI():
 ## -# Get a handle to a plugin
 ## -# Obtain some info from the plugin
 
-## \example rrPluginParameter.py
+## \example rrPluginProperty.py
 ## This Example shows
-## -# Get a handle to a parameter in a Plugin
-## -# Obtain some info about the parameter
-## -# Getting the value of the parameter
-## -# Setting the value of the parameter
+## -# Get a handle to a property in a Plugin
+## -# Obtain some info about the property
+## -# Getting the value of the property
+## -# Setting the value of the property
 
 ## \example rrPluginDocumentation.py
 ## This Example shows
