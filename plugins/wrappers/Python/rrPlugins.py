@@ -78,8 +78,8 @@ class Plugin (object):
            if not rrp.setPluginParameter (self.plugin, name, value.data):
               raise TypeError ("Unable to locate property: ", name)
         else:
-           handle  = rrp.getPluginParameter(self.plugin, name);
-           t1 = rrp.getParameterType (handle)
+           handle  = rrp.getPluginProperty(self.plugin, name);
+           t1 = rrp.getPropertyType (handle)
            if (t1 == "listOfParrameters"):
               if isinstance (value, list):
                  if len(value) != 2:
@@ -88,19 +88,19 @@ class Plugin (object):
                      raise TypeError("Expecting property name in first element of list")
                  if (not isinstance(value[1], float)) and (isinstance(value[1], int)):
                      raise TypeError("Expecting floating value in second element of list")
-                 para1 = rrp.createParameter(value[0], "double", "", value[1])
-                 rrp.addParameterToList (handle, para1)
+                 para1 = rrp.createProperty(value[0], "double", "", value[1])
+                 rrp.addPropertyToList (handle, para1)
               else:
                  raise  TypeError ("Expecting a list in setProperty")
            else:
-              rrp.setPluginParameter (self.plugin, name, value)
+              rrp.setPluginProperty (self.plugin, name, value)
 
     def getProperty (self, name):
-        handle = rrp.getPluginParameter (self.plugin, name)
+        handle = rrp.getPluginProperty (self.plugin, name)
         if handle == 0:
             raise ValueError ("Property: " + name + " does not exist")
-        value = rrp.getParameter (handle)
-        if (rrp.getParameterType(handle) == "roadRunnerData"):
+        value = rrp.getProperty (handle)
+        if (rrp.getPropertyType(handle) == "roadRunnerData"):
             return DataSeries (value)
         else:
            return value
@@ -117,12 +117,12 @@ class Plugin (object):
         else:  raise AttributeError, name
 
     def listOfProperties (self):
-        nameList = rrp.getListOfPluginParameterNames (self.plugin)
+        nameList = rrp.getListOfPluginPropertyNames (self.plugin)
         aList = []
         for i in range (0, len (nameList)):
             name = nameList[i]
-            handle = rrp.getPluginParameter(self.plugin, nameList[i])
-            hint = rrp.getParameterHint(handle)
+            handle = rrp.getPluginProperty(self.plugin, nameList[i])
+            hint = rrp.getPropertyHint(handle)
             aList.append ([name, hint])
         return aList
 
@@ -214,6 +214,6 @@ if __name__=='__main__':
     p.plotDataSeries (series)
     #p.InputData = series
     p.execute()
-    p.plotDataSeries (p.InputData)
+#    p.plotDataSeries (p.InputData)
 
     print "Test Finished"

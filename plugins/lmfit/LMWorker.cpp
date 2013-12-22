@@ -57,7 +57,7 @@ void LMWorker::run()
     StringList& species = mTheHost.mObservedDataSelectionList.getValueReference();//mMinData.getObservedDataSelectionList();
     Log(lInfo)<<"The following species are selected: "<<species.AsString();
 
-    Parameters& Paras =  mTheHost.mInputParameterList.getValueReference(); //mMinData.getParameters();
+    Properties& Paras =  mTheHost.mInputPropertyList.getValueReference(); //mMinData.getProperties();
     Log(lInfo)<<"The following parameters are to be minimized";
     for(int i = 0; i < Paras.count(); i++)
     {
@@ -114,17 +114,17 @@ void LMWorker::run()
 
     for (int i = 0; i < mLMData.nrOfParameters; ++i)
     {
-        Log(lInfo)<<"Parameter "<<mLMData.parameterLabels[i]<<" = "<< mLMData.parameters[i];
+        Log(lInfo)<<"Property "<<mLMData.parameterLabels[i]<<" = "<< mLMData.parameters[i];
     }
 
     Log(lInfo)<<"Obtained norm:  "<<status.fnorm;
 
     //Populate with data to report back
-    Parameters& parsOut = mTheHost.mOutputParameterList.getValueReference();
+    Properties& parsOut = mTheHost.mOutputPropertyList.getValueReference();
     parsOut.clear();
     for (int i = 0; i < mLMData.nrOfParameters; ++i)
     {
-        parsOut.add(new Parameter<double>(mLMData.parameters[i], mLMData.parameterLabels[i], ""), true);
+        parsOut.add(new Property<double>(mLMData.parameters[i], mLMData.parameterLabels[i], ""), true);
     }
 
     mTheHost.mNorm.setValue(status.fnorm);
@@ -156,14 +156,14 @@ bool LMWorker::setup()
 {
     StringList& species         = mTheHost.mObservedDataSelectionList.getValueReference();   //Model data selection..
     mLMData.nrOfSpecies         = species.Count();
-    Parameters parameters       = mTheHost.mInputParameterList.getValue();
+    Properties parameters       = mTheHost.mInputPropertyList.getValue();
     mLMData.nrOfParameters      = parameters.count();
     mLMData.parameters          = new double[mLMData.nrOfParameters];
     mLMData.mLMPlugin           = static_cast<RRPluginHandle> (&mTheHost);
     //Set initial parameter values
     for(int i = 0; i < mLMData.nrOfParameters; i++)
     {
-        Parameter<double> *par = (Parameter<double>*) parameters[i];
+        Property<double> *par = (Property<double>*) parameters[i];
         if(par)
         {
             mLMData.parameters[i] = par->getValue();
@@ -255,7 +255,7 @@ bool LMWorker::setupRoadRunner()
 }
 
 /* function evaluation, determination of residues */
-void evaluate(const double *par,       //Parameter vector
+void evaluate(const double *par,       //Property vector
               int          m_dat,      //Dimension of residue vector
               const void   *userData,  //Data structure
               double       *fvec,      //residue vector..

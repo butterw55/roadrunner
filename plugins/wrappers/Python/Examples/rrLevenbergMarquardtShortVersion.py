@@ -20,8 +20,8 @@ assignOnProgressEvent(lm.plugin, progressEvent, None, theId)
 ##===================================================
 
 #Set a lmfit parametere. Printflags control the output in the callback message
-lm.setParameter("printflags", 2)
-lm.setParameter("ftol", 2.e-2)
+#lm.setParameter("printflags", 2)
+#lm.setParameter("ftol", 2.e-2)
 experimentalData = lm.loadDataSeries ("testData.dat")
 
 lm.setParameter ("ExperimentalData", experimentalData)

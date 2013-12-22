@@ -1,7 +1,7 @@
 #pragma hdrstop
 #include "rrp_api.h"
 #include <sstream>
-#include "rrParameter.h"
+#include "rrProperty.h"
 #include "rrRoadRunner.h"
 #include "rrPluginManager.h"
 #include "rrPlugin.h"
@@ -223,41 +223,41 @@ char* rrp_cc getPluginHint(RRPluginHandle handle)
     catch_ptr_macro
 }
 
-RRParametersHandle rrp_cc getPluginParameters(RRPluginHandle handle)
+RRPropertiesHandle rrp_cc getPluginProperties(RRPluginHandle handle)
 {
     start_try
         Plugin* aPlugin = castToPlugin(handle);
-        return aPlugin->getParameters();
+        return aPlugin->getProperties();
     catch_ptr_macro
 }
 
-char* rrp_cc getListOfPluginParameterNames(RRPluginHandle handle)
+char* rrp_cc getListOfPluginPropertyNames(RRPluginHandle handle)
 {
     start_try
         Plugin* aPlugin = castToPlugin(handle);        
-        return createText(aPlugin->getParameterNames().AsString());
+        return createText(aPlugin->getPropertyNames().AsString());
     catch_ptr_macro
 }
 
-RRParameterHandle rrp_cc getPluginParameter(RRPluginHandle handle, const char* parameterName)
+RRPropertyHandle rrp_cc getPluginProperty(RRPluginHandle handle, const char* parameterName)
 {
     start_try
         Plugin* aPlugin = castToPlugin(handle);
-        PluginParameter *para = NULL;
+        PropertyBase *para = NULL;
         if(aPlugin)
         {           
-            return aPlugin->getParameter(parameterName);
+            return aPlugin->getProperty(parameterName);
         }
         return NULL;
     catch_ptr_macro
 }
 
-bool rrp_cc setPluginParameter(RRPluginHandle handle, const char* parameterName, const char* value)
+bool rrp_cc setPluginProperty(RRPluginHandle handle, const char* parameterName, const char* value)
 {
     start_try
         Plugin* aPlugin = castToPlugin(handle);
-        PluginParameter* aParameter = (PluginParameter*) getPluginParameter(aPlugin, parameterName);
-        return setParameterByString(aParameter, value);
+        PropertyBase* aProperty = (PropertyBase*) getPluginProperty(aPlugin, parameterName);
+        return setPropertyByString(aProperty, value);
     catch_bool_macro
 }
 

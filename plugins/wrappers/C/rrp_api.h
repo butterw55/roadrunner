@@ -390,7 +390,7 @@ RRP_DECLSPEC bool rrp_cc assignPluginInput(RRPluginHandle handle, void* userData
 RRP_DECLSPEC RRHandle rrp_cc getRRHandleFromPlugin(RRPluginHandle handle);
 
 /*!
- \brief Get a Plugins Parameterse as an xml document. The string returned from this function is formated as xml.
+ \brief Get a Plugins Propertiese as an xml document. The string returned from this function is formated as xml.
  \param handle Handle to a plugin
  \return Returns available parameters in the plugin, as a pointer to a string, NULL otherwise
  \ingroup plugins
@@ -403,7 +403,7 @@ RRP_DECLSPEC char* rrp_cc getPluginPropertiesAsXML(RRPluginHandle handle);
   \return Returns a handle to a plugins parameter container, NULL otherwise
  \ingroup plugins
 */
-RRP_DECLSPEC RRParametersHandle rrp_cc getPluginParameters(RRPluginHandle handle);
+RRP_DECLSPEC RRPropertiesHandle rrp_cc getPluginProperties(RRPluginHandle handle);
 
 /*!
  \brief Get a list of a plugin parameter names, as a string. Space being the delimiter.
@@ -411,7 +411,7 @@ RRP_DECLSPEC RRParametersHandle rrp_cc getPluginParameters(RRPluginHandle handle
   \return Returns a string if succesfull, NULL otherwise
  \ingroup plugins
 */
-RRP_DECLSPEC char* rrp_cc getListOfPluginParameterNames(RRPluginHandle handle);
+RRP_DECLSPEC char* rrp_cc getListOfPluginPropertyNames(RRPluginHandle handle);
 
 /*!
  \brief Get a parameter handle to a parameter.
@@ -420,17 +420,17 @@ RRP_DECLSPEC char* rrp_cc getListOfPluginParameterNames(RRPluginHandle handle);
  \return Returns a handle to a parameter. Returns NULL if not found
  \ingroup plugins
 */
-RRP_DECLSPEC RRParameterHandle rrp_cc getPluginParameter(RRPluginHandle handle, const char* parameterName);
+RRP_DECLSPEC RRPropertyHandle rrp_cc getPluginProperty(RRPluginHandle handle, const char* parameterName);
 
 /*!
- \brief Set the value of a PluginParameter by a string.
+ \brief Set the value of a PluginProperty by a string.
  \param handle Handle to a plugin
  \param parameterName Name of parameter
  \param value Value of parameter, as string
  \return true if succesful, false otherwise
  \ingroup plugins
 */
-RRP_DECLSPEC bool rrp_cc setPluginParameter(RRPluginHandle handle, const char* parameterName, const char* value);
+RRP_DECLSPEC bool rrp_cc setPluginProperty(RRPluginHandle handle, const char* parameterName, const char* value);
 
 /*!
  \brief Retrieve a handle to RoadRunners internal data
@@ -598,7 +598,7 @@ int main()
     The libRoadRunner Plugin API is centered around three important concepts:
     - A Plugin Manager (RRPluginManagerHandle)
     - A Plugin (RRPlugin)
-    - A Plugin Parameter (RRParameter)
+    - A Plugin Property (RRProperty)
 
     \section plugins_usage How to use plugins
     A typical use case of the Plugin API may be as follows:
@@ -667,8 +667,8 @@ int main()
  \defgroup plugins Plugin Functions
  \brief Functions operating on Plugin Handles.
 
- \defgroup plugin_parameters Plugin Parameters
- \brief Plugins Parameter related functions
+ \defgroup plugin_parameters Plugin Properties
+ \brief Plugins Property related functions
 
 \defgroup utilities Utility Functions
  \brief Functions to help and assist in the use of the Plugins framework

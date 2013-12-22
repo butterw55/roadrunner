@@ -27,13 +27,13 @@ using namespace rrc;
 LM::LM(rr::RoadRunner* aRR)
 :
 CPPPlugin(                  "Levenberg-Marquardt", "Fitting",       aRR, NULL),
-mLMFit(                     "LMFit",                                "Fit Model Parameters Using the Levenberg-Marquardt Algorithm"),    //The 'capability'
+mLMFit(                     "LMFit",                                "Fit Model Propertys Using the Levenberg-Marquardt Algorithm"),    //The 'capability'
 mSBML(                      "<none>",               "SBML",                                 "SBML, i.e. the model to be used in the fitting"),
 mObservedData(              RoadRunnerData(),       "ExperimentalData",                     "Data object holding Experimental data: Provided by client"),
 mModelData(                 RoadRunnerData(),       "FittedData",                           "Data object holding model data: Handed to client"),
 mResidualsData(             RoadRunnerData(),       "Residuals",                            "Data object holding residuals: Handed to client"),
-mInputParameterList(        Parameters(),           "InputParameterList",                   "List of parameters to fit"),
-mOutputParameterList(       Parameters(),           "OutputParameterList",                  "List of parameters that was fittedt"),
+mInputPropertyList(        Properties(),           "InputPropertyList",                   "List of parameters to fit"),
+mOutputPropertyList(       Properties(),           "OutputPropertyList",                  "List of parameters that was fittedt"),
 mObservedDataSelectionList( StringList(),           "ExperimentalDataSelectionList",        "Experimental data selection list"),
 mModelDataSelectionList(    StringList(),           "FittedDataSelectionList",              "Fitted data selection list"),
 mNorm(                      -1.0,                   "Norm",                                 "Norm of fitting. An estimate of goodness of fit"),
@@ -54,34 +54,34 @@ printflags(                0,                       "printflags" ,              
 {
     mVersion = "1.0";
     //Setup the plugins capabilities
-    mLMFit.addParameter(&mSBML);
-    mLMFit.addParameter(&mObservedData);
-    mLMFit.addParameter(&mModelData);
-    mLMFit.addParameter(&mResidualsData);
-    mLMFit.addParameter(&mInputParameterList);
-    mLMFit.addParameter(&mOutputParameterList);
-    mLMFit.addParameter(&mObservedDataSelectionList);
-    mLMFit.addParameter(&mModelDataSelectionList);
-    mLMFit.addParameter(&mNorm);
-    mLMFit.addParameter(&mNrOfIter);
+    mLMFit.addProperty(&mSBML);
+    mLMFit.addProperty(&mObservedData);
+    mLMFit.addProperty(&mModelData);
+    mLMFit.addProperty(&mResidualsData);
+    mLMFit.addProperty(&mInputPropertyList);
+    mLMFit.addProperty(&mOutputPropertyList);
+    mLMFit.addProperty(&mObservedDataSelectionList);
+    mLMFit.addProperty(&mModelDataSelectionList);
+    mLMFit.addProperty(&mNorm);
+    mLMFit.addProperty(&mNrOfIter);
 
     //Add the lmfit parameters
 
-    mLMFit.addParameter(&ftol);
-    mLMFit.addParameter(&xtol);
-    mLMFit.addParameter(&gtol);
-    mLMFit.addParameter(&epsilon);
-    mLMFit.addParameter(&stepbound);
-    mLMFit.addParameter(&maxcall);
-    mLMFit.addParameter(&scale_diag);
-    mLMFit.addParameter(&printflags);
+    mLMFit.addProperty(&ftol);
+    mLMFit.addProperty(&xtol);
+    mLMFit.addProperty(&gtol);
+    mLMFit.addProperty(&epsilon);
+    mLMFit.addProperty(&stepbound);
+    mLMFit.addProperty(&maxcall);
+    mLMFit.addProperty(&scale_diag);
+    mLMFit.addProperty(&printflags);
 
     mProperties.add(mLMFit);
     //Allocate model and Residuals data
     mResidualsData.setValue(new RoadRunnerData());
     mModelData.setValue(new RoadRunnerData());
     
-    mHint ="Parameter fitting using the Levenberg-Marquardt algorithm";
+    mHint ="Property fitting using the Levenberg-Marquardt algorithm";
     mDescription="The Levenberg-Marquardt plugin is used to fit a proposed \
 SBML models parameters to experimental data. \
 The current implementation is based on the lmfit C library by Joachim Wuttke. \
@@ -152,8 +152,8 @@ bool LM::resetPlugin()
 //        mResidualsData.getValueReference()->clear();
 //    }
 
-    mInputParameterList.getValueReference().clear();
-    mOutputParameterList.getValueReference().clear();
+    mInputPropertyList.getValueReference().clear();
+    mOutputPropertyList.getValueReference().clear();
     mObservedDataSelectionList.getValueReference().clear();
     mModelDataSelectionList.getValueReference().clear();
     return true;
@@ -167,7 +167,7 @@ string LM::getSBML()
 string LM::getResult()
 {
     stringstream msg;
-    Parameters& pars = mOutputParameterList.getValueReference();
+    Properties& pars = mOutputPropertyList.getValueReference();
 
     for(int i = 0; i < pars.count(); i++)
     {

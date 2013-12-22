@@ -100,7 +100,7 @@ class PLUGINS_API_DECLSPEC Capabilities
         /**
             Set a parameter value in a capability.
         */
-        bool                            setParameter(const string& name, const string& value);
+        bool                            setProperty(const string& name, const string& value);
 
         /**
             Get capabilities as a list of strings

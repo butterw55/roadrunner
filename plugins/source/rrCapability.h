@@ -43,7 +43,7 @@
 #include <string>
 #include <vector>
 #include "rrPluginsAPIExporter.h"
-#include "rrParameters.h"
+#include "rrProperties.h"
 //---------------------------------------------------------------------------
 
 namespace rrp
@@ -51,7 +51,7 @@ namespace rrp
 
 /**
     A Capability. A capability is a basically a container of parameters, with the addition of a name and description.
-    \todo Might be better just inherit from Parameters and add the name, descr variables.
+    \todo Might be better just inherit from Properties and add the name, descr variables.
 */
 class PLUGINS_API_DECLSPEC Capability
 {
@@ -85,12 +85,12 @@ class PLUGINS_API_DECLSPEC Capability
         /**
             Get a pointers to the underlying parameter container
         */
-        Parameters*                         getParameters();
+        Properties*                         getProperties();
 
         /**
             Get a pointer to a parameter with a specific name
         */
-        PluginParameter*                    getParameter(const string& paraName);
+        PropertyBase*                    getProperty(const string& paraName);
 
         /**
             Assign name and description
@@ -100,7 +100,7 @@ class PLUGINS_API_DECLSPEC Capability
         /**
             Add a parameter to the capability
         */
-        void                                addParameter(PluginParameter* me);
+        void                                addProperty(PropertyBase* me);
 
         /**
             Get the capability as a string
@@ -110,12 +110,12 @@ class PLUGINS_API_DECLSPEC Capability
         /**
             Get number of parameters
         */
-        u_int                               nrOfParameters() const;
+        u_int                               nrOfProperties() const;
 
         /**
             Get a reference to a parameter
         */
-        PluginParameter&                    operator[](const int& i);
+        PropertyBase&                    operator[](const int& i);
 
         /**
             Output the capability to a output stream
@@ -138,7 +138,7 @@ class PLUGINS_API_DECLSPEC Capability
         /**
             Container for parameters associated with the capability
         */
-        Parameters                          mParameters;
+        Properties                          mProperties;
 
 };
 
