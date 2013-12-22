@@ -75,7 +75,7 @@ class Plugin (object):
 
     def setProperty(self, name, value):
         if (isinstance (value, DataSeries)):
-           if not rrp.setPluginProperty (self.plugin, name, value.data):
+           if not rrp.setPluginParameter (self.plugin, name, value.data):
               raise TypeError ("Unable to locate property: ", name)
         else:
            handle  = rrp.getPluginProperty(self.plugin, name);
@@ -143,8 +143,8 @@ class Plugin (object):
     def execute (self):
         return rrp.executePlugin (self.plugin)
 
-    def executeEx (self, inThread):
-        return rrp.executePluginEx (self.plugin, inThread)
+    def executeEx (self):
+        return rrp.executePluginEx (self.plugin)
 
     def plotDataSeries (self, dataSeries):
         if (isinstance (dataSeries, DataSeries)):
@@ -210,7 +210,7 @@ if __name__=='__main__':
 
     p.Sigma = 0.00005
 
-    series = p.loadDataSeries ("testData.dat")
+    series = p.loadDataSeries ("..\\Examples\\testData.dat")
     p.plotDataSeries (series)
     #p.InputData = series
     p.execute()
