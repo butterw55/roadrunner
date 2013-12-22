@@ -76,13 +76,19 @@ printflags(                0,                       "printflags" ,              
     mLMFit.addParameter(&scale_diag);
     mLMFit.addParameter(&printflags);
 
-    mCapabilities.add(mLMFit);
+    mProperties.add(mLMFit);
     //Allocate model and Residuals data
     mResidualsData.setValue(new RoadRunnerData());
     mModelData.setValue(new RoadRunnerData());
     
-    //Setup so the Norm parameter is a reference of the NORM parameter in the lmDataStructure
-    mNorm.getValueReference() = mLMWorker.mLMData.mNorm;
+    mHint ="Parameter fitting using the Levenberg-Marquardt algorithm";
+    mDescription="The Levenberg-Marquardt plugin is used to fit a proposed \
+SBML models parameters to experimental data. \
+The current implementation is based on the lmfit C library by Joachim Wuttke. \
+The Plugin has numerous parameters for fine tuning the algorithm. See the embedded PDF for more information. \
+";
+
+
 }
 
 LM::~LM()

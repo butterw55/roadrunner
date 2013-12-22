@@ -130,6 +130,16 @@ class PLUGINS_API_DECLSPEC Plugin
         string                          getCategory();
 
         /**
+            Get plugin description
+        */
+        string                          getDescription();
+
+        /**
+            Get plugin Hint
+        */
+        string                          getHint();
+
+        /**
             Get plugin version information
         */
         string                          getVersion();
@@ -279,6 +289,12 @@ class PLUGINS_API_DECLSPEC Plugin
                                         //! Plugin category
         string                          mCategory;
 
+                                        //! Plugin description
+        string                          mDescription;
+
+                                        //! Plugin Hint
+        string                          mHint;
+
                                         //! Plugin version
         string                          mVersion;
 
@@ -357,15 +373,15 @@ class PLUGINS_API_DECLSPEC Plugin
         void                           *mWorkFinishedData2;
 
         /**
-         * Capabilities container. Descendant add capabilites to this container, as they wish.
-         * It is basically a container for parameter data that can be exchanged to/from the plugin by using parameters
+         * Properties container. Descendant add properties to this container, as they wish.
+         * Property data values can be exchanged to/from the plugin by.
          */
-        Capabilities                    mCapabilities;
+        Capabilities                    mProperties;
 
         /**
          * Opaque data pointer. Plugin designer may use this to communicat data of any type out/in to the plugin
          * using the assignPluginInput() function.
-         * 
+         *
          */
         void                           *mClientData;
 

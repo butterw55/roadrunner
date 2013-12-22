@@ -195,12 +195,37 @@ RRP_DECLSPEC long rrp_cc getPluginSharedLibHandle(RRPluginManagerHandle handle, 
 
 //==========================  PLUGIN HANDLE functions
 /*!
- \brief Get the name of a Plugin
+ \brief Get the name of a Plugin.
  \param handle Handle to a plugin
- \return Returns the plugins full name, as a string, NULL otherwise
- \ingroup plugins
+ \return Returns a string on success, NULL otherwise
+  \ingroup plugins
 */
 RRP_DECLSPEC char* rrp_cc getPluginName(RRPluginHandle handle);
+
+/*!
+ \brief Return a plugins Category. A plugin developer may assign this information. 
+ \param handle Handle to a plugin
+ \return Returns a string on success, NULL otherwise
+
+ \ingroup plugins
+*/
+RRP_DECLSPEC char* rrp_cc getPluginCategory(RRPluginHandle handle);
+
+/*!
+ \brief Return a plugins description. This is assigned by the plugin developer. 
+ \param handle Handle to a plugin
+ \return Returns a string on success, NULL otherwise
+ \ingroup plugins
+*/
+RRP_DECLSPEC char* rrp_cc getPluginDescription(RRPluginHandle handle);
+
+/*!
+ \brief Return a plugins Hint. This information is assigned by the plugin developer.
+ \param handle Handle to a plugin
+ \return Returns a string on success, NULL otherwise
+  \ingroup plugins
+*/
+RRP_DECLSPEC char* rrp_cc getPluginHint(RRPluginHandle handle);
 
 /*!
  \brief Return some information about a Plugin. 

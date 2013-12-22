@@ -23,19 +23,19 @@ Capabilities::~Capabilities()
 
 void Capabilities::add(Capability& capability)
 {
-    mCapabilities.push_back(&capability);
+    mProperties.push_back(&capability);
 }
 
 void Capabilities::clear()
 {
-    mCapabilities.clear();
+    mProperties.clear();
 }
 
 Capability* Capabilities::operator[](int i)
 {
-    if(mCapabilities.size())
+    if(mProperties.size())
     {
-        return (mCapabilities[i]);
+        return (mProperties[i]);
     }
     return NULL;
 }
@@ -44,7 +44,7 @@ Capability* Capabilities::get(const string& capName)
 {
     for(int i = 0; i < count(); i++)
     {
-        Capability* aCap = (mCapabilities[i]);
+        Capability* aCap = (mProperties[i]);
         if(aCap && aCap->getName() == capName)
         {
             return aCap;
@@ -60,7 +60,7 @@ StringList Capabilities::asStringList()
     //Add capabilitys
     for(int i = 0; i < count(); i++)
     {
-        Capability& aCapability = *(mCapabilities[i]);
+        Capability& aCapability = *(mProperties[i]);
         caps.add(aCapability.getName());
     }
 
@@ -72,7 +72,7 @@ string Capabilities::info() const
     stringstream st;
     vector<Capability*>::iterator iter;
 
-    for(iter = mCapabilities.begin(); iter != mCapabilities.end(); iter++)
+    for(iter = mProperties.begin(); iter != mProperties.end(); iter++)
     {
         Capability* aCap = (*iter);
         st<<(*aCap);
@@ -82,7 +82,7 @@ string Capabilities::info() const
 
 u_int Capabilities::count()
 {
-    return mCapabilities.size();
+    return mProperties.size();
 }
 
 //Not giving a capability name, search for first parameter with name 'name'
@@ -90,7 +90,7 @@ bool Capabilities::setParameter(const string& name, const string& value)
 {
     for(int i = 0; i < count(); i++)
     {
-        Capability* capability = mCapabilities[i];
+        Capability* capability = mProperties[i];
 
         if(!capability)
         {
@@ -127,7 +127,7 @@ string Capabilities::asXML()
     //Add capabilitys
     for(int i = 0; i < count(); i++)
     {
-        Capability& aCapability = *(mCapabilities[i]);
+        Capability& aCapability = *(mProperties[i]);
         xmlNodePtr parameters = xmlNewChild(root_node, NULL, BAD_CAST "parameters",NULL);
 
         //Add parameters within each capability
@@ -148,7 +148,7 @@ string Capabilities::asXML()
     int buffersize;
     xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
 
-    Log(rr::Logger::LOG_INFORMATION)<<(char*) xmlbuff;
+    Log(rr::lDebug)<<(char*) xmlbuff;
 
     string xml = xmlbuff != NULL ? string((char*) xmlbuff) : string("");
     xmlFreeDoc(doc);

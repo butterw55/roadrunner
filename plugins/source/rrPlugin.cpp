@@ -9,28 +9,29 @@
 namespace rrp
 {
 using namespace std;
-Plugin::Plugin( const string& name,
-                const string& category,
-                RoadRunner* aRR,
-                const string& language,
-                const PluginManager* pm)
+Plugin::Plugin( const string&           name,
+                const string&           category,
+                RoadRunner*             aRR,
+                const string&           language,
+                const PluginManager*    pm)
 :
 mName(name),
 mAuthor("Totte Karlsson"),
 mCategory(category),
+mDescription("<none>"),
+mHint("<none>"),
 mVersion("0.0"),
-mCopyright("Totte Karlsson, Herbert Sauro, Systems Biology, UW 2012"),
+mCopyright("Totte Karlsson, Herbert Sauro, Systems Biology, UW 2012-2014"),
 mRR(aRR),
 mWorkStartedEvent(NULL),
 mWorkProgressEvent(NULL),
 mWorkFinishedEvent(NULL),
-mCapabilities(),//name, category),
+mProperties(),//name, category),
 mImplementationLanguage(language),
 mPM(pm),
 mTerminate(false),
 mIsWorking(false)
-{
-}
+{}
 
 Plugin::~Plugin()
 {}
@@ -86,7 +87,7 @@ bool Plugin::resetPlugin()
 
 string Plugin::getPluginPropertiesAsXML()
 {
-    return mCapabilities.asXML();
+    return mProperties.asXML();
 }
 
 bool Plugin::assignInput(void* userData)
@@ -132,13 +133,13 @@ void Plugin::setLibraryName(const string& libName)
 
 bool Plugin::setParameter(const string& nameOf, const char* value)
 {
-    if(!mCapabilities.count())
+    if(!mProperties.count())
     {
         return false;
     }
 
     string val(value);
-    return mCapabilities.setParameter(nameOf, val);
+    return mProperties.setParameter(nameOf, val);
 }
 
 bool Plugin::setParameter(const string& nameOf, const char* value, Capability& capability)
@@ -183,6 +184,16 @@ string Plugin::getCategory()
     return mCategory;
 }
 
+string Plugin::getDescription()
+{
+    return mDescription;
+}
+
+string Plugin::getHint()
+{
+    return mHint;
+}
+
 string Plugin::getVersion()
 {
     return mVersion;
@@ -209,6 +220,8 @@ string Plugin::getInfo()
     msg<<setw(30)<<left<<"Name"<<mName<<"\n";
     msg<<setw(30)<<left<<"Author"<<mAuthor<<"\n";
     msg<<setw(30)<<left<<"Category"<<mCategory<<"\n";
+    msg<<setw(30)<<left<<"Description"<<mDescription<<"\n";
+    msg<<setw(30)<<left<<"Hint"<<mHint<<"\n";
     msg<<setw(30)<<left<<"Version"<<mVersion<<"\n";
     msg<<setw(30)<<left<<"Copyright"<<mCopyright<<"\n";
     return msg.str();
@@ -237,9 +250,9 @@ StringList Plugin::getParameterNames()
 {
     StringList names;        
     //For now, if capName is "" return all
-    for(int i = 0; i < mCapabilities.count(); i++)
+    for(int i = 0; i < mProperties.count(); i++)
     {
-        Parameters* paras = mCapabilities[i]->getParameters();
+        Parameters* paras = mProperties[i]->getParameters();
         
         names.Append(paras->getNames());
     }    
@@ -250,9 +263,9 @@ StringList Plugin::getParameterNames()
 Parameters* Plugin::getParameters()
 {
     //For now, if capName is "" return all
-    for(int i = 0; i < mCapabilities.count(); i++)
+    for(int i = 0; i < mProperties.count(); i++)
     {
-        return mCapabilities[i]->getParameters();
+        return mProperties[i]->getParameters();
     }    
 
     return NULL;
@@ -263,16 +276,16 @@ PluginParameter* Plugin::getParameter(const string& para, const string& capabili
     //If capability string is empty, search all capabilites
     if(capability.size())
     {
-        Capability* cap = mCapabilities.get(capability);
+        Capability* cap = mProperties.get(capability);
         return cap ? cap->getParameter(para) : NULL;
     }
     else    //Search all capabilities
     {
-        for(int i = 0; i < mCapabilities.count(); i++)
+        for(int i = 0; i < mProperties.count(); i++)
         {
-            if(mCapabilities[i]->getParameter(para))
+            if(mProperties[i]->getParameter(para))
             {
-                return mCapabilities[i]->getParameter(para);
+                return mProperties[i]->getParameter(para);
             }
         }
     }
@@ -286,11 +299,11 @@ PluginParameter* Plugin::getParameter(const string& para, Capability& capability
 
 //Capability* Plugin::getCapability(const string& name)
 //{
-//    for(int i = 0; i < mCapabilities.count(); i++)
+//    for(int i = 0; i < mProperties.count(); i++)
 //    {
-//        if(mCapabilities[i]->getName() == name)
+//        if(mProperties[i]->getName() == name)
 //        {
-//            return (mCapabilities[i]);
+//            return (mProperties[i]);
 //        }
 //    }
 //    return NULL;

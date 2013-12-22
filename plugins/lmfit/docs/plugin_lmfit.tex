@@ -62,12 +62,12 @@ Norm						&	double				& 	Norm of fitting. An estimate of goodness of fit. \\
 \centering % used for centering table
 \begin{tabular}{l l p{7.5cm}} % centered columns (4 columns)
 
-Callback & Arguments & Purpose \\ [0.5ex] % inserts table 
+Callback & Arguments & Purpose and argument types \\ [0.5ex] % inserts table 
 %heading
 \hline % inserts single horizontal line
-PluginStarted  	& 	void*, & Signal to application that the plugin has started. \\
-PluginProgress	& 	int*  & Signal progress of fitting, in \% (0-100\%). \\
-PluginFinished	& 	void* & Signal to application the plugin has finished. \\
+PluginStarted  	& 	void*, void*  & Signal to application that the plugin has started. Both parameters are unused by the plugin.\\
+PluginProgress	& 	char*, void*  & Communicating progress of fitting. First argument is a logmessage, verbosity controlled by the printFlags property. Second argument is not used by the plugin. \\
+PluginFinished	& 	void*, void*  & Signals to application the plugin has finished. Both parameters are unused by the plugin.\\
 
 \hline %inserts single line
 \end{tabular}
@@ -85,7 +85,7 @@ where \verb|rrData| is a handle to RoadRunner data and \verb|workInThread| is a 
 \section{Python example}
 
 \begin{singlespace}
-\lstinputlisting[label=plugin_lmfit_header,caption={Minimization example.},language=Python]{Examples/lmfitPlugin/rrLevenbergMarquardtDemo.py}
+\lstinputlisting[label=plugin_lmfit_header,caption={Minimization example.},language=Python]{Examples/rrLevenbergMarquardt.py}
 \end{singlespace}
 
 \begin{figure}[H]
