@@ -1,6 +1,6 @@
 /**
- * @file rrPluginParameter.h
- * @brief RoadRunner Parameter class implementation
+ * @file rrPropertyBase.h
+ * @brief RoadRunner Property class implementation
  * @author Totte Karlsson & Herbert M Sauro
  *
  * <--------------------------------------------------------------
@@ -38,8 +38,8 @@
  *
  * redistribute any piece of this software without proper attribution;
 */
-#ifndef rrPluginParameterH
-#define rrPluginParameterH
+#ifndef rrPluginPropertyH
+#define rrPluginPropertyH
 #include "rrPluginsAPIExporter.h"
 #include <string>
 #include <ostream>
@@ -52,10 +52,10 @@ using std::string;
 using std::ostream;
 
 /**
- * The PluginParameter class is an interface for derived Parameters, that can be of any type.
+ * The PluginProperty class is an interface for derived Properties, that can be of any type.
  * A parameter has a name, description and a hint, encapsulating the the purpose of the actual parameter.
  */
-class PLUGINS_API_DECLSPEC PluginParameter
+class PLUGINS_API_DECLSPEC PropertyBase
 {
     public:
     //Friends first
@@ -63,20 +63,20 @@ class PLUGINS_API_DECLSPEC PluginParameter
          * Ouput the parameter to an output stream.
          */
         PLUGINS_API_DECLSPEC
-        friend ostream&                     operator<<(ostream& stream, const PluginParameter& outMe);
+        friend ostream&                     operator<<(ostream& stream, const PropertyBase& outMe);
 
     public:
         /**
          * The constructor populates the parameters name and hint.
          */
-                                            PluginParameter(const string& type, const string& name, const string& hint);
+                                            PropertyBase(const string& type, const string& name, const string& hint);
         /**
          * De-allocate any memory allocated.
          */
-        virtual                            ~PluginParameter();
+        virtual                            ~PropertyBase();
 
-                                            PluginParameter(const PluginParameter& pp);
-        PluginParameter&                    operator=(const PluginParameter& rhs);
+                                            PropertyBase(const PropertyBase& pp);
+        PropertyBase&                    operator=(const PropertyBase& rhs);
         /**
          * Return the parameters name
          */

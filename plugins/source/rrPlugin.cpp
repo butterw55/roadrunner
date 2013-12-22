@@ -3,7 +3,7 @@
 #include <iomanip>
 #include "rrUtils.h"
 #include "rrPlugin.h"
-#include "rrParameter.h"
+#include "rrProperty.h"
 //---------------------------------------------------------------------------
 
 namespace rrp
@@ -131,7 +131,7 @@ void Plugin::setLibraryName(const string& libName)
     mLibraryName = libName;
 }
 
-bool Plugin::setParameter(const string& nameOf, const char* value)
+bool Plugin::setProperty(const string& nameOf, const char* value)
 {
     if(!mProperties.count())
     {
@@ -139,21 +139,21 @@ bool Plugin::setParameter(const string& nameOf, const char* value)
     }
 
     string val(value);
-    return mProperties.setParameter(nameOf, val);
+    return mProperties.setProperty(nameOf, val);
 }
 
-bool Plugin::setParameter(const string& nameOf, const char* value, Capability& capability)
+bool Plugin::setProperty(const string& nameOf, const char* value, Capability& capability)
 {
     //Go trough the parameter container and look for parameter
-    for(int i = 0; i < capability.nrOfParameters(); i++)
+    for(int i = 0; i < capability.nrOfProperties(); i++)
     {
-        PluginParameter* aPar = const_cast<PluginParameter*>( &(capability[i]) );
+        PropertyBase* aPar = const_cast<PropertyBase*>( &(capability[i]) );
 
         if(aPar->getName() == nameOf)
         {
-//            if(dynamic_cast< Parameter<int>* >(aParameter))
+//            if(dynamic_cast< Property<int>* >(aProperty))
 //            {
-//                Parameter<int> *aIntPar = dynamic_cast< Parameter<int>* >(aParameter);
+//                Property<int> *aIntPar = dynamic_cast< Property<int>* >(aProperty);
 //                int aVal = rr::ToInt(value);
                 aPar->setValueFromString( value);
 //                return true;
@@ -231,8 +231,8 @@ string Plugin::getExtendedInfo()
 {
     stringstream msg;
     msg<<getInfo();
-    msg<<"\nParameter Info\n";
-    msg<<(*getParameters());
+    msg<<"\nProperty Info\n";
+    msg<<(*getProperties());
     return msg.str();
 }
 
@@ -246,13 +246,13 @@ unsigned char* Plugin::getManualAsPDF() const
     return NULL;
 }
 
-StringList Plugin::getParameterNames()
+StringList Plugin::getPropertyNames()
 {
     StringList names;        
     //For now, if capName is "" return all
     for(int i = 0; i < mProperties.count(); i++)
     {
-        Parameters* paras = mProperties[i]->getParameters();
+        Properties* paras = mProperties[i]->getProperties();
         
         names.Append(paras->getNames());
     }    
@@ -260,41 +260,41 @@ StringList Plugin::getParameterNames()
     return names;
 }
 
-Parameters* Plugin::getParameters()
+Properties* Plugin::getProperties()
 {
     //For now, if capName is "" return all
     for(int i = 0; i < mProperties.count(); i++)
     {
-        return mProperties[i]->getParameters();
+        return mProperties[i]->getProperties();
     }    
 
     return NULL;
 }
 
-PluginParameter* Plugin::getParameter(const string& para, const string& capability)
+PropertyBase* Plugin::getProperty(const string& para, const string& capability)
 {
     //If capability string is empty, search all capabilites
     if(capability.size())
     {
         Capability* cap = mProperties.get(capability);
-        return cap ? cap->getParameter(para) : NULL;
+        return cap ? cap->getProperty(para) : NULL;
     }
     else    //Search all capabilities
     {
         for(int i = 0; i < mProperties.count(); i++)
         {
-            if(mProperties[i]->getParameter(para))
+            if(mProperties[i]->getProperty(para))
             {
-                return mProperties[i]->getParameter(para);
+                return mProperties[i]->getProperty(para);
             }
         }
     }
     return NULL;
 }
 
-PluginParameter* Plugin::getParameter(const string& para, Capability& capability)
+PropertyBase* Plugin::getProperty(const string& para, Capability& capability)
 {
-    return capability.getParameter(para);
+    return capability.getProperty(para);
 }
 
 //Capability* Plugin::getCapability(const string& name)
