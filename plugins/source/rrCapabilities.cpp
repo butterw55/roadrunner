@@ -2,8 +2,8 @@
 #include "libxml/tree.h"
 #include "libxml/xpath.h"
 #include "rrException.h"
-#include "rrPluginParameter.h"
-#include "rrParameter.h"
+#include "rrPropertyBase.h"
+#include "rrProperty.h"
 #include "rrLogger.h"
 #include "rrCapabilities.h"
 #include "rrCapability.h"
@@ -23,19 +23,19 @@ Capabilities::~Capabilities()
 
 void Capabilities::add(Capability& capability)
 {
-    mCapabilities.push_back(&capability);
+    mProperties.push_back(&capability);
 }
 
 void Capabilities::clear()
 {
-    mCapabilities.clear();
+    mProperties.clear();
 }
 
 Capability* Capabilities::operator[](int i)
 {
-    if(mCapabilities.size())
+    if(mProperties.size())
     {
-        return (mCapabilities[i]);
+        return (mProperties[i]);
     }
     return NULL;
 }
@@ -44,7 +44,7 @@ Capability* Capabilities::get(const string& capName)
 {
     for(int i = 0; i < count(); i++)
     {
-        Capability* aCap = (mCapabilities[i]);
+        Capability* aCap = (mProperties[i]);
         if(aCap && aCap->getName() == capName)
         {
             return aCap;
@@ -60,7 +60,7 @@ StringList Capabilities::asStringList()
     //Add capabilitys
     for(int i = 0; i < count(); i++)
     {
-        Capability& aCapability = *(mCapabilities[i]);
+        Capability& aCapability = *(mProperties[i]);
         caps.add(aCapability.getName());
     }
 
@@ -72,7 +72,7 @@ string Capabilities::info() const
     stringstream st;
     vector<Capability*>::iterator iter;
 
-    for(iter = mCapabilities.begin(); iter != mCapabilities.end(); iter++)
+    for(iter = mProperties.begin(); iter != mProperties.end(); iter++)
     {
         Capability* aCap = (*iter);
         st<<(*aCap);
@@ -82,29 +82,29 @@ string Capabilities::info() const
 
 u_int Capabilities::count()
 {
-    return mCapabilities.size();
+    return mProperties.size();
 }
 
 //Not giving a capability name, search for first parameter with name 'name'
-bool Capabilities::setParameter(const string& name, const string& value)
+bool Capabilities::setProperty(const string& name, const string& value)
 {
     for(int i = 0; i < count(); i++)
     {
-        Capability* capability = mCapabilities[i];
+        Capability* capability = mProperties[i];
 
         if(!capability)
         {
             return false;
         }
 
-        Parameters* paras = capability[i].getParameters();
+        Properties* paras = capability[i].getProperties();
 
         if(paras)
         {
-            PluginParameter* aParameter = paras->getParameter(name);
-            if(aParameter)
+            PropertyBase* aProperty = paras->getProperty(name);
+            if(aProperty)
             {
-                aParameter->setValueFromString(value);
+                aProperty->setValueFromString(value);
                 return true;
             }
         }
@@ -127,15 +127,15 @@ string Capabilities::asXML()
     //Add capabilitys
     for(int i = 0; i < count(); i++)
     {
-        Capability& aCapability = *(mCapabilities[i]);
+        Capability& aCapability = *(mProperties[i]);
         xmlNodePtr parameters = xmlNewChild(root_node, NULL, BAD_CAST "parameters",NULL);
 
         //Add parameters within each capability
-        for(int j = 0; j < aCapability.nrOfParameters(); j++)
+        for(int j = 0; j < aCapability.nrOfProperties(); j++)
         {
             xmlNodePtr paraNode = xmlNewChild(parameters, NULL, BAD_CAST "para", NULL);
 
-            PluginParameter* parameter = const_cast<PluginParameter*>(&(aCapability[j]));
+            PropertyBase* parameter = const_cast<PropertyBase*>(&(aCapability[j]));
             xmlNewProp(paraNode, BAD_CAST "name",           BAD_CAST parameter->getName().c_str());
             xmlNewProp(paraNode, BAD_CAST "value",          BAD_CAST parameter->getValueAsString().c_str());            
             xmlNewProp(paraNode, BAD_CAST "type",           BAD_CAST parameter->getType().c_str());
@@ -148,7 +148,7 @@ string Capabilities::asXML()
     int buffersize;
     xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
 
-    Log(rr::Logger::LOG_INFORMATION)<<(char*) xmlbuff;
+    Log(rr::lDebug)<<(char*) xmlbuff;
 
     string xml = xmlbuff != NULL ? string((char*) xmlbuff) : string("");
     xmlFreeDoc(doc);

@@ -8,6 +8,7 @@ import tempfile
 import time
 from ctypes import *
 import matplotlib.pyplot as plot
+from rrPluginUtils import *
 
 """
 CTypes Python Bindings to the RoadRunner Plugin API.
@@ -38,44 +39,44 @@ except:
 
 # Experimental parameter object class
 # Usage:
-# p = rrPlugins.ParameterObject ("k1", "hint", 0.1)
+# p = rrPlugins.PropertyObject ("k1", "hint", 0.1)
 # p.value = 0.5
 # print p.name
 
-#class ParameterObject:
+#class PropertyObject:
 #    _parameterHandle = -1
 
 #    def __getValue (self):
-#        return getParameterValue (self._parameterHandle)
+#        return getPropertyValue (self._parameterHandle)
 
 #    def __setValue (self, value):
 #       if type (value) is int:
-#           setIntParameter (self._parameterHandle, value)
+#           setIntProperty (self._parameterHandle, value)
 #       if type (value) is float:
-#           setDoubleParameter (self._parameterHandle, value)
+#           setDoubleProperty (self._parameterHandle, value)
 #       if type (value) is str:
-#           setStringParameter (self._parameterHandle, value)
+#           setStringProperty (self._parameterHandle, value)
 #    value = property (__getValue, __setValue)
 
 #    def __getName (self):
-#        return getParameterName(self._parameterHandle)
+#        return getPropertyName(self._parameterHandle)
 #    name = property (__getName)
 
 #    def __getHint (self):
-#        return getParameterHint(self._parameterHandle)
+#        return getPropertyHint(self._parameterHandle)
 #    hint = property (__getHint)
 
 #    def __getType (self):
-#        return getParameterType(self._parameterHandle)
+#        return getPropertyType(self._parameterHandle)
 #    pType = property (__getType)
 
 #    def __init__(self, name, hint, value):
 #      if type (value) is int:
-#        self._parameterHandle = createParameter (name, "int", hint)
+#        self._parameterHandle = createProperty (name, "int", hint)
 #      if type (value) is float:
-#        self._parameterHandle = createParameter (name, "double", hint)
+#        self._parameterHandle = createProperty (name, "double", hint)
 #      if type (value) is str:
-#        self._parameterHandle = createParameter (name, "string", hint)
+#        self._parameterHandle = createProperty (name, "string", hint)
 #      self.__setValue (value)
 
 #    def __getHandle (self):
@@ -316,6 +317,57 @@ rrpLib.getPluginName.restype = c_char_p
 def getPluginName(pluginHandle):
     return rrpLib.getPluginName(pluginHandle)
 
+## \brief Get the Category of a Plugin. This is assigned by the pluging developer
+## \param pluginHandle Handle to a plugin
+## \return Returns a string if successful, None otherwise
+##
+## @code
+## name = rrPlugins.getPluginCategory(pluginHandle)
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
+## \ingroup plugins
+rrpLib.getPluginCategory.restype = c_char_p
+def getPluginCategory(pluginHandle):
+    data =  rrpLib.getPluginCategory(pluginHandle)
+    res = data
+    rrpLib.freeText(data)
+    return res
+
+## \brief Get the Description of a Plugin. This is assigned by the pluging developer
+## \param pluginHandle Handle to a plugin
+## \return Returns a string if successful, None otherwise
+##
+## @code
+## name = rrPlugins.getPluginDescription(pluginHandle)
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
+## \ingroup plugins
+rrpLib.getPluginDescription.restype = c_char_p
+def getPluginDescription(pluginHandle):
+    data =  rrpLib.getPluginDescription(pluginHandle)
+    res = data
+    rrpLib.freeText(data)
+    return res
+
+## \brief Get a plugins Hint. A plugins hint is a short description on what the plugin is doing.This is assigned by the pluging developer
+## \param pluginHandle Handle to a plugin
+## \return Returns a string if successful, None otherwise
+##
+## @code
+## name = rrPlugins.getPluginHint(pluginHandle)
+## @endcode
+## \htmlonly  <br/>
+## \endhtmlonly
+## \ingroup plugins
+rrpLib.getPluginHint.restype = c_char_p
+def getPluginHint(pluginHandle):
+    data =  rrpLib.getPluginHint(pluginHandle)
+    res = data
+    rrpLib.freeText(data)
+    return res
+
 ## \brief Returns information about a Plugin.
 ## \param pluginHandle Handle to a plugin
 ## \return Returns information as a string for the plugin, None otherwise
@@ -531,18 +583,18 @@ def getRRHandleFromPlugin(pluginHandle):
 ## \param pluginHandle Handle to a plugin
 ## \return Returns a handle to a list of Properties on success, None otherwise
 ## \ingroup plugin_properties
-rrpLib.getPluginproperties.restype = c_void_p
+rrpLib.getPluginProperties.restype = c_void_p
 def getPluginproperties(pluginHandle):
-    return rrpLib.getPluginProperty(pluginHandle)
+    return rrpLib.getPluginProperties(pluginHandle)
 
 ## \brief Get a list of property names in a plugin
 ## \param pluginHandle Handle to a plugin
 ## \return Returns the netire list of top level property names, None otherwise
 ## \ingroup plugin_properties
 rrpLib.getListOfPluginPropertyNames.restype = c_char_p
-def getListOfPluginpropertyNames(pluginHandle):
+def getListOfPluginPropertyNames(pluginHandle):
     paraNames =  rrpLib.getListOfPluginPropertyNames(pluginHandle)
-    if not propertyNames:
+    if not paraNames:
         return list()
     else:
         names = propertyNames.split(',')
@@ -920,7 +972,7 @@ def getStringProperty (propertyHandle):
 ## \param value Value to assign to the property.
 ## \return Returns true if successful, false otherwise
 ## \ingroup plugin_properties
-rrpLib.setStringPropertyr.restype = c_bool
+rrpLib.setStringProperty.restype = c_bool
 def setStringProperty(propertyHandle, value):
     return rrpLib.setStringProperty(propertyHandle, c_char_p(value))
 
@@ -958,7 +1010,8 @@ def getRoadRunnerDataProperty(propertyHandle):
 ## \return Returns true if successful, false otherwise
 ## \ingroup plugin_properties
 rrpLib.setRoadRunnerDataProperty.restype = c_bool
-def setRoadRunnerDataProperty(propertyHandle, vProperty(propertyHandle, c_void_p(value))
+def setRoadRunnerDataProperty(propertyHandle, value):
+    return Property(propertyHandle, c_void_p(value))
 
 ## \brief Get the value of a property.
 ## \param propertyHandle A Handle to a property
@@ -1078,9 +1131,13 @@ def plotRoadRunnerData(data, colHeaders):
 rrpLib.getRoadRunnerDataColumnHeader.restype = c_char_p
 def getRoadRunnerDataColumnHeader(rrDataHandle):
     hdr = rrpLib.getRoadRunnerDataColumnHeader(rrDataHandle)
-    res = hdr
-    rrpLib.freeText(res)
-    return hdr.split(',')
+    
+    if hdr:
+        res = hdr
+        rrpLib.freeText(hdr)
+        return res.split(',')
+    else:
+        return None
 
 
 ## \brief Write RoadRunnerData to a file

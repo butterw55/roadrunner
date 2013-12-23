@@ -1,5 +1,5 @@
-#ifndef rrParameterH
-#define rrParameterH
+#ifndef rrPropertyH
+#define rrPropertyH
 #include <vector>
 #include <string>
 #include <sstream>
@@ -8,10 +8,10 @@
 #include "rrUtils.h"
 #include "rrStringList.h"
 #include "rrConstants.h"
-#include "rrPluginParameter.h"
+#include "rrPropertyBase.h"
 #include "rrStringUtils.h"
 #include "rrRoadRunnerData.h"
-#include "rrParameters.h"
+#include "rrProperties.h"
 #include "../wrappers/C/rrc_types.h"
 //---------------------------------------------------------------------------
 namespace rrp
@@ -20,9 +20,9 @@ using namespace rr;
 using std::string;
 
 /**
-    Template class implementing a PluginParameter. As this class is a template, it can be of any type.
+    Template class implementing a PluginProperty. As this class is a template, it can be of any type.
 
-    The characteristics of a Parameter is its type and its value. Various functions assist in setting/getting
+    The characteristics of a Property is its type and its value. Various functions assist in setting/getting
     a parameters value.
 
     Of importance is the ability to get a pointer to its internal value, e.g. \a getValuePointer(), or \a getValueHandle(), as it can be used as a
@@ -37,7 +37,7 @@ template <class T>
 string getParaType(const T& val);
 
 template<class T>
-class Parameter : public PluginParameter
+class Property : public PropertyBase
 {
     protected:
         T                               mValue;
@@ -47,10 +47,10 @@ class Parameter : public PluginParameter
         /**
             Create a parameter, assigning a name, value, and optionally a Hint.
         */
-                                        Parameter(const T& value = T(), const string& name=gNoneString, const string& hint = gNoneString);
-                                        Parameter(const Parameter<T>& para);
-                                       ~Parameter();
-        Parameter<T>&                   operator=(const Parameter<T>& rhs);
+                                        Property(const T& value = T(), const string& name=gNoneString, const string& hint = gNoneString);
+                                        Property(const Property<T>& para);
+                                       ~Property();
+        Property<T>&                   operator=(const Property<T>& rhs);
         void                            setValue(T* val);
         void                            setValue(const T& val);
         void                            setValueFromString(const string& val);
@@ -63,65 +63,65 @@ class Parameter : public PluginParameter
 };
 
 template<class T>
-Parameter<T>::Parameter(const T& value, const string& name, const string& hint)
+Property<T>::Property(const T& value, const string& name, const string& hint)
 :
-PluginParameter(getParaType(value), name, hint),
+PropertyBase(getParaType(value), name, hint),
 mValue(value)
 {}
 
 template<class T>
-Parameter<T>::Parameter(const Parameter<T>& para)
+Property<T>::Property(const Property<T>& para)
 :
-PluginParameter(para)
+PropertyBase(para)
 {
     mValue = para.mValue;
 }
 
 template<class T>
-Parameter<T>::~Parameter()
+Property<T>::~Property()
 {}
 
 
 template<class T>
-Parameter<T>& Parameter<T>::operator=(const Parameter<T>& rhs)
+Property<T>& Property<T>::operator=(const Property<T>& rhs)
 {
-    PluginParameter::operator= (rhs);
+    PropertyBase::operator= (rhs);
     mValue = rhs.mValue;
     return (*this);
 }
 
 template<class T>
-void Parameter<T>::setValue(const T& val)
+void Property<T>::setValue(const T& val)
 {
     mValue = val;
 }
 
 template<class T>
-T Parameter<T>::getValue() const
+T Property<T>::getValue() const
 {
     return mValue;
 }
 
 template<class T>
-string Parameter<T>::getValueAsString() const
+string Property<T>::getValueAsString() const
 {
     return rr::toString(mValue);
 }
 
 template<class T>
-T* Parameter<T>::getValuePointer()
+T* Property<T>::getValuePointer()
 {
     return &(mValue);
 }
 
 template<class T>
-T& Parameter<T>::getValueReference()
+T& Property<T>::getValueReference()
 {
     return mValue;
 }
 
 template<class T>
-void* Parameter<T>::getValueHandle()
+void* Property<T>::getValueHandle()
 {
     return (void*) &mValue;
 }
@@ -131,121 +131,121 @@ void* Parameter<T>::getValueHandle()
 //================= BOOL ===============================
 
 template<>
-inline void Parameter<bool>::setValueFromString(const string& val)
+inline void Property<bool>::setValueFromString(const string& val)
 {
     mValue = rr::toBool(val);
 }
 
 //================= Int ===============================
 //template<>
-//inline Parameter<int>::Parameter<int>(const int& value, const string& name, const string& hint)
+//inline Property<int>::Property<int>(const int& value, const string& name, const string& hint)
 //:
-//PluginParameter("int", name, hint),
+//PropertyBase("int", name, hint),
 //mValue(value)
 //{}
 
 
 template<>
-inline void Parameter<int>::setValueFromString(const string& val)
+inline void Property<int>::setValueFromString(const string& val)
 {
     mValue = rr::toInt(val);
 }
 
 //================= char* ===============================
 //template<>
-//inline Parameter<char*>::~Parameter()
+//inline Property<char*>::~Property()
 //{
 //    rr::freeText(mValue);
 //}
 //
 //template<>
-//inline void Parameter<char*>::setValue(char** val)
+//inline void Property<char*>::setValue(char** val)
 //{
 //    rr::freeText(mValue);
 //    mValue = rr::createText(string(val[0]));
 //}
 //
 //template<>
-//inline void Parameter<char*>::setValue(char* const& val)
+//inline void Property<char*>::setValue(char* const& val)
 //{
 //    rr::freeText(mValue);
 //    mValue = rr::createText(string(val));
 //}
 //
 //template<>
-//inline void Parameter<char*>::setValueFromString(const string& val)
+//inline void Property<char*>::setValueFromString(const string& val)
 //{
 //    mValue = rr::createText(val);
 //}
 
 //================= Double ===============================
 template<>
-inline void Parameter<double>::setValueFromString(const string& val)
+inline void Property<double>::setValueFromString(const string& val)
 {
     mValue = rr::toDouble(val);
 }
 
 template<>
-inline string Parameter<double>::getValueAsString() const
+inline string Property<double>::getValueAsString() const
 {
     return rr::toString(mValue, "%G");
 }
 
 //================= std::string ===============================
 template<>
-inline void Parameter<string>::setValueFromString(const string& str)
+inline void Property<string>::setValueFromString(const string& str)
 {
     mValue = str;
 }
 
 //================= vector<string> ===============================
 //template<>
-//inline string Parameter< std::vector<string> >::getType() const
+//inline string Property< std::vector<string> >::getType() const
 //{
 //    return "vector<string>";
 //}
 
 template<>
-inline void Parameter< std::vector<string> >::setValueFromString(const string& val)
+inline void Property< std::vector<string> >::setValueFromString(const string& val)
 {
     mValue = rr::splitString(val,", ");
 }
 
 //================= rr::StringList ===============================
 //template<>
-//inline string Parameter< rr::StringList >::getType() const
+//inline string Property< rr::StringList >::getType() const
 //{
 //    return "StringList";
 //}
 
 template<>
-inline string Parameter<rr::StringList>::getValueAsString() const
+inline string Property<rr::StringList>::getValueAsString() const
 {
     return mValue.AsString();
 }
 
 template<>
-inline void Parameter< rr::StringList >::setValueFromString(const string& val)
+inline void Property< rr::StringList >::setValueFromString(const string& val)
 {
     mValue = rr::splitString(val,", ");
 }
 
 ////================= RRCDataPtr ===============================
 //template<>
-//inline void Parameter< rrc::RRCDataPtr >::setValueFromString(const string& val)
+//inline void Property< rrc::RRCDataPtr >::setValueFromString(const string& val)
 //{
 //    //Todo: implement this ugly conversion?
 //}
 //
 //template<>
-//inline string Parameter<rrc::RRCDataPtr>::getValueAsString() const
+//inline string Property<rrc::RRCDataPtr>::getValueAsString() const
 //{
 //    return "";
 //}
 
 //============= RoadRunner data ===========================
 template<>
-inline string Parameter<rr::RoadRunnerData>::getValueAsString() const
+inline string Property<rr::RoadRunnerData>::getValueAsString() const
 {
     std::stringstream rrData;
     rrData << (mValue);
@@ -253,32 +253,32 @@ inline string Parameter<rr::RoadRunnerData>::getValueAsString() const
 }
 
 template<>
-inline void Parameter<rr::RoadRunnerData>::setValueFromString(const string& val)
+inline void Property<rr::RoadRunnerData>::setValueFromString(const string& val)
 {
     //This is not implemented, but could easily be.    
 }
 
 template<>
-inline void Parameter<rr::RoadRunnerData>::setValue(const rr::RoadRunnerData& val)
+inline void Property<rr::RoadRunnerData>::setValue(const rr::RoadRunnerData& val)
 {
     mValue = val;
 }
 
 template<>
-inline void Parameter<rr::RoadRunnerData>::setValue(rr::RoadRunnerData* val)
+inline void Property<rr::RoadRunnerData>::setValue(rr::RoadRunnerData* val)
 {
     mValue = (*val);
 }
 
 //template<>
-//inline string Parameter<rr::RoadRunnerData>::getType() const
+//inline string Property<rr::RoadRunnerData>::getType() const
 //{
 //    return "roadRunnerData";
 //}
 
 ////Pointer to data
 //template<>
-//inline string Parameter<rr::RoadRunnerData*>::getValueAsString() const
+//inline string Property<rr::RoadRunnerData*>::getValueAsString() const
 //{
 //    std::stringstream rrData;
 //    rrData << (mValue);
@@ -286,41 +286,41 @@ inline void Parameter<rr::RoadRunnerData>::setValue(rr::RoadRunnerData* val)
 //}
 //
 //template<>
-//inline void Parameter<rr::RoadRunnerData*>::setValueFromString(const string& val)
+//inline void Property<rr::RoadRunnerData*>::setValueFromString(const string& val)
 //{
 //    //This is not implemented, but could easily be.
 //}
 //
 //template<>
-//inline void Parameter<rr::RoadRunnerData*>::setValue(const (rr::RoadRunnerData*) &val)
+//inline void Property<rr::RoadRunnerData*>::setValue(const (rr::RoadRunnerData*) &val)
 //{
 //    //Deep copy
 //    (*mValue) = **(val);
 //}
 //
 //template<>
-//inline void Parameter<rr::RoadRunnerData*>::setValue(rr::RoadRunnerData** val)
+//inline void Property<rr::RoadRunnerData*>::setValue(rr::RoadRunnerData** val)
 //{
 //    //Deep copy
 //    (*mValue) = **(val);
 //}
 //
 //template<>
-//inline string Parameter<rr::RoadRunnerData*>::getType() const
+//inline string Property<rr::RoadRunnerData*>::getType() const
 //{
 //    return "roadRunnerDataShared";
 //}
 
 //============ RRStringArray
 template<>
-inline string Parameter<rrc::RRStringArray>::getValueAsString() const
+inline string Property<rrc::RRStringArray>::getValueAsString() const
 {
     //Todo:: when needed
     return string("");
 }
 
 template<>
-inline void Parameter<rrc::RRStringArray>::setValueFromString(const string& val)
+inline void Property<rrc::RRStringArray>::setValueFromString(const string& val)
 {
     //Todo.. clear current list first..
     rr::StringList list = rr::splitString(val, ",");
@@ -332,43 +332,43 @@ inline void Parameter<rrc::RRStringArray>::setValueFromString(const string& val)
 }
 
 //template<>
-//inline string Parameter<rrc::RRStringArray>::getType() const
+//inline string Property<rrc::RRStringArray>::getType() const
 //{
 //    return "RRStringArray";
 //}
 
-//========== Parameters container
+//========== Properties container
 template<>
-inline string Parameter<Parameters>::getValueAsString() const
+inline string Property<Properties>::getValueAsString() const
 {
     StringList list = mValue.getNames();
     return list.AsString();
 }
 
 template<>
-inline void Parameter<Parameters>::setValue(Parameters* val)
+inline void Property<Properties>::setValue(Properties* val)
 {
     mValue = (*val);
 }
 
 template<>
-inline void Parameter<Parameters>::setValueFromString(const string& val)
+inline void Property<Properties>::setValueFromString(const string& val)
 {
-    Log(rr::lError)<<"Trying to set Parameters container by a string..";
+    Log(rr::lError)<<"Trying to set Properties container by a string..";
     return;
 }
 
 template<>
-inline void Parameter<Parameters>::setValue(const Parameters& val)
+inline void Property<Properties>::setValue(const Properties& val)
 {
     mValue = val;
 }
 
 
 //template<>
-//inline string Parameter<Parameters>::getType() const
+//inline string Property<Properties>::getType() const
 //{
-//    return "listOfParameters";
+//    return "listOfProperties";
 //}
 
 template<>
@@ -421,9 +421,9 @@ inline string getParaType<RoadRunnerData>(const RoadRunnerData& a)
 }
 
 template<>
-inline string getParaType(const Parameters& value)
+inline string getParaType(const Properties& value)
 {
-    return "listOfParameters";
+    return "listOfProperties";
 }
 
 

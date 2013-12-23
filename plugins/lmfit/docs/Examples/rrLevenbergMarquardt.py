@@ -20,8 +20,8 @@ assignOnProgressEvent(lm.plugin, progressEvent, None, theId)
 ##===================================================
 
 #Set a lmfit parametere. Printflags control the output in the callback message
-#lm.setParameter("printflags", 2)
-#lm.setParameter("ftol", 2.e-2)
+lm.setParameter("printflags", 2)
+lm.setParameter("ftol", 2.e-2)
 experimentalData = lm.loadDataSeries ("testData.dat")
 
 lm.setParameter ("ExperimentalData", experimentalData)
@@ -60,9 +60,6 @@ rrp.plt.show()
 
 #print getPluginResult(lm.plugin)
 
-print getPluginCategory(lm.plugin)
-print getPluginDescription(lm.plugin)
-print getPluginHint(lm.plugin)
 #Observe that getPluginProperties prings out the value for each parameter, including the parameters that are RoadRunnerData
 #print getPluginPropertiesAsXML(lm.plugin)
 
