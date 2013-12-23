@@ -75,12 +75,14 @@ class Plugin (object):
 
     def setProperty(self, name, value):
         if (isinstance (value, DataSeries)):
-           if not rrp.setPluginParameter (self.plugin, name, value.data):
+           if not rrp.setPluginProperty (self.plugin, name, value.data):
               raise TypeError ("Unable to locate property: ", name)
         else:
            handle  = rrp.getPluginProperty(self.plugin, name);
+           if handle == 0:
+              raise ValueError ("Unable to locate property: ", name)
            t1 = rrp.getPropertyType (handle)
-           if (t1 == "listOfParrameters"):
+           if (t1 == "listOfProperties"):
               if isinstance (value, list):
                  if len(value) != 2:
                     raise TypeError ("Expecting two elements in the property list")
@@ -137,14 +139,15 @@ class Plugin (object):
     def OnProgress (self, f):
         global _onProgressEvent
 
-        _onProgressEvent =  rrp.NotifyIntEvent(f)
-        rrp.assignOnProgressEvent(self.plugin, _onProgressEvent)
+        _onProgressEvent =  rrp.NotifyPluginEvent (f)
+        theId = id (self)
+        rrp.assignOnProgressEvent(self.plugin, _onProgressEvent, None, theId)
 
     def execute (self):
         return rrp.executePlugin (self.plugin)
 
-    def executeEx (self):
-        return rrp.executePluginEx (self.plugin)
+    def executeEx (self, inThread):
+        return rrp.executePluginEx (self.plugin, inThread)
 
     def plotDataSeries (self, dataSeries):
         if (isinstance (dataSeries, DataSeries)):
@@ -187,6 +190,9 @@ class Plugin (object):
             aList.append ([names[i], hint])
         return aList
 
+    def viewManual (self):
+        rrp.displayPluginManual(self.plugin)
+
 def extractColumn (data, index):
     return data[:,index]
 
@@ -198,12 +204,16 @@ def plot (data, myColor="red", myLinestyle="None", myMarker="None", myLabel=""):
         plt.legend(bbox_to_anchor=(1.05, 1), loc=1, borderaxespad=0.)
         return p
 
+def show():
+    plt.show()
+
+
 if __name__=='__main__':
 
     print "Starting Test"
 
     p = Plugin ("rrp_add_noise")
-
+    p.viewManual()
     #pl = p.listOfProperties()
     #for item in pl:
     #    print item
@@ -213,7 +223,7 @@ if __name__=='__main__':
     series = p.loadDataSeries ("..\\Examples\\testData.dat")
     p.plotDataSeries (series)
     #p.InputData = series
-    p.execute()
+    #p.execute()
 #    p.plotDataSeries (p.InputData)
 
     print "Test Finished"
