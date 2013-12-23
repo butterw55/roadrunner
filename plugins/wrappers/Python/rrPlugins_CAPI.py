@@ -18,12 +18,18 @@ Currently this is a fairly raw implementation with few Pythonic refinements
 
 __version__ = "1.0.0"
 
-# Get current folder and construct an absolute path to
-# the plugins.
-dirPath = os.path.dirname(os.path.realpath(__file__))
-gDefaultPluginsPath  = os.path.split(dirPath)[0]
+# Get folder of where rrplugins_CAPI shared library is installed and construct an absolute path to
+# the plugins from that.
 
 sharedLib='rrplugins_c_api'
+dirPath = getPathToParentFolderOf(sharedLib)
+
+if os.path.exists(dirPath):
+    gDefaultPluginsPath  = dirPath + os.sep + 'plugins'
+else:
+    print '==== WARNING: Roadrunner plugin folder could not be found =====\n'
+    gDefaultPluginsPath = ''
+
 rrpLib=None
 try:
     if sys.platform.startswith('win32'):
@@ -109,7 +115,7 @@ NotifyEvent  = CFUNCTYPE(None)
 ## This is a helper object that a client can use as an argument to a roadrunner plugin.
 ## The exact number of plugins event functions required arguments, and their type is plugin dependent. A client of the
 ## the plugin need to get this information from plugin specific documentation. An example of
-## using this particular function, NotifyIntIntEvent is shown below. As indicated, this python function takes two arguments.
+## using this particular function, NotifyIntEvent is shown below. As indicated, this python function takes two arguments.
 ## The first argument is an integer, indicating progress (possibly a percentage), the second argument is not used in this particular case, but still required.
 ##@code
 ##def pluginIsProgressing(progress, dummy):
@@ -125,6 +131,25 @@ NotifyEvent  = CFUNCTYPE(None)
 ## \ingroup plugins
 NotifyIntEvent  = CFUNCTYPE(None, c_int)
 
+## \brief Plugin function event type definition
+## This is a helper object that a client can use as an argument to a roadrunner plugin.
+## The exact number of plugins event functions required arguments, and their type is plugin dependent. A client of the
+## the plugin need to get this information from plugin specific documentation. An example of
+## using this particular function, NotifyStringEvent is shown below. As indicated, this function takes two arguments.
+## The first argument is a string, passes as a C char* (c_char_p), carrying a progress message for example.
+##@code
+##def pluginIsProgressing(progress):
+##    print '\nPlugin progress:' + progress
+## #The user can assign this function as a plugin event to monitor the progress of the plugin as follows.
+## #Note, make sure you assign the event to a variable (c_event) so that the Python garbage
+## #collector doesn't delete it
+## c_event = NotifyEvent(myPluginFunction)
+## c_event = NotifyStringEvent(pluginIsProgressing)
+## assignOnProgressEvent(plugin, c_event)
+##@endcode
+## \ingroup plugins
+NotifyStringEvent  = CFUNCTYPE(None, c_char_p)
+
 ## \brief Create a new instance of a plugin manager.
 ## \brief A PluginManager manages a collection of plugins, loaded and unloaded by
 ##  the load and unload API functions respectively.
@@ -137,6 +162,9 @@ NotifyIntEvent  = CFUNCTYPE(None, c_int)
 ## \htmlonly  <br/>
 ## \endhtmlonly
 ## \ingroup plugin_manager
+
+NotifyPluginEvent = CFUNCTYPE(None, c_char_p, c_void_p)
+
 
 rrpLib.createPluginManager.restype = c_void_p
 def createPluginManager(pluginDir = None):
@@ -597,7 +625,7 @@ def getListOfPluginPropertyNames(pluginHandle):
     if not paraNames:
         return list()
     else:
-        names = propertyNames.split(',')
+        names = paraNames.split(',')
         return names
 
 ## \brief Clear a list of properties. Some properties exposed by plugins are lists that can hold other properties. New property can be
@@ -688,7 +716,7 @@ def setPluginProperty(pluginHandle, propertyName, propertyValue):
         else:
            raise TypeError ('Cannot set the value of such property')
     else:
-           raise ('Bad Handle')
+           raise TypeError('Bad Handle')
     return False
 
 ## \brief Set the value of a property
@@ -1011,7 +1039,7 @@ def getRoadRunnerDataProperty(propertyHandle):
 ## \ingroup plugin_properties
 rrpLib.setRoadRunnerDataProperty.restype = c_bool
 def setRoadRunnerDataProperty(propertyHandle, value):
-    return Property(propertyHandle, c_void_p(value))
+    return rrpLib.setRoadRunnerDataProperty(propertyHandle, c_void_p(value))
 
 ## \brief Get the value of a property.
 ## \param propertyHandle A Handle to a property
@@ -1131,7 +1159,7 @@ def plotRoadRunnerData(data, colHeaders):
 rrpLib.getRoadRunnerDataColumnHeader.restype = c_char_p
 def getRoadRunnerDataColumnHeader(rrDataHandle):
     hdr = rrpLib.getRoadRunnerDataColumnHeader(rrDataHandle)
-    
+
     if hdr:
         res = hdr
         rrpLib.freeText(hdr)
