@@ -9,7 +9,7 @@ def pluginIsProgressing(msg, lmP):
     # The plugin don't know what a python object is.
     # We need to cast it here, to a proper python object
     lmObject = cast(lmP, ctypes.py_object).value
-    print 'Iterations = ' + `lmObject.getParameter("NrOfIter")` + '\tNorm = ' + `lmObject.getParameter("Norm")`
+    print 'Iterations = ' + `lmObject.getProperty("NrOfIter")` + '\tNorm = ' + `lmObject.getProperty("Norm")`
 
 progressEvent =  NotifyPluginEvent(pluginIsProgressing)
 theId = id(lm)
@@ -28,7 +28,7 @@ lm.setProperty ("ExperimentalData", experimentalData)
 lm.setProperty ("SBML", lm.readAllText("sbml_test_0001.xml"))
 
 # Add the parameters that we're going to fit and the initial value
-lm.setProperty ("InputPropertyList", ["k1", 0.2])
+lm.setProperty ("InputPropertyList", ["k1", 10.2])
 
 
 lm.setProperty("FittedDataSelectionList", "[S1] [S2]")
@@ -58,13 +58,13 @@ rrp.plot (experimentalData[:,[0,1]], myColor="red", myLinestyle="", myMarker="*"
 rrp.plot (experimentalData[:,[0,2]], myColor="blue", myLinestyle="", myMarker="*", myLabel="S2 Data")
 rrp.plt.show()
 
-#print getPluginResult(lm.plugin)
+print getPluginResult(lm.plugin)
 
 print getPluginCategory(lm.plugin)
 print getPluginDescription(lm.plugin)
 print getPluginHint(lm.plugin)
 #Observe that getPluginProperties prings out the value for each parameter, including the parameters that are RoadRunnerData
-#print getPluginPropertiesAsXML(lm.plugin)
+print getPluginStatus(lm.plugin)
 
 
 

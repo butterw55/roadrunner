@@ -573,7 +573,7 @@ def assignOnStartedEvent(pluginHandle, pluginEvent, userData1 = None, userData2 
 ## \param userData2 void* pointer to user data.
 ## \return Returns true or false indicating success/failure
 ## \ingroup plugins
-rrpLib.assignOnProgressEvent.args =[c_void_p, NotifyEvent, c_void_p]
+rrpLib.assignOnProgressEvent.args =[c_void_p, c_void_p, c_void_p]
 def assignOnProgressEvent(pluginHandle, pluginEvent, userData1 = None, userData2 = None):
     return rrpLib.assignOnProgressEvent(pluginHandle, pluginEvent, userData1, userData2)
 
@@ -837,7 +837,7 @@ def freeProperty(propertyHandle):
 rrpLib.addPropertyToList.restype = c_bool
 def addPropertyToList(propertyHandle, addMe):
     #Make sure the Property is of type list
-    if getPropertyType(propertyHandle) == 'listOfProperty':
+    if getPropertyType(propertyHandle) == 'listOfProperties':
         listHandle = getPropertyValue(propertyHandle)
         return rrpLib.addPropertyToList(listHandle, addMe)
     else:

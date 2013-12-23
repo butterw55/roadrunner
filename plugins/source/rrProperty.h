@@ -45,12 +45,12 @@ class Property : public PropertyBase
         T*                              getPtr(T *obj) { return obj; } //obj is already pointer, return it!
     public:
         /**
-            Create a parameter, assigning a name, value, and optionally a Hint.
+            Create a property, assigning a name, value, and optionally a Hint.
         */
                                         Property(const T& value = T(), const string& name=gNoneString, const string& hint = gNoneString);
                                         Property(const Property<T>& para);
                                        ~Property();
-        Property<T>&                   operator=(const Property<T>& rhs);
+        Property<T>&                    operator=(const Property<T>& rhs);
         void                            setValue(T* val);
         void                            setValue(const T& val);
         void                            setValueFromString(const string& val);
@@ -59,7 +59,6 @@ class Property : public PropertyBase
         T*                              getValuePointer();
         void*                           getValueHandle();
         string                          getValueAsString() const;
-//        string                          getType() const;
 };
 
 template<class T>
@@ -80,7 +79,6 @@ PropertyBase(para)
 template<class T>
 Property<T>::~Property()
 {}
-
 
 template<class T>
 Property<T>& Property<T>::operator=(const Property<T>& rhs)
@@ -137,14 +135,6 @@ inline void Property<bool>::setValueFromString(const string& val)
 }
 
 //================= Int ===============================
-//template<>
-//inline Property<int>::Property<int>(const int& value, const string& name, const string& hint)
-//:
-//PropertyBase("int", name, hint),
-//mValue(value)
-//{}
-
-
 template<>
 inline void Property<int>::setValueFromString(const string& val)
 {
@@ -199,12 +189,6 @@ inline void Property<string>::setValueFromString(const string& str)
 }
 
 //================= vector<string> ===============================
-//template<>
-//inline string Property< std::vector<string> >::getType() const
-//{
-//    return "vector<string>";
-//}
-
 template<>
 inline void Property< std::vector<string> >::setValueFromString(const string& val)
 {
@@ -212,12 +196,6 @@ inline void Property< std::vector<string> >::setValueFromString(const string& va
 }
 
 //================= rr::StringList ===============================
-//template<>
-//inline string Property< rr::StringList >::getType() const
-//{
-//    return "StringList";
-//}
-
 template<>
 inline string Property<rr::StringList>::getValueAsString() const
 {
@@ -234,7 +212,7 @@ inline void Property< rr::StringList >::setValueFromString(const string& val)
 //template<>
 //inline void Property< rrc::RRCDataPtr >::setValueFromString(const string& val)
 //{
-//    //Todo: implement this ugly conversion?
+//    //Todo: implement this conversion?
 //}
 //
 //template<>
@@ -331,12 +309,6 @@ inline void Property<rrc::RRStringArray>::setValueFromString(const string& val)
     }
 }
 
-//template<>
-//inline string Property<rrc::RRStringArray>::getType() const
-//{
-//    return "RRStringArray";
-//}
-
 //========== Properties container
 template<>
 inline string Property<Properties>::getValueAsString() const
@@ -363,13 +335,6 @@ inline void Property<Properties>::setValue(const Properties& val)
 {
     mValue = val;
 }
-
-
-//template<>
-//inline string Property<Properties>::getType() const
-//{
-//    return "listOfProperties";
-//}
 
 template<>
 inline string getParaType(const int& a)

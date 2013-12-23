@@ -1,10 +1,17 @@
 import rrPlugins as rrp
-from ctypes import *
+import ctypes as ct
 
-def pluginIsProgressing(progress):
-    print 'Plugin progress:' + str (progress) +' %'
+def pluginIsProgressing(msg, lm):
+    lmObject = ct.cast(lm, ct.py_object).value
+    print 'Norm = ' + `lmObject.getProperty("Norm")` #Retrieve plugin parameters
+    print 'Nr of Iterations = ' + `lmObject.getProperty("NrOfIter")`
+
 
 lm = rrp.Plugin ("rrp_lm")
+
+print lm.listOfProperties()
+
+lm.printflags = 1
 
 experimentalData = lm.loadDataSeries ("testData.dat")
 
@@ -17,7 +24,7 @@ lm.InputParameterList = ["k1", 0.2]
 lm.FittedDataSelectionList = "[S1] [S2]"
 lm.ExperimentalDataSelectionList = "[S1] [S2]"
 
-#lm.OnProgress (pluginIsProgressing)
+lm.OnProgress (pluginIsProgressing)
 
 # Execute lmfit plugin
 res = lm.execute()
@@ -36,5 +43,6 @@ rrp.plot (residuals[:,[0,2]], myColor="red", myLinestyle="None", myMarker="x", m
 rrp.plot (experimentalData[:,[0,1]], myColor="red", myLinestyle="", myMarker="*", myLabel="S1 Data")
 rrp.plot (experimentalData[:,[0,2]], myColor="blue", myLinestyle="", myMarker="*", myLabel="S2 Data")
 
+rrp.plt.show()
 
 
