@@ -82,10 +82,10 @@ void LMWorker::run()
     //Setup data structures
     setup();
 
-    if(mTheHost.mWorkProgressEvent)
+    /*if(mTheHost.mWorkProgressEvent)
     {
         mTheHost.mWorkProgressEvent(mTheHost.mWorkProgressData1, mTheHost.mWorkProgressData2);
-    }
+    }*/
 
     //This is the library function doing the minimization..
     lmmin(  mLMData.nrOfParameters,

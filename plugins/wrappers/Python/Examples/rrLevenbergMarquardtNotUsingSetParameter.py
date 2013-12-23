@@ -4,13 +4,12 @@ import pprint
 
 def pluginIsProgressing(msg, lm):
     lmObject = ct.cast(lm, ct.py_object).value
-    print 'Norm = ' + `lmObject.getProperty("Norm")` #Retrieve plugin properties
+    print 'Norm = ' + `lmObject.getProperty("Norm")` #Retrieve plugin parameters
     print 'Nr of Iterations = ' + `lmObject.getProperty("NrOfIter")`
 
 
 lm = rrp.Plugin ("rrp_lm")
 
-pprint.pprint (lm.listOfProperties())
 
 lm.printflags = 1
 
@@ -43,5 +42,7 @@ rrp.plot (residuals[:,[0,1]], myColor="blue", myLinestyle="None", myMarker="x", 
 rrp.plot (residuals[:,[0,2]], myColor="red", myLinestyle="None", myMarker="x", myLabel="S2 Residual")
 rrp.plot (experimentalData[:,[0,1]], myColor="red", myLinestyle="", myMarker="*", myLabel="S1 Data")
 rrp.plot (experimentalData[:,[0,2]], myColor="blue", myLinestyle="", myMarker="*", myLabel="S2 Data")
-rrp.show()
+
+rrp.plt.show()
+
 

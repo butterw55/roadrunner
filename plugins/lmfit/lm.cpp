@@ -49,7 +49,7 @@ epsilon(                   LM_USERTOL,              "epsilon"    ,              
 stepbound(                 100.,                    "stepbound"  ,                           " initial bound to steps in the outer loop. "),
 maxcall(                   100,                     "maxcall"    ,                           " maximum number of iterations. "),
 scale_diag(                1,                       "scale_diag" ,                           " UNDOCUMENTED, TESTWISE automatical diag rescaling? "),
-printflags(                0,                       "printflags" ,                           " OR'ed to produce more noise ")
+printflags(                1,                       "printflags" ,                           " OR'ed to produce more noise ")
 
 {
     mVersion = "1.0";
@@ -118,7 +118,9 @@ string LM::getStatus()
 {
     stringstream msg;
     msg<<Plugin::getStatus();    
-    msg <<getResult();
+    
+    msg<<"\nFitting parameters: "<<mInputPropertyList;
+    msg <<getResult();    
     return msg.str();
 }
 

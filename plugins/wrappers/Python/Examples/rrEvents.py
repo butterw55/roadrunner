@@ -40,13 +40,13 @@ plugin = loadPlugin(pm, "rrp_add_noise")
 print getPluginInfo(plugin)
 
 #get parameter for noise 'size'
-sigmaHandle = getPluginParameter(plugin, "Sigma")
+sigmaHandle = getPluginProperty(plugin, "Sigma")
 
-aSigma = getParameterValueAsString(sigmaHandle)
+aSigma = getPropertyValueAsString(sigmaHandle)
 print 'Current sigma is ' + aSigma
 
 #set size of noise
-setParameter(sigmaHandle, 0.02)
+setProperty(sigmaHandle, 0.02)
 
 cb_func1 =  NotifyEvent(pluginStarted)
 assignOnStartedEvent(plugin,  cb_func1)
@@ -58,16 +58,16 @@ cb_func3 =  NotifyEvent(pluginIsFinished)
 assignOnFinishedEvent(plugin, cb_func3)
 
 #Assign data to the plugin
-pluginData = getPluginParameter(plugin,"InputData")
-setParameter(pluginData, getRoadRunnerDataHandle(rr))
+pluginData = getPluginProperty(plugin,"InputData")
+setProperty(pluginData, getRoadRunnerDataHandle(rr))
 
 #Execute the noise plugin which will add some noise to the (internal) data
 executePluginEx(plugin)
 
 #Retrieve data from plugin
 
-rrData = getNumpyData(getParameter(pluginData))
-colNames = getRoadRunnerDataColumnHeader(getParameter(pluginData))
+rrData = getNumpyData(getProperty(pluginData))
+colNames = getRoadRunnerDataColumnHeader(getProperty(pluginData))
 plotRoadRunnerData(rrData, colNames)
 unLoadPlugins(pm)
 unLoadAPI()
