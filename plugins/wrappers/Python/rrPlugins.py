@@ -3,7 +3,7 @@
 import rrPlugins_CAPI as rrp
 import matplotlib.pyplot as plt
 
-__version__ = "0.5.01"
+__version__ = "0.6.0"
 
 class DataSeries(object):
 
@@ -137,10 +137,13 @@ class Plugin (object):
         return DataSeries(handle)
 
     def OnProgress (self, f):
+        # Make sure garbage collector doens't remove the event pointer
         global _onProgressEvent
 
         _onProgressEvent =  rrp.NotifyPluginEvent (f)
-        rrp.assignOnProgressEvent(self.plugin, _onProgressEvent)
+        # Pass the address of the self object
+        theId = id (self)
+        rrp.assignOnProgressEvent(self.plugin, _onProgressEvent, None, theId)
 
     def execute (self):
         return rrp.executePlugin (self.plugin)
@@ -188,7 +191,7 @@ class Plugin (object):
             hint = hint.replace("Category......................", "")
             aList.append ([names[i], hint])
         return aList
-        
+
     def viewManual (self):
         rrp.displayPluginManual(self.plugin)
 
@@ -202,7 +205,10 @@ def plot (data, myColor="red", myLinestyle="None", myMarker="None", myLabel=""):
         plt.setp (p, color=myColor, marker=myMarker, linestyle = myLinestyle, linewidth=1, label=myLabel)
         plt.legend(bbox_to_anchor=(1.05, 1), loc=1, borderaxespad=0.)
         return p
-        
+
+def show():
+    plt.show()
+
 
 if __name__=='__main__':
 
@@ -218,8 +224,8 @@ if __name__=='__main__':
 
     series = p.loadDataSeries ("..\\Examples\\testData.dat")
     p.plotDataSeries (series)
-    #p.InputData = series
-    #p.execute()
-#    p.plotDataSeries (p.InputData)
+    p.InputData = series
+    p.execute()
+    p.plotDataSeries (p.InputData)
 
     print "Test Finished"

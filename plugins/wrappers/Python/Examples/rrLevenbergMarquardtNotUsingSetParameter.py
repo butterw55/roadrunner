@@ -1,5 +1,6 @@
 import rrPlugins as rrp
 import ctypes as ct
+import pprint
 
 def pluginIsProgressing(msg, lm):
     lmObject = ct.cast(lm, ct.py_object).value
@@ -9,7 +10,6 @@ def pluginIsProgressing(msg, lm):
 
 lm = rrp.Plugin ("rrp_lm")
 
-print lm.listOfProperties()
 
 lm.printflags = 1
 
