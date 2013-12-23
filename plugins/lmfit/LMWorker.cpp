@@ -2,7 +2,6 @@
 #include "rrRoadRunnerData.h"
 #include "rrLogger.h"
 #include "LMWorker.h"
-//#include "noise.h"
 #include "lm.h"
 #include "lib/lmmin.h"
 #include "rrStringUtils.h"
@@ -58,7 +57,7 @@ void LMWorker::run()
     StringList& species = mTheHost.mObservedDataSelectionList.getValueReference();//mMinData.getObservedDataSelectionList();
     Log(lInfo)<<"The following species are selected: "<<species.AsString();
 
-    Parameters& Paras =  mTheHost.mInputParameterList.getValueReference(); //mMinData.getParameters();
+    Properties& Paras =  mTheHost.mInputPropertyList.getValueReference(); //mMinData.getProperties();
     Log(lInfo)<<"The following parameters are to be minimized";
     for(int i = 0; i < Paras.count(); i++)
     {
@@ -68,21 +67,32 @@ void LMWorker::run()
     //Some parameters to the Algorithm..
     lm_status_struct status;
     lm_control_struct control = lm_control_double;
-    control.printflags = 3;
+    //Set defaults from Plugin
 
+    control.ftol                    =       *(double*)  mTheHost.ftol.getValueHandle();
+    control.xtol                    =       *(double*)  mTheHost.xtol.getValueHandle();
+    control.gtol                    =       *(double*)  mTheHost.gtol.getValueHandle();
+    control.epsilon                 =       *(double*)  mTheHost.epsilon.getValueHandle();
+    control.stepbound               =       *(double*)  mTheHost.stepbound.getValueHandle();
+    control.maxcall                 =       *(int*)     mTheHost.maxcall.getValueHandle();
+    control.scale_diag              =       *(int*)     mTheHost.scale_diag.getValueHandle();
+    control.printflags              =       *(int*)     mTheHost.printflags.getValueHandle();
+
+    //control.printflags = 3;
     //Setup data structures
     setup();
 
-    if(mTheHost.mWorkProgressEvent)
+    /*if(mTheHost.mWorkProgressEvent)
     {
-        mTheHost.mWorkProgressEvent(mTheHost.mWorkProgressData1, NULL);
-    }
+        mTheHost.mWorkProgressEvent(mTheHost.mWorkProgressData1, mTheHost.mWorkProgressData2);
+    }*/
 
     //This is the library function doing the minimization..
     lmmin(  mLMData.nrOfParameters,
             mLMData.parameters,
             mLMData.nrOfResiduePoints,
-            (const void*) &mLMData,
+            //(const void*) &mLMData,
+			(const void*) &mTheHost,
             evaluate,
             &control,
             &status,
@@ -104,23 +114,23 @@ void LMWorker::run()
 
     for (int i = 0; i < mLMData.nrOfParameters; ++i)
     {
-        Log(lInfo)<<"Parameter "<<mLMData.parameterLabels[i]<<" = "<< mLMData.parameters[i];
+        Log(lInfo)<<"Property "<<mLMData.parameterLabels[i]<<" = "<< mLMData.parameters[i];
     }
 
     Log(lInfo)<<"Obtained norm:  "<<status.fnorm;
 
     //Populate with data to report back
-    Parameters& parsOut = mTheHost.mOutputParameterList.getValueReference();
+    Properties& parsOut = mTheHost.mOutputPropertyList.getValueReference();
     parsOut.clear();
     for (int i = 0; i < mLMData.nrOfParameters; ++i)
     {
-        parsOut.add(new Parameter<double>(mLMData.parameterLabels[i], mLMData.parameters[i], ""), true);
+        parsOut.add(new Property<double>(mLMData.parameters[i], mLMData.parameterLabels[i], ""), true);
     }
 
     mTheHost.mNorm.setValue(status.fnorm);
-    createModelData(mTheHost.mModelData.getValueReference());
+    createModelData(mTheHost.mModelData.getValuePointer());
 
-    createResidualsData(mTheHost.mResidualsData.getValueReference());
+    createResidualsData(mTheHost.mResidualsData.getValuePointer());
     workerFinished();
 }
 
@@ -146,14 +156,14 @@ bool LMWorker::setup()
 {
     StringList& species         = mTheHost.mObservedDataSelectionList.getValueReference();   //Model data selection..
     mLMData.nrOfSpecies         = species.Count();
-    Parameters parameters       = mTheHost.mInputParameterList.getValue();
+    Properties parameters       = mTheHost.mInputPropertyList.getValue();
     mLMData.nrOfParameters      = parameters.count();
     mLMData.parameters          = new double[mLMData.nrOfParameters];
     mLMData.mLMPlugin           = static_cast<RRPluginHandle> (&mTheHost);
     //Set initial parameter values
     for(int i = 0; i < mLMData.nrOfParameters; i++)
     {
-        Parameter<double> *par = (Parameter<double>*) parameters[i];
+        Property<double> *par = (Property<double>*) parameters[i];
         if(par)
         {
             mLMData.parameters[i] = par->getValue();
@@ -164,7 +174,7 @@ bool LMWorker::setup()
         }
     }
 
-    RoadRunnerData& obsData             = *(mTheHost.mObservedData.getValueReference());
+    RoadRunnerData& obsData             = (mTheHost.mObservedData.getValueReference());
     mLMData.nrOfTimePoints              = obsData.rSize();
     mLMData.timeStart                   = obsData.getTimeStart();
     mLMData.timeEnd                     = obsData.getTimeEnd();
@@ -245,15 +255,16 @@ bool LMWorker::setupRoadRunner()
 }
 
 /* function evaluation, determination of residues */
-void evaluate(const double *par,       //Parameter vector
+void evaluate(const double *par,       //Property vector
               int          m_dat,      //Dimension of residue vector
               const void   *userData,  //Data structure
               double       *fvec,      //residue vector..
               int          *infoIndex  //Index into info message array
 )
 {
-    const lmDataStructure *myData = (const lmDataStructure*)userData;
-
+    const LM *thePlugin = (const LM*) userData;
+	const lmDataStructure* myData = &(thePlugin->mLMData);
+	
     //Check if user have asked for termination..
     if(isBeingTerminated(myData->mLMPlugin))
     {
@@ -351,8 +362,8 @@ void LMWorker::createResidualsData(RoadRunnerData* _data)
 {
     RoadRunnerData& resData = *(_data);        
     //We now have the parameters
-    RoadRunnerData& obsData = *(mTheHost.mObservedData.getValueReference());
-    RoadRunnerData& modData = *(mTheHost.mModelData.getValueReference());
+    RoadRunnerData& obsData = (mTheHost.mObservedData.getValueReference());
+    RoadRunnerData& modData = (mTheHost.mModelData.getValueReference());
 
     resData.reSize(modData.rSize(), modData.cSize());
 

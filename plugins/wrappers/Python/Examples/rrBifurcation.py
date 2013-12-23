@@ -1,7 +1,7 @@
 import sys; import numpy; import rrPython; import rrPlugins;
 import matplotlib.pyplot as plot
 
-rr = rrPython; rrp = rrPlugins
+rr = rrPython; rrp = rrPlugins_CAPI
 
 sbmlModel ="../models/bistable.xml"
 

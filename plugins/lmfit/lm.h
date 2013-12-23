@@ -2,7 +2,7 @@
 #define lmH
 #include <vector>
 #include "rrCapability.h"
-#include "rrParameter.h"
+#include "rrProperty.h"
 #include "rrCPPPlugin.h"
 #include "rrRoadRunner.h"
 #include "rrc_types.h"
@@ -20,25 +20,37 @@ class LM : public CPPPlugin
 {
     friend class LMWorker;
 
-    protected:
+    public:
         Capability                              mLMFit;        
-        Parameter<string>                       mSBML;                          //This is the model
-        Parameter<RoadRunnerData*>              mObservedData;
-        Parameter<RoadRunnerData*>              mModelData;
-        Parameter<RoadRunnerData*>              mResidualsData;
-        Parameter<Parameters>                   mInputParameterList;            //Parameters to fit
-        Parameter<Parameters>                   mOutputParameterList;           //Parameters that was fitted
-        Parameter<StringList>                   mObservedDataSelectionList;     //Species selection list for observed data
-        Parameter<StringList>                   mModelDataSelectionList;        //Species selection list for observed data
-        Parameter<double>                       mNorm;                          //Part of minimization result
-
-        //Utility functions for the thread
+        Property<string>                       mSBML;                          //This is the model
+        Property<RoadRunnerData>				mObservedData;
+        Property<RoadRunnerData>				mModelData;
+        Property<RoadRunnerData>				mResidualsData;
+        Property<Properties>                   mInputPropertyList;            //Properties to fit
+        Property<Properties>                   mOutputPropertyList;           //Properties that was fitted
+        Property<StringList>                   mObservedDataSelectionList;     //Species selection list for observed data
+        Property<StringList>                   mModelDataSelectionList;        //Species selection list for observed data
+        Property<double>                       mNorm;                          //Part of minimization result
+        Property<int>                          mNrOfIter;                      //Part of minimization result
+        
+        //LMFIT Tuning parameters
+        Property<double>                       ftol;       /* relative error desired in the sum of squares. */
+        Property<double>                       xtol;       /* relative error between last two approximations. */
+        Property<double>                       gtol;       /* orthogonality desired between fvec and its derivs. */
+        Property<double>                       epsilon;    /* step used to calculate the jacobian. */
+        Property<double>                       stepbound;  /* initial bound to steps in the outer loop. */
+        Property<int>                          maxcall;    /* maximum number of iterations. */
+        Property<int>                          scale_diag; /* UNDOCUMENTED, TESTWISE automatical diag rescaling? */
+        Property<int>                          printflags; /* OR'ed to produce more noise */
+		
+		
+		//Utility functions for the thread
         string                                  getTempFolder();
         string                                  getSBML();
 
         //The worker is doing the work
         LMWorker                                mLMWorker;
-
+		lmDataStructure							&mLMData;        //LevenbergMarq.. data structure
     public:
                                                 LM(RoadRunner* aRR = NULL);
                                                ~LM();

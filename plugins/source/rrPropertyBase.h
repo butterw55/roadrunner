@@ -1,6 +1,6 @@
 /**
- * @file rrPluginParameter.h
- * @brief RoadRunner Parameter class implementation
+ * @file rrPropertyBase.h
+ * @brief RoadRunner Property class implementation
  * @author Totte Karlsson & Herbert M Sauro
  *
  * <--------------------------------------------------------------
@@ -38,8 +38,8 @@
  *
  * redistribute any piece of this software without proper attribution;
 */
-#ifndef rrPluginParameterH
-#define rrPluginParameterH
+#ifndef rrPluginPropertyH
+#define rrPluginPropertyH
 #include "rrPluginsAPIExporter.h"
 #include <string>
 #include <ostream>
@@ -52,26 +52,31 @@ using std::string;
 using std::ostream;
 
 /**
- * The PluginParameter class is an interface for derived Parameters, that can be of any type.
+ * The PluginProperty class is an interface for derived Properties, that can be of any type.
  * A parameter has a name, description and a hint, encapsulating the the purpose of the actual parameter.
  */
-class PLUGINS_API_DECLSPEC PluginParameter
+class PLUGINS_API_DECLSPEC PropertyBase
 {
+    public:
+    //Friends first
+        /**
+         * Ouput the parameter to an output stream.
+         */
+        PLUGINS_API_DECLSPEC
+        friend ostream&                     operator<<(ostream& stream, const PropertyBase& outMe);
+
     public:
         /**
          * The constructor populates the parameters name and hint.
          */
-                                            PluginParameter(const string& name, const string& hint);
+                                            PropertyBase(const string& type, const string& name, const string& hint);
         /**
          * De-allocate any memory allocated.
          */
-        virtual                            ~PluginParameter();
+        virtual                            ~PropertyBase();
 
-        /**
-         * Return the parameter in a string representation
-         */
-        string                              asString() const;
-
+                                            PropertyBase(const PropertyBase& pp);
+        PropertyBase&                    operator=(const PropertyBase& rhs);
         /**
          * Return the parameters name
          */
@@ -81,12 +86,12 @@ class PLUGINS_API_DECLSPEC PluginParameter
          * Return description of the parameter
          */
         string                              getDescription() const;
-        
+
         /**
          * Set the description of a parameter
          */
         void                                setDescription(const string& descr);
-        
+
         /**
          * Set the hint of a parameter
          */
@@ -97,18 +102,24 @@ class PLUGINS_API_DECLSPEC PluginParameter
          */
         string                              getHint() const;
 
-        //Pure virtuals
         /**
-         * Get the value of the parameter, as a string. This function need to be implemented in any derived class.
+         * Return the parameter in a string representation
+         */
+        string                              asString() const;
+
+        /**
+         * Get the type of the parameter.
+         */
+        string                              getType() const;
+
+        //Virtuals
+        /**
+         *  Get the value of the parameter, as a string. This function need to be implemented in a derived class needing
+            its value to be expressed as a string.
          \note In the case of a complex type, such as RoadRunnerData for example, expect the returned string to be
          of considerate size.
          */
         virtual string                      getValueAsString() const;
-
-        /**
-         * Get the type of the parameter. This function need to be implemented in any derived class.
-         */
-        virtual string                      getType() const;
 
         /**
          * Get an opaque pointer to the value of the parameter. This function need to be implemented in any derived class.
@@ -120,11 +131,6 @@ class PLUGINS_API_DECLSPEC PluginParameter
          */
         virtual void                        setValueFromString(const string& value) = 0;
 
-        /**
-         * Ouput the parameter to an output stream. This function need to be implemented in any derived class.
-         */
-        PLUGINS_API_DECLSPEC
-        friend ostream&                     operator<<(ostream& stream, const PluginParameter& outMe);
 
     protected:
         /**
@@ -142,6 +148,10 @@ class PLUGINS_API_DECLSPEC PluginParameter
          */
         string                              mHint;
 
+        /**
+         * The type of the parameter.
+         */
+        string                              mType;
 };
 
 }

@@ -9,8 +9,8 @@
 #include "rrc_cpp_support.h"            //Support functions, not exposed as api functions and or data
 #include "rrp_api.h"
 #include "rrp_cpp_support.h"
-#include "rrParameter.h"
-#include "rrPluginParameter.h"
+#include "rrProperty.h"
+#include "rrPropertyBase.h"
 //---------------------------------------------------------------------------
 
 namespace rrp
@@ -18,7 +18,7 @@ namespace rrp
 using namespace std;
 using namespace rr;
 
-RRParameterHandle rrp_cc createParameter(const char* label, const char* type, const char* _hint, void* value)
+RRPropertyHandle rrp_cc createProperty(const char* label, const char* type, const char* _hint, void* value)
 {
     start_try
         char* hint = (char*) _hint;
@@ -37,7 +37,7 @@ RRParameterHandle rrp_cc createParameter(const char* label, const char* type, co
                 bool* val = (bool*) value;
                 iniVal = (*val);
             }
-            Parameter<bool> *para = new Parameter<bool>(label, iniVal, hint);
+            Property<bool> *para = new Property<bool>(iniVal, label, hint);
             return para;
         }
 
@@ -50,7 +50,7 @@ RRParameterHandle rrp_cc createParameter(const char* label, const char* type, co
                 int* val = (int*) value;
                 iniVal = (*val);
             }
-            Parameter<int> *para = new Parameter<int>(label, iniVal, hint);
+            Property<int> *para = new Property<int>(iniVal, label, hint);
             return para;
         }
 
@@ -64,7 +64,7 @@ RRParameterHandle rrp_cc createParameter(const char* label, const char* type, co
                 double* dVal = (double*) value;
                 iniVal = (*dVal);
             }
-            Parameter<double> *para = new Parameter<double>(label, iniVal, hint);
+            Property<double> *para = new Property<double>(iniVal, label, hint);
             return para;
         }
 
@@ -77,22 +77,22 @@ RRParameterHandle rrp_cc createParameter(const char* label, const char* type, co
                 double* dVal = (double*) value;
                 iniVal = (*dVal);
             }
-            Parameter<double> *para = new Parameter<double>(label, iniVal, hint);
+            Property<double> *para = new Property<double>(iniVal, label, hint);
             return para;
         }
 
-        if(string(type) == string("string"))
-        {
-            char* iniVal  = "";
-            if(value != NULL)
-            {
-                //cast it
-                char* *val = (char**) value;
-                iniVal = (*val);
-            }
-            Parameter<char*> *para = new Parameter<char*>(label, iniVal, hint);
-            return para;
-        }
+        //if(string(type) == string("string"))
+        //{
+        //    char* iniVal  = "";
+        //    if(value != NULL)
+        //    {
+        //        //cast it
+        //        char* *val = (char**) value;
+        //        iniVal = (*val);
+        //    }
+        //    Property<char*> *para = new Property<char*>(iniVal, label, hint);
+        //    return para;
+        //}
 
         if(string(type) == string("std::string"))
         {
@@ -103,21 +103,21 @@ RRParameterHandle rrp_cc createParameter(const char* label, const char* type, co
                 string* val = (string*) value;
                 iniVal = (*val);
             }
-            Parameter<string> *para = new Parameter<string>(label, iniVal, hint);
+            Property<string> *para = new Property<string>(iniVal, label, hint);
             return para;
         }
 
-        if(string(type) == string("listOfParameters"))
+        if(string(type) == string("listOfProperties"))
         {
-            Parameters iniVal;
+            Properties iniVal;
             if(value != NULL)
             {
                 //cast it
-                Parameters* val = (Parameters*) value;
+                Properties* val = (Properties*) value;
                 iniVal = (*val);
             }
 
-            Parameter<Parameters> *para = new Parameter<Parameters>(label, iniVal, hint);
+            Property<Properties> *para = new Property<Properties>(iniVal, label, hint);
             return para;
         }
 
@@ -131,7 +131,7 @@ RRParameterHandle rrp_cc createParameter(const char* label, const char* type, co
                 iniVal = (*val);
             }
 
-            Parameter<RoadRunnerData> *para = new Parameter<RoadRunnerData>(label, iniVal, hint);
+            Property<RoadRunnerData> *para = new Property<RoadRunnerData>(iniVal, label, hint);
             return para;
         }
 
@@ -139,260 +139,260 @@ RRParameterHandle rrp_cc createParameter(const char* label, const char* type, co
     catch_ptr_macro
 }
 
-bool rrp_cc freeParameter(RRParameterHandle paraHandle)
+bool rrp_cc freeProperty(RRPropertyHandle paraHandle)
 {
     start_try
-        PluginParameter* para   = castToParameter(paraHandle);
+        PropertyBase* para   = castToProperty(paraHandle);
         delete para;
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc addParameterToList(RRParametersHandle handle, RRParameterHandle para)
+bool rrp_cc addPropertyToList(RRPropertiesHandle handle, RRPropertyHandle para)
 {
     start_try
-        Parameters* paras   = castToParameters(handle);
-        PluginParameter* bPara = castToParameter(para);
+        Properties* paras   = castToProperties(handle);
+        PropertyBase* bPara = castToProperty(para);
         paras->add(bPara, false);
         return true;
     catch_bool_macro
 }
 
-char* rrp_cc getParameterInfo(RRParameterHandle handle)
+char* rrp_cc getPropertyInfo(RRPropertyHandle handle)
 {
     start_try
-        PluginParameter* para = castToParameter(handle);
+        PropertyBase* para = castToProperty(handle);
         stringstream s;
         s<<"Name="<<para->getName()<<"\tType="<<para->getType()<<"\tDescription="<<para->getDescription()<<"\tHint="<<para->getHint();
         return createText(s.str());
     catch_ptr_macro
 }
 
-bool rrp_cc setParameterDescription(RRParameterHandle handle, const char* value)
+bool rrp_cc setPropertyDescription(RRPropertyHandle handle, const char* value)
 {
     start_try
-        PluginParameter* para = castToParameter(handle);
+        PropertyBase* para = castToProperty(handle);
         para->setDescription(string(value));        
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc setParameterHint(RRParameterHandle handle, const char* value)
+bool rrp_cc setPropertyHint(RRPropertyHandle handle, const char* value)
 {
     start_try
-        PluginParameter* para = castToParameter(handle);
+        PropertyBase* para = castToProperty(handle);
         para->setHint(string(value));
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc setParameterByString(RRParameterHandle handle, const char* value)
+bool rrp_cc setPropertyByString(RRPropertyHandle handle, const char* value)
 {
     start_try
-        PluginParameter* para = castToParameter(handle);
+        PropertyBase* para = castToProperty(handle);
         para->setValueFromString(string(value));
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc setBoolParameter(RRParameterHandle handle, bool value)
+bool rrp_cc setBoolProperty(RRPropertyHandle handle, bool value)
 {
     start_try
-        Parameter<bool>* para = castToBoolParameter(handle);
+        Property<bool>* para = castToBoolProperty(handle);
         para->setValue(value);
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc getBoolParameter(RRParameterHandle handle, bool* value)
+bool rrp_cc getBoolProperty(RRPropertyHandle handle, bool* value)
 {
     start_try
-        Parameter<bool>* para = castToBoolParameter(handle);
+        Property<bool>* para = castToBoolProperty(handle);
         (*value) = para->getValue();
         return true;
     catch_bool_macro
 }
 
 
-bool rrp_cc setIntParameter(RRParameterHandle handle, int value)
+bool rrp_cc setIntProperty(RRPropertyHandle handle, int value)
 {
     start_try
-        Parameter<int>* para = castToIntParameter(handle);
+        Property<int>* para = castToIntProperty(handle);
         para->setValue(value);
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc getIntParameter(RRParameterHandle handle, int *value)
+bool rrp_cc getIntProperty(RRPropertyHandle handle, int *value)
 {
     start_try
-        Parameter<int>* para = castToIntParameter(handle);
+        Property<int>* para = castToIntProperty(handle);
         (*value) = para->getValue();
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc setDoubleParameter(RRParameterHandle handle, double value)
+bool rrp_cc setDoubleProperty(RRPropertyHandle handle, double value)
 {
     start_try
-        Parameter<double>* para = castToDoubleParameter(handle);
+        Property<double>* para = castToDoubleProperty(handle);
         para->setValue(value);
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc getDoubleParameter(RRParameterHandle handle, double *value)
+bool rrp_cc getDoubleProperty(RRPropertyHandle handle, double *value)
 {
     start_try
-        Parameter<double>* para = castToDoubleParameter(handle);
+        Property<double>* para = castToDoubleProperty(handle);
         (*value) = para->getValue();
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc setStringParameter(RRParameterHandle handle, char* value)
+bool rrp_cc setStringProperty(RRPropertyHandle handle, char* value)
 {
     start_try
-        Parameter<string>* para = castToStringParameter(handle);
+        Property<string>* para = castToStringProperty(handle);
         para->setValue(value);
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc getStringParameter(RRParameterHandle handle, const char* (*value))
+bool rrp_cc getStringProperty(RRPropertyHandle handle, const char* (*value))
 {
     start_try
-        Parameter<string>* para = castToStringParameter(handle);
+        Property<string>* para = castToStringProperty(handle);
                 
         (*value) = para->getValue().c_str();
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc setListParameter(RRParameterHandle handle, void* value)
+bool rrp_cc setListProperty(RRPropertyHandle handle, void* value)
 {
     start_try
-        Parameter<Parameters>* para = castToParametersParameter(handle);
-        para->setValue((Parameters*)(value));
+        Property<Properties>* para = castToPropertiesProperty(handle);
+        para->setValue((Properties*)(value));
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc getListParameter(RRParameterHandle handle, void* (value))
+bool rrp_cc getListProperty(RRPropertyHandle handle, void* (value))
 {
     start_try
-        Parameter<Parameters>* para = castToParametersParameter(handle);
-        //Parameters* assignTo = castToParameters(value);
+        Property<Properties>* para = castToPropertiesProperty(handle);
+        //Properties* assignTo = castToProperties(value);
         //
         (value) = (void*) &(para->getValue());
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc setRoadRunnerDataParameter(RRParameterHandle handle, void* value)
+bool rrp_cc setRoadRunnerDataProperty(RRPropertyHandle handle, void* value)
 {
     start_try
-        Parameter<RoadRunnerData*>* para = castToRoadRunnerDataParameter(handle);
-        para->setValue((RoadRunnerData*) value);
+        Property<RoadRunnerData>* para = castToRoadRunnerDataProperty(handle);
+        para->setValue(*((RoadRunnerData*) value));
         return true;
     catch_bool_macro
 }
 
-bool rrp_cc getRoadRunnerDataParameter(RRParameterHandle handle, void* value)
+bool rrp_cc getRoadRunnerDataProperty(RRPropertyHandle handle, void* value)
 {
     start_try
-        Parameter<RoadRunnerData*>* para = castToRoadRunnerDataParameter(handle);
+        Property<RoadRunnerData>* para = castToRoadRunnerDataProperty(handle);
         RoadRunnerData* assignTo = castToRoadRunnerData(value);
-        (assignTo) = para->getValue();
+        (assignTo) = &(para->getValue());
         return true;
     catch_bool_macro
 }
 
-char* rrp_cc getParameterValueAsString(RRParameterHandle handle)
+char* rrp_cc getPropertyValueAsString(RRPropertyHandle handle)
 {
     start_try
-        PluginParameter* para = castToParameter(handle);
+        PropertyBase* para = castToProperty(handle);
         string val = para->getValueAsString();
         return rr::createText(val);
     catch_ptr_macro
 }
 
-void* rrp_cc getParameterValueHandle(RRParameterHandle handle)
+void* rrp_cc getPropertyValueHandle(RRPropertyHandle handle)
 {
     start_try
-        PluginParameter* para = castToParameter(handle);
+        PropertyBase* para = castToProperty(handle);
         return para->getValueHandle();
     catch_ptr_macro
 }
 
-char* rrp_cc getParameterName(RRParameterHandle handle)
+char* rrp_cc getPropertyName(RRPropertyHandle handle)
 {
     start_try
-        PluginParameter* para = castToParameter(handle);
+        PropertyBase* para = castToProperty(handle);
         return rr::createText(para->getName());
     catch_ptr_macro
 }
 
-char* rrp_cc getParameterHint(RRParameterHandle handle)
+char* rrp_cc getPropertyHint(RRPropertyHandle handle)
 {
     start_try
-        PluginParameter* para = castToParameter(handle);
+        PropertyBase* para = castToProperty(handle);
         return rr::createText(para->getHint());
     catch_ptr_macro
 }
 
-char* rrp_cc getParameterType(RRParameterHandle handle)
+char* rrp_cc getPropertyType(RRPropertyHandle handle)
 {
     start_try
-        PluginParameter* para = castToParameter(handle);
+        PropertyBase* para = castToProperty(handle);
         return rr::createText(para->getType());
     catch_ptr_macro
 }
 
-RRParameterHandle rrp_cc getFirstParameter(RRParametersHandle handle)
+RRPropertyHandle rrp_cc getFirstProperty(RRPropertiesHandle handle)
 {
     start_try
-        Parameters *paras = castToParameters(handle);
+        Properties *paras = castToProperties(handle);
         return paras->getFirst();
     catch_ptr_macro
 }
 
-RRParameterHandle rrp_cc getNextParameter(RRParametersHandle handle)
+RRPropertyHandle rrp_cc getNextProperty(RRPropertiesHandle handle)
 {
     start_try
-        Parameters *paras = castToParameters(handle);
+        Properties *paras = castToProperties(handle);
         return paras->getNext();
     catch_ptr_macro
 }
 
-RRParameterHandle rrp_cc getPreviousParameter(RRParametersHandle handle)
+RRPropertyHandle rrp_cc getPreviousProperty(RRPropertiesHandle handle)
 {
     start_try
-        Parameters *paras = castToParameters(handle);
+        Properties *paras = castToProperties(handle);
         return paras->getPrevious();
     catch_ptr_macro
 }
 
-RRParameterHandle rrp_cc getCurrentParameter(RRParametersHandle handle)
+RRPropertyHandle rrp_cc getCurrentProperty(RRPropertiesHandle handle)
 {
     start_try
-        Parameters *paras = castToParameters(handle);
+        Properties *paras = castToProperties(handle);
         return paras->getCurrent();
     catch_ptr_macro
 }
 
-bool rrp_cc clearParameterList(RRParametersHandle handle)
+bool rrp_cc clearPropertyList(RRPropertiesHandle handle)
 {
     start_try
-        Parameters* paras = castToParameters(handle);
+        Properties* paras = castToProperties(handle);
         return paras->clear();
         catch_bool_macro
 }
 
-char* rrp_cc getNamesFromParameterList(RRParametersHandle handle)
+char* rrp_cc getNamesFromPropertyList(RRPropertiesHandle handle)
 {
     start_try
-        Parameters* paras = castToParameters(handle);    
+        Properties* paras = castToProperties(handle);    
         StringList aList;
         for(int i = 0; i < paras->count(); i++)
         {

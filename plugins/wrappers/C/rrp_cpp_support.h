@@ -43,14 +43,16 @@
 
 #ifndef rrp_cpp_supportH
 #define rrp_cpp_supportH
+#include <string>
 #include "rrp_api.h"
 #include "rrRoadRunnerData.h"
 namespace rrp
 {
+using std::string;
 template <class T>
-class Parameter;
-class Parameters;
-class PluginParameter;
+class Property;
+class Properties;
+class PropertyBase;
 class Plugin;
 class PluginManager;
 
@@ -72,60 +74,60 @@ PluginManager*                       castToPluginManager(RRPluginManagerHandle h
 Plugin*                             castToPlugin(RRPluginHandle handle);
 
 /*!
- \brief Cast a handle to RoadRunner Parameters pointer, throws if it fails
+ \brief Cast a handle to RoadRunner Properties pointer, throws if it fails
  \param[in] handle  A handle to a roadrunner parameters instance
  \return Pointer to a parameters instance
  \ingroup cpp_support
 */
-Parameters*                         castToParameters(RRParametersHandle handle);
+Properties*                         castToProperties(RRPropertiesHandle handle);
 
 /*!
- \brief Cast a handle to RoadRunner PluginParameter pointer, throws if it fails
+ \brief Cast a handle to RoadRunner PropertyBase pointer, throws if it fails
  \param[in] handle  A handle to a roadrunner parameter instance
  \return Pointer to a baseparameter instance
  \ingroup cpp_support
 */
-PluginParameter*                      castToParameter(RRParameterHandle handle);
+PropertyBase*                      castToProperty(RRPropertyHandle handle);
 
 /*!
- \brief Cast a handle to RoadRunner Parameter<bool> pointer, throws if it fails
+ \brief Cast a handle to RoadRunner Property<bool> pointer, throws if it fails
  \param[in] handle  A handle to a roadrunner parameter instance
- \return Pointer to a Parameter<int>* instance
+ \return Pointer to a Property<int>* instance
  \ingroup cpp_support
 */
-Parameter< bool >*                   castToBoolParameter(RRParameterHandle handle);
+Property< bool >*                   castToBoolProperty(RRPropertyHandle handle);
 
 /*!
- \brief Cast a handle to RoadRunner Parameter<int> pointer, throws if it fails
+ \brief Cast a handle to RoadRunner Property<int> pointer, throws if it fails
  \param[in] handle  A handle to a roadrunner parameter instance
- \return Pointer to a Parameter<int>* instance
+ \return Pointer to a Property<int>* instance
  \ingroup cpp_support
 */
-Parameter< int >*                   castToIntParameter(RRParameterHandle handle);
+Property< int >*                   castToIntProperty(RRPropertyHandle handle);
 
 /*!
- \brief Cast a handle to RoadRunner Parameter<double> pointer, throws if it fails
+ \brief Cast a handle to RoadRunner Property<double> pointer, throws if it fails
  \param[in] handle  A handle to a roadrunner parameter instance
- \return Pointer to a Parameter<double>* instance
+ \return Pointer to a Property<double>* instance
  \ingroup cpp_support
 */
-Parameter<double>*                  castToDoubleParameter(RRParameterHandle handle);
+Property<double>*                  castToDoubleProperty(RRPropertyHandle handle);
 
 /*!
- \brief Cast a handle to RoadRunner Parameter<string> pointer, throws if it fails
+ \brief Cast a handle to RoadRunner Property<string> pointer, throws if it fails
  \param[in] handle  A handle to a roadrunner parameter instance
- \return Pointer to a Parameter<double>* instance
+ \return Pointer to a Property<double>* instance
  \ingroup cpp_support
 */
-Parameter<string>*                   castToStringParameter(RRParameterHandle handle);
+Property<string>*                   castToStringProperty(RRPropertyHandle handle);
 
 /*!
- \brief Cast a handle to RoadRunner Parameter<Parameters> pointer, throws if it fails
+ \brief Cast a handle to RoadRunner Property<Properties> pointer, throws if it fails
  \param[in] handle  A handle to a roadrunner parameter instance
- \return Pointer to a Parameter<Parameters>* instance
+ \return Pointer to a Property<Properties>* instance
  \ingroup cpp_support
 */
-Parameter<Parameters>*              castToParametersParameter(RRParameterHandle handle);
+Property<Properties>*              castToPropertiesProperty(RRPropertyHandle handle);
 
 /*!
  \brief Cast a handle to RoadRunnerData pointer, throws if it fails
@@ -133,17 +135,17 @@ Parameter<Parameters>*              castToParametersParameter(RRParameterHandle 
  \return Pointer to a RoadRunnerData instance
  \ingroup cpp_support
 */
-rr::RoadRunnerData*                 castToRoadRunnerData(RRParameterHandle handle);
+rr::RoadRunnerData*                 castToRoadRunnerData(RRPropertyHandle handle);
 
 /*!
- \brief Cast a handle to RoadRunner Parameter<RoadRunnerData*> pointer, throws if it fails
+ \brief Cast a handle to RoadRunner Property<RoadRunnerData> pointer, throws if it fails
  \param[in] handle  A handle to a roadrunner parameter instance
- \return Pointer to a Parameter<RoadRunnerData>* instance
- \note To limit the amount of supported types, the underlying type can only be of Pointer to RoadRunner
+ \return Pointer to a Property<RoadRunnerData> instance
+ \note To limit the amount of supported types, the underlying type can only be of RoadRunnerData, not pointer to
   data.
  \ingroup cpp_support
 */
-Parameter<rr::RoadRunnerData*>*      castToRoadRunnerDataParameter(RRParameterHandle handle);
+Property<rr::RoadRunnerData>*      castToRoadRunnerDataProperty(RRPropertyHandle handle);
 
 //Result data
 /*!

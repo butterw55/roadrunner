@@ -1,29 +1,29 @@
 #pragma hdrstop
 #include "rrLogger.h"
-#include "rrParameters.h"
+#include "rrProperties.h"
 
 namespace rrp
 {
 using namespace rr;
 
-Parameters::Parameters(bool canClientClear)
+Properties::Properties(bool canClientClear)
     :mCanClientClearList(canClientClear)
 {}
 
                                         
-Parameters::~Parameters()
+Properties::~Properties()
 {
     clear();
 }
 
-Parameters::Parameters(const Parameters& cpyMe)
+Properties::Properties(const Properties& cpyMe)
 {
     this->mCanClientClearList = true;
     this->mParas = cpyMe.mParas;
     this->mParasIter = this->mParas.begin();
 }
 
-bool Parameters::clear()
+bool Properties::clear()
 {
     if(mCanClientClearList == false)
     {
@@ -41,12 +41,12 @@ bool Parameters::clear()
     return true;
 }
 
-void Parameters::add(PluginParameter* me, bool own)
+void Properties::add(PropertyBase* me, bool own)
 {
-    mParas.push_back( pair<PluginParameter*, bool>(me, own) );
+    mParas.push_back( pair<PropertyBase*, bool>(me, own) );
 }
 
-StringList Parameters::getNames() const
+StringList Properties::getNames() const
 {
     StringList list;
     for(int i = 0; i < count(); i++)
@@ -56,22 +56,22 @@ StringList Parameters::getNames() const
     return list;
 }
 
-const PluginParameter* Parameters::operator[](const int& i) const
+const PropertyBase* Properties::operator[](const int& i) const
 {
     return mParas[i].first;
 }
 
-PluginParameter* Parameters::operator[](const int& i)
+PropertyBase* Properties::operator[](const int& i)
 {
     return mParas[i].first;
 }
 
-u_int Parameters::count() const
+u_int Properties::count() const
 {
     return mParas.size();
 }
 
-PluginParameter* Parameters::getParameter(const string& paraName)
+PropertyBase* Properties::getProperty(const string& paraName)
 {
     for(int i = 0; i < count(); i++)
     {
@@ -83,7 +83,7 @@ PluginParameter* Parameters::getParameter(const string& paraName)
     return NULL;
 }
 
-PluginParameter* Parameters::getFirst()
+PropertyBase* Properties::getFirst()
 {
     mParasIter = mParas.begin();
     if(mParasIter != mParas.end())
@@ -93,7 +93,7 @@ PluginParameter* Parameters::getFirst()
     return NULL;
 }
 
-PluginParameter* Parameters::getCurrent()
+PropertyBase* Properties::getCurrent()
 {
     if(mParasIter != mParas.end())
     {
@@ -102,7 +102,7 @@ PluginParameter* Parameters::getCurrent()
     return NULL;
 }
 
-PluginParameter* Parameters::getNext()
+PropertyBase* Properties::getNext()
 {
     mParasIter++;
     if(mParasIter != mParas.end())
@@ -112,7 +112,7 @@ PluginParameter* Parameters::getNext()
     return NULL;
 }
 
-PluginParameter* Parameters::getPrevious()
+PropertyBase* Properties::getPrevious()
 {
     mParasIter--;
     if(mParasIter != mParas.end())
@@ -122,7 +122,7 @@ PluginParameter* Parameters::getPrevious()
     return NULL;
 }
 
-ostream& operator<<(ostream& stream, const Parameters& paras)
+ostream& operator<<(ostream& stream, const Properties& paras)
 {
     for(int i = 0; i < paras.count(); i++)
     {
@@ -132,6 +132,5 @@ ostream& operator<<(ostream& stream, const Parameters& paras)
     }
     return stream;
 }
-
 
 }

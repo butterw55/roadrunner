@@ -1,5 +1,5 @@
 import roadrunner
-from rrPlugins import *
+from rrPlugins_CAPI import *
 
 #Create a plugin manager
 pm = createPluginManager()
@@ -9,7 +9,7 @@ noisePlugin = loadPlugin(pm, "rrp_add_noise")
 
 #Create a roadrunner instance
 rr = roadrunner.RoadRunner()
-rr.load("../../models/sbml_test_0001.xml")
+rr.load("sbml_test_0001.xml")
 
 #Generate data
 rr.simulate(0, 10, 511) #Want 512 points
@@ -25,6 +25,8 @@ setPluginParameter(noisePlugin, "Sigma", 1.e-5)
 #Execute the noise plugin which will add some noise to the (internal) data
 executePlugin(noisePlugin)
 
+#Read result from the plugin -----RECENTLY UPDATED
+rrDataHandle = getParameter(dataPara)
 
 hdr = getRoadRunnerDataColumnHeader(rrDataHandle)
 npData = getNumpyData(rrDataHandle)

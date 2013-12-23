@@ -69,7 +69,7 @@ class RR_DECLSPEC StringList
          * standard vector<string>
          */
         //operator vector<string>() const { return mStrings; }
-        operator const vector<string>&() const { return mStrings;}
+        operator const vector<string>&() const;
 };
 
 

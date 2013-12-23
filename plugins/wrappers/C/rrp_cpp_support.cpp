@@ -37,100 +37,100 @@ Plugin* castToPlugin(RRPluginHandle handle)
     }
 }
 
-Parameters* castToParameters(RRParametersHandle handle)
+Properties* castToProperties(RRPropertiesHandle handle)
 {
-    Parameters* para = (Parameters*) handle;
+    Properties* para = (Properties*) handle;
     if(para) //Will only fail if handle is NULL...
     {
         return para;
     }
     else
     {
-        Exception ex("Failed to cast to a valid Parameters handle");
+        Exception ex("Failed to cast to a valid Properties handle");
         throw(ex);
     }
 }
 
-PluginParameter* castToParameter(RRParameterHandle handle)
+PropertyBase* castToProperty(RRPropertyHandle handle)
 {
-    PluginParameter* para = (PluginParameter*) handle;
+    PropertyBase* para = (PropertyBase*) handle;
     if(para) //Will only fail if handle is NULL...
     {
         return para;
     }
     else
     {
-        Exception ex("Failed to cast to a valid Parameter handle");
+        Exception ex("Failed to cast to a valid Property handle");
         throw(ex);
     }
 }
 
-Parameter<bool>* castToBoolParameter(RRParameterHandle handle)
+Property<bool>* castToBoolProperty(RRPropertyHandle handle)
 {
-    Parameter<bool>* para = (Parameter<bool>*) handle;
+    Property<bool>* para = (Property<bool>*) handle;
     if(para) //Will only fail if handle is NULL...
     {
         return para;
     }
     else
     {
-        Exception ex("Failed to cast to a valid Boolean Parameter handle");
+        Exception ex("Failed to cast to a valid Boolean Property handle");
         throw(ex);
     }
 }
 
-Parameter<int>* castToIntParameter(RRParameterHandle handle)
+Property<int>* castToIntProperty(RRPropertyHandle handle)
 {
-    Parameter<int>* para = (Parameter<int>*) handle;
+    Property<int>* para = (Property<int>*) handle;
     if(para) //Will only fail if handle is NULL...
     {
         return para;
     }
     else
     {
-        Exception ex("Failed to cast to a valid Integer Parameter handle");
+        Exception ex("Failed to cast to a valid Integer Property handle");
         throw(ex);
     }
 }
 
-Parameter<double>* castToDoubleParameter(RRParameterHandle handle)
+Property<double>* castToDoubleProperty(RRPropertyHandle handle)
 {
-    Parameter<double>* para = (Parameter<double>*) handle;
+    Property<double>* para = (Property<double>*) handle;
     if(para) //Will only fail if handle is NULL...
     {
         return para;
     }
     else
     {
-        Exception ex("Failed to cast to a valid Double Parameter handle");
+        Exception ex("Failed to cast to a valid Double Property handle");
         throw(ex);
     }
 }
 
-Parameter<string>* castToStringParameter(RRParameterHandle handle)
+Property<string>* castToStringProperty(RRPropertyHandle handle)
 {
-    Parameter<string>* para = (Parameter<string>*) handle;
+    Property<string>* para = (Property<string>*) handle;
     if(para) //Will only fail if handle is NULL...
     {
         return para;
     }
     else
     {
-        Exception ex("Failed to cast to a valid string Parameter handle");
+        Exception ex("Failed to cast to a valid string Property handle");
         throw(ex);
     }
 }
 
-Parameter<Parameters>* castToParametersParameter(RRParameterHandle handle)
+Property<Properties>* castToPropertiesProperty(RRPropertyHandle handle)
 {
-    Parameter<Parameters>* para = (Parameter<Parameters>*) handle;
+    Property<Properties>* para = (Property<Properties>*) handle;
     if(para) //Will only fail if handle is NULL...
     {
         return para;
     }
     else
     {
-        Exception ex("Failed to cast to a valid string Parameter handle");
+        Exception ex("Failed to cast to a valid string Property handle");
         throw(ex);
     }
 }
@@ -144,21 +144,21 @@ RoadRunnerData* castToRoadRunnerData(RRDataHandle handle)
     }
     else
     {
-        Exception ex("Failed to cast to a valid string Parameter handle");
+        Exception ex("Failed to cast to a valid string Property handle");
         throw(ex);
     }
 }
 
-Parameter<RoadRunnerData*>* castToRoadRunnerDataParameter(RRParameterHandle handle)
+Property<RoadRunnerData>* castToRoadRunnerDataProperty(RRPropertyHandle handle)
 {
-    Parameter<RoadRunnerData*>* para = (Parameter<RoadRunnerData*>*) handle;
+    Property<RoadRunnerData>* para = (Property<RoadRunnerData>*) handle;
     if(para) //Will only fail if handle is NULL...
     {
         return para;
     }
     else
     {
-        Exception ex("Failed to cast to a valid string Parameter handle");
+        Exception ex("Failed to cast to a valid RoadRunnerData Property handle");
         throw(ex);
     }
 }

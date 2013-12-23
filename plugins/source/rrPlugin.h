@@ -75,7 +75,7 @@ typedef void    (event_cc *PluginEvent)(void* data1, void* data2);
 
   -# A Plugin typically expose various \a Capabilities, available to a client of a plugin trough the \a Capabilites conatiner.
 
-  -# Each Capability may have various numbers of \a Parameters that a client of the Plugin may \a set or \a get.
+  -# Each Capability may have various numbers of \a Properties that a client of the Plugin may \a set or \a get.
 
   -# The internal work a plugin is designed to do may be executed in a separate thread, and various functions to monitor and manage
   the work of a Plugin is exposed, e.g. isWorking(), terminate(), isBeingTerminated() etc.
@@ -130,6 +130,16 @@ class PLUGINS_API_DECLSPEC Plugin
         string                          getCategory();
 
         /**
+            Get plugin description
+        */
+        string                          getDescription();
+
+        /**
+            Get plugin Hint
+        */
+        string                          getHint();
+
+        /**
             Get plugin version information
         */
         string                          getVersion();
@@ -169,12 +179,12 @@ class PLUGINS_API_DECLSPEC Plugin
         /**
             Retieves the parameters 
         */
-        Parameters*                     getParameters(); //Each capability has a set of parameters
+        Properties*                     getProperties(); //Each capability has a set of parameters
 
         /**
             Retieves the names of the parameters 
         */
-        StringList                      getParameterNames(); //Each capability has a set of parameters
+        StringList                      getPropertyNames(); //Each capability has a set of parameters
 
         /**
             Retieves a plugin properties, as XML
@@ -184,22 +194,22 @@ class PLUGINS_API_DECLSPEC Plugin
         /**
             Retieves a specific parameter, in a specific capability.
         */
-        PluginParameter*                getParameter(const string& param, const string& capability = "");
+        PropertyBase*                getProperty(const string& param, const string& capability = "");
 
         /**
             Retieves a specific parameter, in a specific capability.
         */
-        PluginParameter*                getParameter(const string& param, Capability& capability);
+        PropertyBase*                getProperty(const string& param, Capability& capability);
 
         /**
-            Sets the value of specified Parameter with value as specified
+            Sets the value of specified Property with value as specified
         */
-        bool                            setParameter(const string& nameOf, const char* value);
+        bool                            setProperty(const string& nameOf, const char* value);
 
         /**
-            Sets the value of specified Parameter with value as specified
+            Sets the value of specified Property with value as specified
         */
-        bool                            setParameter(const string& nameOf, const char* value, Capability& capability);
+        bool                            setProperty(const string& nameOf, const char* value, Capability& capability);
 
 
         /**
@@ -279,6 +289,12 @@ class PLUGINS_API_DECLSPEC Plugin
                                         //! Plugin category
         string                          mCategory;
 
+                                        //! Plugin description
+        string                          mDescription;
+
+                                        //! Plugin Hint
+        string                          mHint;
+
                                         //! Plugin version
         string                          mVersion;
 
@@ -357,15 +373,15 @@ class PLUGINS_API_DECLSPEC Plugin
         void                           *mWorkFinishedData2;
 
         /**
-         * Capabilities container. Descendant add capabilites to this container, as they wish.
-         * It is basically a container for parameter data that can be exchanged to/from the plugin by using parameters
+         * Properties container. Descendant add properties to this container, as they wish.
+         * Property data values can be exchanged to/from the plugin by.
          */
-        Capabilities                    mCapabilities;
+        Capabilities                    mProperties;
 
         /**
          * Opaque data pointer. Plugin designer may use this to communicat data of any type out/in to the plugin
          * using the assignPluginInput() function.
-         * 
+         *
          */
         void                           *mClientData;
 

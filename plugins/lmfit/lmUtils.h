@@ -27,9 +27,11 @@ typedef struct
     RRHandle                rrHandle;
     double*                 time;
     RRPluginHandle          mLMPlugin;
-    PluginEvent          mProgressEvent;
+    PluginEvent             mProgressEvent;
     void*                   mProgressEventContextData;
     char*                   mProgressEventMessage;
+    int                     mNrOfIterations;
+    double                  mNorm;
 } lmDataStructure;
 
 void my_printout(   int n_par,

@@ -1,4 +1,4 @@
-from rrPlugins import *
+from rrPlugins_CAPI import *
 
 listParaHandle = createParameter("myList", "listOfParameters", "a Hint")
 
