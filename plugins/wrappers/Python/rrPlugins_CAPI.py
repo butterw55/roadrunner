@@ -708,11 +708,11 @@ def setPluginProperty(pluginHandle, propertyName, propertyValue):
         if paraType == 'std::string': #Behaves the same in the backend
             return setStringProperty(propertyHandle, propertyValue)
         if paraType == 'listOfProperties':
-            return setListProperty(propertyHandle, paraValue)
+            return setListProperty(propertyHandle, propertyValue)
         if paraType == 'roadRunnerData': #The value of this is a handle
             return setRoadRunnerDataProperty (propertyHandle, propertyValue)
         if paraType == 'StringList':
-            return setPropertyByString(propertyHandle, paraValue)
+            return setPropertyByString(propertyHandle, propertyValue)
         else:
            raise TypeError ('Cannot set the value of such property')
     else:
@@ -841,7 +841,7 @@ def addPropertyToList(propertyHandle, addMe):
         listHandle = getPropertyValue(propertyHandle)
         return rrpLib.addPropertyToList(listHandle, addMe)
     else:
-        return false
+        return False
 
 ## \brief Set a Property by a string
 ## \param propertyHandle to a Property instance
@@ -874,7 +874,7 @@ def getPropertyValueAsString(propertyHandle):
 ## \return Returns a Handle to the property value if successful, None otherwise
 #
 ## @code
-## propertyHandle = rrPlugins.getPropertyValueHandle (parhandle)
+## propertyHandle = rrPlugins.getPropertyValueHandle (prophandle)
 ## @endcode
 ## \htmlonly  <br/>
 ## \endhtmlonly
