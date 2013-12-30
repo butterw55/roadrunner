@@ -20,10 +20,10 @@ getCurrentPlugin                                = _getCurrentPlugin
 
 ;Functions taking a plugin handle
 getPluginName                                   = _getPluginName
-getPluginParameters                             = _getPluginParameters
+getPluginProperties                             = _getPluginProperties
 getPluginStatus                                 = _getPluginStatus
-getPluginParameter                              = _getPluginParameter
-setPluginParameter                              = _setPluginParameter
+getPluginProperty                              = _getPluginProperty
+setPluginProperty                              = _setPluginProperty
 getPluginResult                                 = _getPluginResult
 getPluginPropertiesAsXML                        = _getPluginPropertiesAsXML
 getPluginInfo                                   = _getPluginInfo
@@ -46,18 +46,18 @@ stringArrayToStringFWD                          = _stringArrayToStringFWD
 getLastPluginError                              = _getLastPluginError
 
 ;Functions taking a parameter handle
-createParameter                                 = _createParameter
-getParameterName                                = _getParameterName
-getParameterHint                                = _getParameterHint
-getParameterValueAsString                       = _getParameterValueAsString
-getParameterValueHandle                         = _getParameterValueHandle
-addParameterToList                              = _addParameterToList
-getParameterInfo                                = _getParameterInfo
-setParameterByString                            = _setParameterByString
-setIntParameter                                 = _setIntParameter
-setDoubleParameter                              = _setDoubleParameter
-setStringParameter                              = _setStringParameter
-getParameterType                                = _getParameterType
+createProperty                                 = _createProperty
+getPropertyName                                = _getPropertyName
+getPropertyHint                                = _getPropertyHint
+getPropertyValueAsString                       = _getPropertyValueAsString
+getPropertyValueHandle                         = _getPropertyValueHandle
+addPropertyToList                              = _addPropertyToList
+getPropertyInfo                                = _getPropertyInfo
+setPropertyByString                            = _setPropertyByString
+setIntProperty                                 = _setIntProperty
+setDoubleProperty                              = _setDoubleProperty
+setStringProperty                              = _setStringProperty
+getPropertyType                                = _getPropertyType
 
 
 

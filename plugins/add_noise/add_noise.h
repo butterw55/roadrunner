@@ -1,7 +1,7 @@
 #ifndef add_noiseH
 #define add_noiseH
 #include "rrCapability.h"
-#include "rrParameter.h"
+#include "rrProperty.h"
 #include "rrCPPPlugin.h"
 #include "add_noise_worker.h"
 
@@ -21,9 +21,9 @@ class AddNoise : public CPPPlugin
 
     private:
         Capability                  mAddNoise;
-        Parameter<int>              mNoiseType;
-        Parameter<double>           mSigma;
-        Parameter<RoadRunnerData>   mData;
+        Property<int>              mNoiseType;
+        Property<double>           mSigma;
+        Property<RoadRunnerData>   mData;
         AddNoiseWorker              mAddNoiseWorker;
 
     public:
@@ -55,7 +55,7 @@ inline string getParaType(const addNoise::AddNoise::NoiseType& value)
 }
 
 template<>
-inline string Parameter<addNoise::AddNoise::NoiseType>::getValueAsString() const
+inline string Property<addNoise::AddNoise::NoiseType>::getValueAsString() const
 {
     switch(mValue)
     {
@@ -68,7 +68,7 @@ inline string Parameter<addNoise::AddNoise::NoiseType>::getValueAsString() const
 }
 
 template<>
-inline void Parameter< addNoise::AddNoise::NoiseType >::setValueFromString(const string& val)
+inline void Property< addNoise::AddNoise::NoiseType >::setValueFromString(const string& val)
 {
     //Only gaussian noise is available at this time
     if(val == "0")

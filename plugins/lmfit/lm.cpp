@@ -27,54 +27,54 @@ using namespace rrc;
 LM::LM(rr::RoadRunner* aRR)
 :
 CPPPlugin(                  "Levenberg-Marquardt", "Fitting",       aRR, NULL),
-mLMFit(                     "LMFit",                                "Fit Model Parameters Using the Levenberg-Marquardt Algorithm"),    //The 'capability'
-mSBML(                      "<none>",               "SBML",                                 "SBML, i.e. the model to be used in the fitting"),
-mObservedData(              RoadRunnerData(),       "ExperimentalData",                     "Data object holding Experimental data: Provided by client"),
+mLMFit(                     "LMFit",                                "Fit Model Propertys Using the Levenberg-Marquardt Algorithm"),    //The 'capability'
+mSBML(                      "<none>",               "SBML",                                 "SBML document as a string. Model to be used in the fitting"),
+mExperimentalData(          RoadRunnerData(),       "ExperimentalData",                     "Data object holding Experimental data: Provided by client"),
 mModelData(                 RoadRunnerData(),       "FittedData",                           "Data object holding model data: Handed to client"),
 mResidualsData(             RoadRunnerData(),       "Residuals",                            "Data object holding residuals: Handed to client"),
-mInputParameterList(        Parameters(),           "InputParameterList",                   "List of parameters to fit"),
-mOutputParameterList(       Parameters(),           "OutputParameterList",                  "List of parameters that was fittedt"),
-mObservedDataSelectionList( StringList(),           "ExperimentalDataSelectionList",        "Experimental data selection list"),
+mInputParameterList(         Properties(),          "InputParameterList",                    "List of parameters to fit"),
+mOutputParameterList(        Properties(),          "OutputParameterList",                   "List of parameters that was fittedt"),
+mExperimentalDataSelectionList( StringList(),       "ExperimentalDataSelectionList",        "Experimental data selection list"),
 mModelDataSelectionList(    StringList(),           "FittedDataSelectionList",              "Fitted data selection list"),
 mNorm(                      -1.0,                   "Norm",                                 "Norm of fitting. An estimate of goodness of fit"),
 mNrOfIter(                  -1,                     "NrOfIter",                             "Number of iterations"),
 mLMWorker(*this),
 mLMData(mLMWorker.mLMData),
 
-
-ftol(                      LM_USERTOL,              "ftol"       ,                           " relative error desired in the sum of squares. "),
-xtol(                      LM_USERTOL,              "xtol"       ,                           " relative error between last two approximations. "),
-gtol(                      LM_USERTOL,              "gtol"       ,                           " orthogonality desired between fvec and its derivs. "),
-epsilon(                   LM_USERTOL,              "epsilon"    ,                           " step used to calculate the jacobian. "),
-stepbound(                 100.,                    "stepbound"  ,                           " initial bound to steps in the outer loop. "),
-maxcall(                   100,                     "maxcall"    ,                           " maximum number of iterations. "),
+//The following Properties are the members of lmfits control_structure.
+//Changing their default values may be needed depending on the problem.
+ftol(                      LM_USERTOL,              "ftol"       ,                           " Relative error desired in the sum of squares. "),
+xtol(                      LM_USERTOL,              "xtol"       ,                           " Relative error between last two approximations. "),
+gtol(                      LM_USERTOL,              "gtol"       ,                           " Orthogonality desired between fvec and its derivs. "),
+epsilon(                   LM_USERTOL,              "epsilon"    ,                           " Step used to calculate the jacobian. "),
+stepbound(                 100.,                    "stepbound"  ,                           " Initial bound to steps in the outer loop. "),
+maxcall(                   100,                     "maxcall"    ,                           " Maximum number of iterations. "),
 scale_diag(                1,                       "scale_diag" ,                           " UNDOCUMENTED, TESTWISE automatical diag rescaling? "),
-printflags(                0,                       "printflags" ,                           " OR'ed to produce more noise ")
+printflags(                1,                       "printflags" ,                           " OR'ed to produce more noise ")
 
 {
     mVersion = "1.0";
     //Setup the plugins capabilities
-    mLMFit.addParameter(&mSBML);
-    mLMFit.addParameter(&mObservedData);
-    mLMFit.addParameter(&mModelData);
-    mLMFit.addParameter(&mResidualsData);
-    mLMFit.addParameter(&mInputParameterList);
-    mLMFit.addParameter(&mOutputParameterList);
-    mLMFit.addParameter(&mObservedDataSelectionList);
-    mLMFit.addParameter(&mModelDataSelectionList);
-    mLMFit.addParameter(&mNorm);
-    mLMFit.addParameter(&mNrOfIter);
+    mLMFit.addProperty(&mSBML);
+    mLMFit.addProperty(&mExperimentalData);
+    mLMFit.addProperty(&mModelData);
+    mLMFit.addProperty(&mResidualsData);
+    mLMFit.addProperty(&mInputParameterList);
+    mLMFit.addProperty(&mOutputParameterList);
+    mLMFit.addProperty(&mExperimentalDataSelectionList);
+    mLMFit.addProperty(&mModelDataSelectionList);
+    mLMFit.addProperty(&mNorm);
+    mLMFit.addProperty(&mNrOfIter);
 
     //Add the lmfit parameters
-
-    mLMFit.addParameter(&ftol);
-    mLMFit.addParameter(&xtol);
-    mLMFit.addParameter(&gtol);
-    mLMFit.addParameter(&epsilon);
-    mLMFit.addParameter(&stepbound);
-    mLMFit.addParameter(&maxcall);
-    mLMFit.addParameter(&scale_diag);
-    mLMFit.addParameter(&printflags);
+    mLMFit.addProperty(&ftol);
+    mLMFit.addProperty(&xtol);
+    mLMFit.addProperty(&gtol);
+    mLMFit.addProperty(&epsilon);
+    mLMFit.addProperty(&stepbound);
+    mLMFit.addProperty(&maxcall);
+    mLMFit.addProperty(&scale_diag);
+    mLMFit.addProperty(&printflags);
 
     mProperties.add(mLMFit);
     //Allocate model and Residuals data
@@ -87,8 +87,8 @@ SBML models parameters to experimental data. \
 The current implementation is based on the lmfit C library by Joachim Wuttke. \
 The Plugin has numerous parameters for fine tuning the algorithm. See the embedded PDF for more information. \
 ";
-
-
+    //The function below assigns property descriptions
+    assignPropertyDescriptions();
 }
 
 LM::~LM()
@@ -109,16 +109,18 @@ unsigned int LM::getPDFManualByteSize()
     return sizeofPDF;
 }
 
-StringList LM::getObservedDataSelectionList()
+StringList LM::getExperimentalDataSelectionList()
 {
-    return mObservedDataSelectionList.getValue();
+    return mExperimentalDataSelectionList.getValue();
 }
 
 string LM::getStatus()
 {
     stringstream msg;
     msg<<Plugin::getStatus();    
-    msg <<getResult();
+    
+    msg<<"\nFitting parameters: "<<mInputParameterList;
+    msg <<getResult();    
     return msg.str();
 }
 
@@ -137,9 +139,9 @@ bool LM::resetPlugin()
     mTerminate = false;
 
 
-//    if(mObservedData.getValue())
+//    if(mExperimentalData.getValue())
 //    {
-//        mObservedData.getValueReference()->clear();
+//        mExperimentalData.getValueReference()->clear();
 //    }
 //
 //    if(mModelData.getValue())
@@ -154,7 +156,7 @@ bool LM::resetPlugin()
 
     mInputParameterList.getValueReference().clear();
     mOutputParameterList.getValueReference().clear();
-    mObservedDataSelectionList.getValueReference().clear();
+    mExperimentalDataSelectionList.getValueReference().clear();
     mModelDataSelectionList.getValueReference().clear();
     return true;
 }
@@ -167,7 +169,7 @@ string LM::getSBML()
 string LM::getResult()
 {
     stringstream msg;
-    Parameters& pars = mOutputParameterList.getValueReference();
+    Properties& pars = mOutputParameterList.getValueReference();
 
     for(int i = 0; i < pars.count(); i++)
     {
@@ -209,5 +211,96 @@ const char* plugins_cc getImplementationLanguage()
     return "CPP";
 }
 
+void LM::assignPropertyDescriptions()
+{
+    stringstream s;
+s << "The SBML property should be assigned the (XML) \
+text that defines the SBML model that is used to fit parameters.";
+mSBML.setDescription(s.str()); 
+s.str("");
+
+s << "Experimental data contains the data to be used for fitting input.";
+mExperimentalData.setDescription(s.str());          
+s.str("");
+
+s << "Model data is calculated after the fitting algorithm finishes. It uses the obtained model parameters as input.";
+mModelData.setDescription(s.str());                  
+s.str("");
+
+s << "Residuals data contains the differencies between the Experimental data and the ModelData.";
+mResidualsData.setDescription(s.str());               
+s.str("");
+
+s << "The input parameter list holds the parameters, and their initial values that are to be fitted, e.g. k1, k2. \
+The input parameters are properties of the input SBML model";
+mInputParameterList.setDescription(s.str());           
+s.str("");
+
+s << "The output parameter list holds the resulting fitted parameter(s)";
+mOutputParameterList.setDescription(s.str());           
+s.str("");
+
+s << "The data input may contain multiple columns of data. The Experimental data selection list \
+should contain the columns in the input data that is intended to be used in the fitting.";
+mExperimentalDataSelectionList.setDescription(s.str());  
+s.str("");
+
+s << "The model data selection list contains the selections for which model data will be genereated.  \
+Model data can only be generated for selections present in the experimental data selectionlist.";
+mModelDataSelectionList.setDescription(s.str());
+s.str("");
+
+s << "The norm is an output variable indicating the goodness of fit. The smaller value, the better fit.";
+mNorm.setDescription(s.str());    
+s.str("");
+
+s << "The number of iterations wil hold the number of iterations of the internal fitting routine.";
+mNrOfIter.setDescription(s.str()); 
+s.str("");
+
+    //Add the lmfit parameters
+s << "ftol is a nonnegative input variable. Termination occurs when \
+both the actual and predicted relative reductions in the sum \
+of squares are at most ftol. Therefore, ftol measures the \
+relative error desired in the sum of squares.";
+    ftol.setDescription(s.str()); 
+s.str("");
+
+s << "xtol is a nonnegative input variable. Termination occurs when \
+the relative error between two consecutive iterates is at \
+most xtol. Therefore, xtol measures the relative error desired \
+in the approximate solution.";
+xtol.setDescription(s.str());      
+s.str("");
+
+s << "gtol is a nonnegative input variable. Termination occurs when \
+the cosine of the angle between fvec and any column of the \
+jacobian is at most gtol in absolute value. Therefore, gtol \
+measures the orthogonality desired between the function vector \
+and the columns of the jacobian.";
+    gtol.setDescription(s.str());   
+s.str("");
+
+s << "Step used to calculate the Jacobian.";
+    epsilon.setDescription(s.str()); 
+s.str("");
+
+s << "Initial bound to steps in the outer loop.";
+    stepbound.setDescription(s.str());
+s.str("");
+
+s << "Maximum number of iterations.";
+    maxcall.setDescription(s.str());  
+s.str("");
+
+s << "UNDOCUMENTED, TESTWISE automatical diag rescaling? ";
+    scale_diag.setDescription(s.str());
+s.str("");
+
+s << "ORed to produce more noise.";
+    printflags.setDescription(s.str());
+s.str("");
+
+}
 }
 

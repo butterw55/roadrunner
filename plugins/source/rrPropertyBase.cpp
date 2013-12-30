@@ -1,25 +1,25 @@
 #pragma hdrstop
 #include <sstream>
 #include "rrStringUtils.h"
-#include "rrPluginParameter.h"
-#include "rrParameter.h"
+#include "rrPropertyBase.h"
+//#include "rrProperty.h"
 //---------------------------------------------------------------------------
 
 using namespace std;
 namespace rrp
 {
 
-PluginParameter::PluginParameter(const string& type, const string& name, const string& hint)
+PropertyBase::PropertyBase(const string& type, const string& name, const string& hint)
 :
 mName(name),
 mHint(hint),
 mType(type)
 {}
 
-PluginParameter::~PluginParameter()
+PropertyBase::~PropertyBase()
 {}
 
-PluginParameter::PluginParameter(const PluginParameter& pp)
+PropertyBase::PropertyBase(const PropertyBase& pp)
 {
     //We could assert here, assigning incompatible types    
     mName = pp.mName;
@@ -27,7 +27,7 @@ PluginParameter::PluginParameter(const PluginParameter& pp)
     mHint = pp.mHint;
 }
 
-PluginParameter& PluginParameter::operator=(const PluginParameter& rhs)
+PropertyBase& PropertyBase::operator=(const PropertyBase& rhs)
 {
     if((this) == &rhs)
     {
@@ -40,55 +40,55 @@ PluginParameter& PluginParameter::operator=(const PluginParameter& rhs)
     return *(this);
 }
 
-string PluginParameter::getType() const
+string PropertyBase::getType() const
 {
     return mType;
 }
 
-string PluginParameter::getName() const
+string PropertyBase::getName() const
 {
     return mName;
 }
 
-string PluginParameter::getHint() const
+string PropertyBase::getHint() const
 {
     return mHint;
 }
 
-string PluginParameter::getDescription() const
+string PropertyBase::getDescription() const
 {
     return mDescription;
 }
 
-void PluginParameter::setDescription(const string& descr)
+void PropertyBase::setDescription(const string& descr)
 {
     mDescription = descr;
 }
 
-void PluginParameter::setHint(const string& hint)
+void PropertyBase::setHint(const string& hint)
 {
     mHint = hint;
 }
 
-void* PluginParameter::getValueHandle()
+void* PropertyBase::getValueHandle()
 {
     return NULL;
 }
 
-string PluginParameter::getValueAsString() const
+string PropertyBase::getValueAsString() const
 {
     stringstream val;
     val<<"The type:"<<getType()<<" do not have a string representation.";
     return val.str();
 }
 
-ostream& operator<<(ostream& stream, const PluginParameter& outMe)
+ostream& operator<<(ostream& stream, const PropertyBase& outMe)
 {
     stream<<outMe.asString();   //virtual friend idiom
     return stream;
 }
 
-string PluginParameter::asString() const
+string PropertyBase::asString() const
 {
     stringstream val;
     val<<"Name: "<<     mName<<endl;

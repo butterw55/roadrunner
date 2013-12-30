@@ -2,8 +2,8 @@
 #include "libxml/tree.h"
 #include "libxml/xpath.h"
 #include "rrException.h"
-#include "rrPluginParameter.h"
-#include "rrParameter.h"
+#include "rrPropertyBase.h"
+#include "rrProperty.h"
 #include "rrLogger.h"
 #include "rrCapabilities.h"
 #include "rrCapability.h"
@@ -86,7 +86,7 @@ u_int Capabilities::count()
 }
 
 //Not giving a capability name, search for first parameter with name 'name'
-bool Capabilities::setParameter(const string& name, const string& value)
+bool Capabilities::setProperty(const string& name, const string& value)
 {
     for(int i = 0; i < count(); i++)
     {
@@ -97,14 +97,14 @@ bool Capabilities::setParameter(const string& name, const string& value)
             return false;
         }
 
-        Parameters* paras = capability[i].getParameters();
+        Properties* paras = capability[i].getProperties();
 
         if(paras)
         {
-            PluginParameter* aParameter = paras->getParameter(name);
-            if(aParameter)
+            PropertyBase* aProperty = paras->getProperty(name);
+            if(aProperty)
             {
-                aParameter->setValueFromString(value);
+                aProperty->setValueFromString(value);
                 return true;
             }
         }
@@ -131,11 +131,11 @@ string Capabilities::asXML()
         xmlNodePtr parameters = xmlNewChild(root_node, NULL, BAD_CAST "parameters",NULL);
 
         //Add parameters within each capability
-        for(int j = 0; j < aCapability.nrOfParameters(); j++)
+        for(int j = 0; j < aCapability.nrOfProperties(); j++)
         {
             xmlNodePtr paraNode = xmlNewChild(parameters, NULL, BAD_CAST "para", NULL);
 
-            PluginParameter* parameter = const_cast<PluginParameter*>(&(aCapability[j]));
+            PropertyBase* parameter = const_cast<PropertyBase*>(&(aCapability[j]));
             xmlNewProp(paraNode, BAD_CAST "name",           BAD_CAST parameter->getName().c_str());
             xmlNewProp(paraNode, BAD_CAST "value",          BAD_CAST parameter->getValueAsString().c_str());            
             xmlNewProp(paraNode, BAD_CAST "type",           BAD_CAST parameter->getType().c_str());

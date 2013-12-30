@@ -36,27 +36,27 @@ if os.path.exists(modelFolder):
 else:
     sbml = getText(model)    
 
-setPluginParameter(lmPlugin, "SBML", sbml)
+setPluginProperty(lmPlugin, "SBML", sbml)
 
 #See documentation for available parameters
-experimentalData    = getPluginParameter(lmPlugin, "ExperimentalData");
-paraList            = getPluginParameter(lmPlugin, "InputParameterList");
+experimentalData    = getPluginProperty(lmPlugin, "ExperimentalData");
+paraList            = getPluginProperty(lmPlugin, "InputPropertyList");
 
 #Add parameters to fit
-para1 = createParameter("k1", "double", "", 0.2)
-addParameterToList(paraList, para1)
+para1 = createProperty("k1", "double", "", 10.2)
+addPropertyToList(paraList, para1)
 
 #Input Data
-setRoadRunnerDataParameter(experimentalData, rrDataHandle)
+setRoadRunnerDataProperty(experimentalData, rrDataHandle)
 
 #set species to fit
 species = "[S1] [S2]"
-paraHandle = getPluginParameter(lmPlugin, "FittedDataSelectionList");
-setParameterByString(paraHandle, species)
+paraHandle = getPluginProperty(lmPlugin, "FittedDataSelectionList");
+setPropertyByString(paraHandle, species)
 
 #Get species list in observed data
-paraHandle = getPluginParameter(lmPlugin, "ExperimentalDataSelectionList");
-setParameterByString(paraHandle, species)
+paraHandle = getPluginProperty(lmPlugin, "ExperimentalDataSelectionList");
+setPropertyByString(paraHandle, species)
 
 #Check plugin status, input
 print '=========================== Levenberg-Marquardt report before minimization '
@@ -76,14 +76,14 @@ y1Input = npData[:,1]
 y2Input = npData[:,2]
 
 # Look at the data
-dataPHandle = getPluginParameter(lmPlugin, "FittedData");
-dataHandle = getParameterValue(dataPHandle)
+dataPHandle = getPluginProperty(lmPlugin, "FittedData");
+dataHandle = getPropertyValue(dataPHandle)
 npData = getNumpyData(dataHandle)
 S1Model = npData[:,1]
 S2Model = npData[:,2]
 
-dataPHandle = getPluginParameter(lmPlugin, "Residuals");
-dataHandle = getParameterValue(dataPHandle)
+dataPHandle = getPluginProperty(lmPlugin, "Residuals");
+dataHandle = getPropertyValue(dataPHandle)
 npData = getNumpyData(dataHandle)
 s1Residual= npData[:,1]
 s2Residual= npData[:,2]

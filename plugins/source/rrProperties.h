@@ -1,6 +1,6 @@
 /**
- * @file rrParameters.h
- * @brief Parameters implementation - a container for Plugin parameters
+ * @file rrProperties.h
+ * @brief Properties implementation - a container for Plugin parameters
  * @author Totte Karlsson & Herbert M Sauro
  *
  * <--------------------------------------------------------------
@@ -38,14 +38,14 @@
  *
  * redistribute any piece of this software without proper attribution;
 */
-#ifndef rrParametersH
-#define rrParametersH
+#ifndef rrPropertiesH
+#define rrPropertiesH
 #include <string>
 #include <list>
 #include <vector>
 #include <utility>
 #include "rrPluginsAPIExporter.h"
-#include "rrPluginParameter.h"
+#include "rrPropertyBase.h"
 #include "rrStringList.h"
 //---------------------------------------------------------------------------
 
@@ -60,29 +60,29 @@ using std::string;
 /**
     Container for Plugin parameters.
 */
-class PLUGINS_API_DECLSPEC Parameters
+class PLUGINS_API_DECLSPEC Properties
 {
     public:
         /**
            Create a parameter container
         */
-                                                Parameters(bool canClear = true);
+                                                Properties(bool canClear = true);
         /**
            Deallocate memory allocated
         */
-        virtual                                ~Parameters();
+        virtual                                ~Properties();
 
         /**
            Copy constructor
         */
-                                                Parameters(const Parameters& cpyMe);
+                                                Properties(const Properties& cpyMe);
         /**
            Add a parameter. By default, the container do not owe memory allocated by the parameter.
            If the ownMemory flag is set to true, the container will de allocate memory for the parameter as well
            \param para A pointer to a Plugin parameter
            \param ownMemory Boolean flag indicating if the container is owing the memory of the parameter or not.
         */
-        void                                    add(PluginParameter* para, bool ownMemory = false);
+        void                                    add(PropertyBase* para, bool ownMemory = false);
 
         /**
            Return parameters in the container as a list of strings.
@@ -96,45 +96,45 @@ class PLUGINS_API_DECLSPEC Parameters
 
         /**
            Access a parameter using operator []
-           \return A const Pointer to a PluginParameter
+           \return A const Pointer to a PropertyBase
         */
-        const PluginParameter*                  operator[](const int& i) const;
+        const PropertyBase*                  operator[](const int& i) const;
 
         /**
            Access a parameter using operator []
-           \return A Pointer to a PluginParameter
+           \return A Pointer to a PropertyBase
         */
-        PluginParameter*                        operator[](const int& i);
+        PropertyBase*                        operator[](const int& i);
 
         /**
            Get a parameter with a specific name
-           \return A Pointer to a PluginParameter if present, NULL otherwise
+           \return A Pointer to a PropertyBase if present, NULL otherwise
         */
-        PluginParameter*                        getParameter(const string& paraName);
+        PropertyBase*                        getProperty(const string& paraName);
 
         /**
-           Get First Parameter. Resets the internal iterator to first element
-           \return A Pointer to a PluginParameter if present, NULL otherwise
+           Get First Property. Resets the internal iterator to first element
+           \return A Pointer to a PropertyBase if present, NULL otherwise
         */
-        PluginParameter*                        getFirst();
+        PropertyBase*                        getFirst();
 
         /**
-           Get Next Parameter. Advances the internal iterator to next element
-           \return A Pointer to a PluginParameter if present, NULL otherwise
+           Get Next Property. Advances the internal iterator to next element
+           \return A Pointer to a PropertyBase if present, NULL otherwise
         */
-        PluginParameter*                        getNext();
+        PropertyBase*                        getNext();
 
         /**
-           Get Previous Parameter. De Advances the internal iterator to next element
-           \return A Pointer to a PluginParameter if present, NULL otherwise
+           Get Previous Property. De Advances the internal iterator to next element
+           \return A Pointer to a PropertyBase if present, NULL otherwise
         */
-        PluginParameter*                        getPrevious();
+        PropertyBase*                        getPrevious();
         
         /**
-           Get Current Parameter. De Advances the internal iterator to next element
-           \return A Pointer to a PluginParameter if present, NULL otherwise
+           Get Current Property. De Advances the internal iterator to next element
+           \return A Pointer to a PropertyBase if present, NULL otherwise
         */
-        PluginParameter*                        getCurrent();
+        PropertyBase*                        getCurrent();
         
         /**
            Empty the parameter container
@@ -145,7 +145,7 @@ class PLUGINS_API_DECLSPEC Parameters
            Output the container to a output stream (ostream)
         */
         PLUGINS_API_DECLSPEC
-        friend ostream&                         operator <<(ostream& os, const Parameters& pars);
+        friend ostream&                         operator <<(ostream& os, const Properties& pars);
 
     protected:
         /**
@@ -153,8 +153,8 @@ class PLUGINS_API_DECLSPEC Parameters
             the memory of the parameter and will de allocate it on clear, or in the destruction of the container.
             \todo Change the container to a std::list.
         */
-        vector< pair<PluginParameter*, bool> >                  mParas;
-        vector< pair<PluginParameter*, bool> >::iterator        mParasIter;
+        vector< pair<PropertyBase*, bool> >                  mParas;
+        vector< pair<PropertyBase*, bool> >::iterator        mParasIter;
 
 
         /**

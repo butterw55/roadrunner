@@ -124,8 +124,28 @@ class Plugin (object):
         for i in range (0, len (nameList)):
             name = nameList[i]
             handle = rrp.getPluginProperty(self.plugin, nameList[i])
-            hint = rrp.getPropertyHint(handle)
-            aList.append ([name, hint])
+            #hint = rrp.getPropertyHint(handle)
+            aList.append ([name])
+        return aList
+
+    def listOfPropertyDescriptions (self):
+        nameList = rrp.getListOfPluginPropertyNames (self.plugin)
+        aList = []
+        for i in range (0, len (nameList)):
+            name = nameList[i]
+            handle = rrp.getPluginProperty(self.plugin, nameList[i])
+            descr = rrp.getPropertyDescription(handle)
+            aList.append ([name, descr])
+        return aList
+
+    def listOfPropertyHints (self):
+        nameList = rrp.getListOfPluginPropertyNames (self.plugin)
+        aList = []
+        for i in range (0, len (nameList)):
+            name = nameList[i]
+            handle = rrp.getPluginProperty(self.plugin, nameList[i])
+            descr = rrp.getPropertyHint(handle)
+            aList.append ([name, descr])
         return aList
 
     def loadDataSeriesAsNumPy (self, fileName):

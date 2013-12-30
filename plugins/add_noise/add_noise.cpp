@@ -24,9 +24,9 @@ mAddNoiseWorker(*this)
 
     //Setup the plugins capabilities
     mProperties.add(mAddNoise);
-    mAddNoise.addParameter(&mNoiseType);
-    mAddNoise.addParameter(&mSigma);
-    mAddNoise.addParameter(&mData);
+    mAddNoise.addProperty(&mNoiseType);
+    mAddNoise.addProperty(&mSigma);
+    mAddNoise.addProperty(&mData);
 
     mHint ="Add Gausssian Noise to RoadRunner Data";
     mDescription="The AddNoise plugin adds Gaussian noise to synthetic data. The amount of noise is controlled \

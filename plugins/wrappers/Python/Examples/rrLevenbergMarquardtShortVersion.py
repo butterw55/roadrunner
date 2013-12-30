@@ -9,7 +9,7 @@ def pluginIsProgressing(msg, lmP):
     # The plugin don't know what a python object is.
     # We need to cast it here, to a proper python object
     lmObject = cast(lmP, ctypes.py_object).value
-    print 'Iterations = ' + `lmObject.getParameter("NrOfIter")` + '\tNorm = ' + `lmObject.getParameter("Norm")`
+    print 'Iterations = ' + `lmObject.getProperty("NrOfIter")` + '\tNorm = ' + `lmObject.getProperty("Norm")`
 
 progressEvent =  NotifyPluginEvent(pluginIsProgressing)
 theId = id(lm)
@@ -20,21 +20,20 @@ assignOnProgressEvent(lm.plugin, progressEvent, None, theId)
 ##===================================================
 
 #Set a lmfit parametere. Printflags control the output in the callback message
-lm.setParameter("printflags", 2)
-lm.setParameter("ftol", 2.e-2)
+#lm.setProperty("printflags", 2)
+#lm.setProperty("ftol", 2.e-2)
 experimentalData = lm.loadDataSeries ("testData.dat")
 
-lm.setParameter ("ExperimentalData", experimentalData)
-lm.setParameter ("SBML", lm.readAllText("sbml_test_0001.xml"))
-
+lm.setProperty ("ExperimentalData", experimentalData)
+lm.setProperty ("SBML", lm.readAllText("sbml_test_0001.xml"))
 
 # Add the parameters that we're going to fit and the initial value
-lm.setParameter ("InputParameterList", ["k1", 0.2])
+lm.setProperty ("InputParameterList", ["k1", 10.2])
 
-lm.setParameter("FittedDataSelectionList", "[S1] [S2]")
-lm.setParameter("ExperimentalDataSelectionList", "[S1] [S2]")
+lm.setProperty("FittedDataSelectionList", "[S1] [S2]")
+lm.setProperty("ExperimentalDataSelectionList", "[S1] [S2]")
 
-print getListOfPluginParameterNames(lm.plugin)
+
 # Execute lmfit plugin
 res = lm.execute()
 
@@ -47,8 +46,8 @@ res = lm.execute()
 experimentalData = experimentalData.AsNumpy
 
 # Get the fitted and residual data
-fittedData = lm.getParameter ("FittedData").AsNumpy
-residuals  = lm.getParameter ("Residuals").AsNumpy
+fittedData = lm.getProperty ("FittedData").AsNumpy
+residuals  = lm.getProperty ("Residuals").AsNumpy
 
 rrp.plot (fittedData[:,[0,1]], myColor="blue", myLinestyle="-", myMarker="", myLabel="S1 Fitted")
 rrp.plot (fittedData[:,[0,2]], myColor="blue", myLinestyle="-", myMarker="", myLabel="S2 Fitted")
@@ -58,13 +57,11 @@ rrp.plot (experimentalData[:,[0,1]], myColor="red", myLinestyle="", myMarker="*"
 rrp.plot (experimentalData[:,[0,2]], myColor="blue", myLinestyle="", myMarker="*", myLabel="S2 Data")
 rrp.plt.show()
 
-#print getPluginResult(lm.plugin)
-
+print getPluginResult(lm.plugin)
 print getPluginCategory(lm.plugin)
 print getPluginDescription(lm.plugin)
 print getPluginHint(lm.plugin)
 #Observe that getPluginProperties prings out the value for each parameter, including the parameters that are RoadRunnerData
-#print getPluginPropertiesAsXML(lm.plugin)
-
+print getPluginStatus(lm.plugin)
 
 
