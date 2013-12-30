@@ -121,7 +121,7 @@ bool PluginManager::load(const string& pluginName)
     if(!folderExists(mPluginFolder))
     {
 
-        Log(lError)<<"Plugin folder: "<<mPluginFolder<<" do not exist..";        
+        Log(lError)<<"Plugin folder: "<<mPluginFolder<<" do not exist..";
         throw(Exception("Plugin folder don't exist"));
     }
 
@@ -146,7 +146,7 @@ bool PluginManager::load(const string& pluginName)
         Log(lInfo)<<"Loading plugin: "<<plugin;
         try
         {
-                            
+
             bool res = loadPlugin(plugin);
             if(!res)
             {
@@ -173,7 +173,7 @@ bool PluginManager::loadPlugin(const string& _libName)
         string prefix("rrp_");
         if(_libName.substr(0, prefix.size()) != prefix)
         {
-            Log(lWarning)<<"The Plugin: "<<_libName<<" lack the rrp_ prefix. Can't be loaded";    
+            Log(lWarning)<<"The Plugin: "<<_libName<<" lack the rrp_ prefix. Can't be loaded";
             return false;
         }
         string libName(_libName);

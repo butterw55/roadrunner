@@ -22,26 +22,26 @@ class LM : public CPPPlugin
 
     public:
         Capability                              mLMFit;        
-        Property<string>                       mSBML;                          //This is the model
-        Property<RoadRunnerData>				mObservedData;
-        Property<RoadRunnerData>				mModelData;
-        Property<RoadRunnerData>				mResidualsData;
-        Property<Properties>                   mInputPropertyList;            //Properties to fit
-        Property<Properties>                   mOutputPropertyList;           //Properties that was fitted
-        Property<StringList>                   mObservedDataSelectionList;     //Species selection list for observed data
-        Property<StringList>                   mModelDataSelectionList;        //Species selection list for observed data
-        Property<double>                       mNorm;                          //Part of minimization result
-        Property<int>                          mNrOfIter;                      //Part of minimization result
+        Property<string>                        mSBML;                          //This is the model
+        Property<RoadRunnerData>				mExperimentalData;
+        Property<RoadRunnerData>			    mModelData;
+        Property<RoadRunnerData>			    mResidualsData;
+        Property<Properties>                    mInputParameterList;            //Parameters to fit
+        Property<Properties>                    mOutputParameterList;           //Parameters that was fitted
+        Property<StringList>                    mExperimentalDataSelectionList;     //Species selection list for observed data
+        Property<StringList>                    mModelDataSelectionList;        //Species selection list for observed data
+        Property<double>                        mNorm;                          //Part of minimization result
+        Property<int>                           mNrOfIter;                      //Part of minimization result
         
         //LMFIT Tuning parameters
-        Property<double>                       ftol;       /* relative error desired in the sum of squares. */
-        Property<double>                       xtol;       /* relative error between last two approximations. */
-        Property<double>                       gtol;       /* orthogonality desired between fvec and its derivs. */
-        Property<double>                       epsilon;    /* step used to calculate the jacobian. */
-        Property<double>                       stepbound;  /* initial bound to steps in the outer loop. */
-        Property<int>                          maxcall;    /* maximum number of iterations. */
-        Property<int>                          scale_diag; /* UNDOCUMENTED, TESTWISE automatical diag rescaling? */
-        Property<int>                          printflags; /* OR'ed to produce more noise */
+        Property<double>                        ftol;       /* relative error desired in the sum of squares. */
+        Property<double>                        xtol;       /* relative error between last two approximations. */
+        Property<double>                        gtol;       /* orthogonality desired between fvec and its derivs. */
+        Property<double>                        epsilon;    /* step used to calculate the jacobian. */
+        Property<double>                        stepbound;  /* initial bound to steps in the outer loop. */
+        Property<int>                           maxcall;    /* maximum number of iterations. */
+        Property<int>                           scale_diag; /* UNDOCUMENTED, TESTWISE automatical diag rescaling? */
+        Property<int>                           printflags; /* OR'ed to produce more noise */
 		
 		
 		//Utility functions for the thread
@@ -64,15 +64,14 @@ class LM : public CPPPlugin
 
         unsigned char*                          getManualAsPDF() const;
         unsigned int                            getPDFManualByteSize();
-        StringList                              getObservedDataSelectionList();
-        virtual _xmlNode*                       createConfigNode(){return NULL;}
-        virtual void                            loadConfig(const _xmlDoc* doc){}
+        StringList                              getExperimentalDataSelectionList();
+        void                                    assignPropertyDescriptions();
 };
 
 extern "C"
 {
-RR_PLUGIN_DECLSPEC LM*         plugins_cc    createPlugin(rr::RoadRunner* aRR);
-RR_PLUGIN_DECLSPEC const char* plugins_cc    getImplementationLanguage();
+RR_PLUGIN_DECLSPEC LM*         plugins_cc       createPlugin(rr::RoadRunner* aRR);
+RR_PLUGIN_DECLSPEC const char* plugins_cc       getImplementationLanguage();
 }
 }
 #endif

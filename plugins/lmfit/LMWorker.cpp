@@ -54,10 +54,10 @@ void LMWorker::run()
 
     setupRoadRunner();
 
-    StringList& species = mTheHost.mObservedDataSelectionList.getValueReference();//mMinData.getObservedDataSelectionList();
+    StringList& species = mTheHost.mExperimentalDataSelectionList.getValueReference();//mMinData.getExperimentalDataSelectionList();
     Log(lInfo)<<"The following species are selected: "<<species.AsString();
 
-    Properties& Paras =  mTheHost.mInputPropertyList.getValueReference(); //mMinData.getProperties();
+    Properties& Paras =  mTheHost.mInputParameterList.getValueReference(); //mMinData.getProperties();
     Log(lInfo)<<"The following parameters are to be minimized";
     for(int i = 0; i < Paras.count(); i++)
     {
@@ -120,7 +120,7 @@ void LMWorker::run()
     Log(lInfo)<<"Obtained norm:  "<<status.fnorm;
 
     //Populate with data to report back
-    Properties& parsOut = mTheHost.mOutputPropertyList.getValueReference();
+    Properties& parsOut = mTheHost.mOutputParameterList.getValueReference();
     parsOut.clear();
     for (int i = 0; i < mLMData.nrOfParameters; ++i)
     {
@@ -154,9 +154,9 @@ void LMWorker::workerFinished()
 
 bool LMWorker::setup()
 {
-    StringList& species         = mTheHost.mObservedDataSelectionList.getValueReference();   //Model data selection..
+    StringList& species         = mTheHost.mExperimentalDataSelectionList.getValueReference();   //Model data selection..
     mLMData.nrOfSpecies         = species.Count();
-    Properties parameters       = mTheHost.mInputPropertyList.getValue();
+    Properties parameters       = mTheHost.mInputParameterList.getValue();
     mLMData.nrOfParameters      = parameters.count();
     mLMData.parameters          = new double[mLMData.nrOfParameters];
     mLMData.mLMPlugin           = static_cast<RRPluginHandle> (&mTheHost);
@@ -174,7 +174,7 @@ bool LMWorker::setup()
         }
     }
 
-    RoadRunnerData& obsData             = (mTheHost.mObservedData.getValueReference());
+    RoadRunnerData& obsData             = (mTheHost.mExperimentalData.getValueReference());
     mLMData.nrOfTimePoints              = obsData.rSize();
     mLMData.timeStart                   = obsData.getTimeStart();
     mLMData.timeEnd                     = obsData.getTimeEnd();
@@ -202,7 +202,7 @@ bool LMWorker::setup()
         }
     }
 
-    //Populate Observed Data
+    //Populate Experimental Data
     for (int i = 0; i < mLMData.nrOfSpecies; i++)
     {
         for(int timePoint = 0; timePoint < mLMData.nrOfTimePoints; timePoint++)
@@ -250,7 +250,7 @@ bool LMWorker::setupRoadRunner()
 
     mRRI = new RoadRunner;
     mRRI->load(mTheHost.mSBML.getValue());
-    mRRI->setSelections(mTheHost.getObservedDataSelectionList());
+    mRRI->setSelections(mTheHost.getExperimentalDataSelectionList());
     return true;
 }
 
@@ -362,7 +362,7 @@ void LMWorker::createResidualsData(RoadRunnerData* _data)
 {
     RoadRunnerData& resData = *(_data);        
     //We now have the parameters
-    RoadRunnerData& obsData = (mTheHost.mObservedData.getValueReference());
+    RoadRunnerData& obsData = (mTheHost.mExperimentalData.getValueReference());
     RoadRunnerData& modData = (mTheHost.mModelData.getValueReference());
 
     resData.reSize(modData.rSize(), modData.cSize());
