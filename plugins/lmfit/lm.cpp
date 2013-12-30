@@ -30,12 +30,11 @@ CPPPlugin(                  "Levenberg-Marquardt", "Fitting",       aRR, NULL),
 mLMFit(                     "LMFit",                                "Fit Model Propertys Using the Levenberg-Marquardt Algorithm"),    //The 'capability'
 mSBML(                      "<none>",               "SBML",                                 "SBML document as a string. Model to be used in the fitting"),
 mExperimentalData(          RoadRunnerData(),       "ExperimentalData",                     "Data object holding Experimental data: Provided by client"),
-//Fitted data don't sound right. Isnt Experimental data the data that was fitted??
 mModelData(                 RoadRunnerData(),       "FittedData",                           "Data object holding model data: Handed to client"),
 mResidualsData(             RoadRunnerData(),       "Residuals",                            "Data object holding residuals: Handed to client"),
-mInputParameterList(         Properties(),           "InputPropertyList",                    "List of parameters to fit"),
-mOutputParameterList(        Properties(),           "OutputPropertyList",                   "List of parameters that was fittedt"),
-mExperimentalDataSelectionList( StringList(),           "ExperimentalDataSelectionList",        "Experimental data selection list"),
+mInputParameterList(         Properties(),          "InputParameterList",                    "List of parameters to fit"),
+mOutputParameterList(        Properties(),          "OutputParameterList",                   "List of parameters that was fittedt"),
+mExperimentalDataSelectionList( StringList(),       "ExperimentalDataSelectionList",        "Experimental data selection list"),
 mModelDataSelectionList(    StringList(),           "FittedDataSelectionList",              "Fitted data selection list"),
 mNorm(                      -1.0,                   "Norm",                                 "Norm of fitting. An estimate of goodness of fit"),
 mNrOfIter(                  -1,                     "NrOfIter",                             "Number of iterations"),
@@ -212,82 +211,95 @@ const char* plugins_cc getImplementationLanguage()
     return "CPP";
 }
 
-void plugin_cc LM::assignPropertyDescriptions()
+void LM::assignPropertyDescriptions()
 {
     stringstream s;
 s << "The SBML property should be assigned the (XML) \
-text that defines the SBML model that is to be fitted."
-    mSBML                               = s.str(); 
+text that defines the SBML model that is used to fit parameters.";
+mSBML.setDescription(s.str()); 
 s.str("");
 
-s << "Experimental data contains the data to be used for fitting input."
-    mExperimentalData                       = s.str();
+s << "Experimental data contains the data to be used for fitting input.";
+mExperimentalData.setDescription(s.str());          
 s.str("");
 
-s << "Model data is calculated after the fitting algorithm finishes. It uses the obtained model parameters as input."
-    mModelData                          = s.str();
+s << "Model data is calculated after the fitting algorithm finishes. It uses the obtained model parameters as input.";
+mModelData.setDescription(s.str());                  
 s.str("");
 
-s << "Residuals data contains the differencies between the Experimental data and the ModelData."
-    mResidualsData                      = s.str();
+s << "Residuals data contains the differencies between the Experimental data and the ModelData.";
+mResidualsData.setDescription(s.str());               
 s.str("");
 
 s << "The input parameter list holds the parameters, and their initial values that are to be fitted, e.g. k1, k2. \
 The input parameters are properties of the input SBML model";
-    mInputParameterList                  = s.str();
+mInputParameterList.setDescription(s.str());           
 s.str("");
 
 s << "The output parameter list holds the resulting fitted parameter(s)";
-    mOutputParameterList                 = s.str();
+mOutputParameterList.setDescription(s.str());           
 s.str("");
 
 s << "The data input may contain multiple columns of data. The Experimental data selection list \
 should contain the columns in the input data that is intended to be used in the fitting.";
-    mExperimentalDataSelectionList          = s.str();
+mExperimentalDataSelectionList.setDescription(s.str());  
 s.str("");
 
 s << "The model data selection list contains the selections for which model data will be genereated.  \
 Model data can only be generated for selections present in the experimental data selectionlist.";
-    mModelDataSelectionList             = s.str();
+mModelDataSelectionList.setDescription(s.str());
 s.str("");
 
-s << "The norm is an output variable indicating the goodness of fit. The smaller value, the better fit."
-    mNorm                               = s.str();
+s << "The norm is an output variable indicating the goodness of fit. The smaller value, the better fit.";
+mNorm.setDescription(s.str());    
 s.str("");
 
-s << "The number of iterations wil hold the number of iterations of the internal fitting routine."
-    mNrOfIter                           = s.str();
+s << "The number of iterations wil hold the number of iterations of the internal fitting routine.";
+mNrOfIter.setDescription(s.str()); 
 s.str("");
 
     //Add the lmfit parameters
-s << "ftol is a nonnegative input variable. Termination occurs when \ 
+s << "ftol is a nonnegative input variable. Termination occurs when \
 both the actual and predicted relative reductions in the sum \
 of squares are at most ftol. Therefore, ftol measures the \
-relative error desired in the sum of squares. ";
-    ftol                                = s.str();
-s.str("");
-s << ""
-    xtol                                = s.str();
-s.str("");
-s << ""
-    gtol                                = s.str();
-s.str("");
-s << ""
-    epsilon                             = s.str();
-s.str("");
-s << ""
-    stepbound                           = s.str();
-s.str("");
-s << ""
-    maxcall                             = s.str();
-s.str("");
-s << ""
-    scale_diag                          = s.str();
-s.str("");
-s << ""
-    printflags                          = s.str();
+relative error desired in the sum of squares.";
+    ftol.setDescription(s.str()); 
 s.str("");
 
+s << "xtol is a nonnegative input variable. Termination occurs when \
+the relative error between two consecutive iterates is at \
+most xtol. Therefore, xtol measures the relative error desired \
+in the approximate solution.";
+xtol.setDescription(s.str());      
+s.str("");
+
+s << "gtol is a nonnegative input variable. Termination occurs when \
+the cosine of the angle between fvec and any column of the \
+jacobian is at most gtol in absolute value. Therefore, gtol \
+measures the orthogonality desired between the function vector \
+and the columns of the jacobian.";
+    gtol.setDescription(s.str());   
+s.str("");
+
+s << "Step used to calculate the Jacobian.";
+    epsilon.setDescription(s.str()); 
+s.str("");
+
+s << "Initial bound to steps in the outer loop.";
+    stepbound.setDescription(s.str());
+s.str("");
+
+s << "Maximum number of iterations.";
+    maxcall.setDescription(s.str());  
+s.str("");
+
+s << "UNDOCUMENTED, TESTWISE automatical diag rescaling? ";
+    scale_diag.setDescription(s.str());
+s.str("");
+
+s << "ORed to produce more noise.";
+    printflags.setDescription(s.str());
+s.str("");
 
 }
 }

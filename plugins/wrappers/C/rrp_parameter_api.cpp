@@ -177,6 +177,14 @@ bool rrp_cc setPropertyDescription(RRPropertyHandle handle, const char* value)
     catch_bool_macro
 }
 
+char* rrp_cc getPropertyDescription(RRPropertyHandle handle)
+{
+    start_try
+        PropertyBase* para = castToProperty(handle);
+        return createText(para->getDescription());                
+    catch_ptr_macro
+}
+
 bool rrp_cc setPropertyHint(RRPropertyHandle handle, const char* value)
 {
     start_try

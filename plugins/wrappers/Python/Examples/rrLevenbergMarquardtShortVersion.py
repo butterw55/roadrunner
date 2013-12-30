@@ -28,8 +28,7 @@ lm.setProperty ("ExperimentalData", experimentalData)
 lm.setProperty ("SBML", lm.readAllText("sbml_test_0001.xml"))
 
 # Add the parameters that we're going to fit and the initial value
-lm.setProperty ("InputPropertyList", ["k1", 10.2])
-
+lm.setProperty ("InputParameterList", ["k1", 10.2])
 
 lm.setProperty("FittedDataSelectionList", "[S1] [S2]")
 lm.setProperty("ExperimentalDataSelectionList", "[S1] [S2]")
@@ -59,12 +58,10 @@ rrp.plot (experimentalData[:,[0,2]], myColor="blue", myLinestyle="", myMarker="*
 rrp.plt.show()
 
 print getPluginResult(lm.plugin)
-
 print getPluginCategory(lm.plugin)
 print getPluginDescription(lm.plugin)
 print getPluginHint(lm.plugin)
 #Observe that getPluginProperties prings out the value for each parameter, including the parameters that are RoadRunnerData
 print getPluginStatus(lm.plugin)
-
 
 

@@ -758,6 +758,21 @@ rrpLib.setPropertyDescription.restype = c_bool
 def setPropertyDescription(propertyHandle, descr):
     return rrpLib.setPropertyDescription(propertyHandle, descr)
 
+## \brief Get the description of a Property
+## \param propertyHandle Handle to a Property instance
+## \param descr String holding the description
+## \return Returns the description if successful, None otherwise
+## \ingroup plugin_properties
+rrpLib.getPropertyDescription.restype = c_char_p
+def getPropertyDescription(propertyHandle):
+    descr = rrpLib.getPropertyDescription(propertyHandle)
+    if descr is None:
+        return None
+    
+    val = descr
+    rrpLib.freeText(descr)
+    return val
+
 ## \brief Set the hint property of a Property
 ## \param propertyHandle Handle to a Property instance
 ## \param descr String holding the hint text
