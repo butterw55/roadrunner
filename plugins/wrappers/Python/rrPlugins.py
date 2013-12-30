@@ -3,7 +3,7 @@
 import rrPlugins_CAPI as rrp
 import matplotlib.pyplot as plt
 
-__version__ = "0.5.01"
+__version__ = "0.6.0"
 
 class DataSeries(object):
 
@@ -60,51 +60,71 @@ class Event(object):
 _pluginManager = rrp.createPluginManager()
 _pluginsAlreadyLoaded = False
 
-class Plugin:
+class Plugin (object):
 
     _OnProgressList = Event()
     _onProgressEvent = 0
+    _propertyNames = []
 
     def __init__(self, pluginName):
         self.pluginName = pluginName
         self.plugin = rrp.loadPlugin (_pluginManager, pluginName)
+        lp = self.listOfProperties()
+        for element in lp:
+            self._propertyNames.append (element[0])
 
-    def setParameter(self, name, value):
+    def setProperty(self, name, value):
         if (isinstance (value, DataSeries)):
-           rrp.setPluginParameter (self.plugin, name, value.data)
+           if not rrp.setPluginProperty (self.plugin, name, value.data):
+              raise TypeError ("Unable to locate property: ", name)
         else:
-           handle  = rrp.getPluginParameter(self.plugin, name);
-           t1 = rrp.getParameterType (handle)
-           if (t1 == "listOfParameters"):
+           handle  = rrp.getPluginProperty(self.plugin, name);
+           if handle == 0:
+              raise ValueError ("Unable to locate property: ", name)
+           t1 = rrp.getPropertyType (handle)
+           if (t1 == "listOfProperties"):
               if isinstance (value, list):
                  if len(value) != 2:
-                    raise TypeError ("Expecting two elements in the parameter list")
+                    raise TypeError ("Expecting two elements in the property list")
                  if not isinstance(value[0], str):
-                     raise TypeError("Expecting parameter name in first element of list")
+                     raise TypeError("Expecting property name in first element of list")
                  if (not isinstance(value[1], float)) and (isinstance(value[1], int)):
                      raise TypeError("Expecting floating value in second element of list")
-                 para1 = rrp.createParameter(value[0], "double", "", value[1])
-                 rrp.addParameterToList (handle, para1)
+                 para1 = rrp.createProperty(value[0], "double", "", value[1])
+                 rrp.addPropertyToList (handle, para1)
               else:
-                 raise  TypeError ("Expecting a list in setParameter")
+                 raise  TypeError ("Expecting a list in setProperty")
            else:
-              rrp.setPluginParameter (self.plugin, name, value)
+              rrp.setPluginProperty (self.plugin, name, value)
 
-    def getParameter (self, name):
-        handle = rrp.getPluginParameter (self.plugin, name)
-        value = rrp.getParameter (handle)
-        if (rrp.getParameterType(handle) == "roadRunnerData"):
+    def getProperty (self, name):
+        handle = rrp.getPluginProperty (self.plugin, name)
+        if handle == 0:
+            raise ValueError ("Property: " + name + " does not exist")
+        value = rrp.getProperty (handle)
+        if (rrp.getPropertyType(handle) == "roadRunnerData"):
             return DataSeries (value)
         else:
            return value
 
-    def listOfParameters (self):
-        nameList = rrp.getListOfPluginParameterNames (self.plugin)
+    def __setattr__ (self, name, value):
+        if (name in self._propertyNames):
+           self.setProperty (name, value)
+        else:
+            super(Plugin, self).__setattr__(name, value)
+
+    def __getattr__ (self, name):
+        if name in self._propertyNames:
+          return self.getProperty(name)
+        else:  raise AttributeError, name
+
+    def listOfProperties (self):
+        nameList = rrp.getListOfPluginPropertyNames (self.plugin)
         aList = []
         for i in range (0, len (nameList)):
             name = nameList[i]
-            handle = rrp.getPluginParameter(self.plugin, nameList[i])
-            hint = rrp.getParameterHint(handle)
+            handle = rrp.getPluginProperty(self.plugin, nameList[i])
+            hint = rrp.getPropertyHint(handle)
             aList.append ([name, hint])
         return aList
 
@@ -117,10 +137,13 @@ class Plugin:
         return DataSeries(handle)
 
     def OnProgress (self, f):
+        # Make sure garbage collector doens't remove the event pointer
         global _onProgressEvent
 
-        _onProgressEvent =  rrp.NotifyIntIntEvent(f)
-        rrp.assignOnProgressEvent(self.plugin, _onProgressEvent)
+        _onProgressEvent =  rrp.NotifyPluginEvent (f)
+        # Pass the address of the self object
+        theId = id (self)
+        rrp.assignOnProgressEvent(self.plugin, _onProgressEvent, None, theId)
 
     def execute (self):
         return rrp.executePlugin (self.plugin)
@@ -128,8 +151,10 @@ class Plugin:
     def executeEx (self, inThread):
         return rrp.executePluginEx (self.plugin, inThread)
 
-    def plotTimeSeriesHandle (self, dataSeries):
+    def plotDataSeries (self, dataSeries):
         if (isinstance (dataSeries, DataSeries)):
+           if dataSeries.data == 0:
+              exit()
            hdr = rrp.getRoadRunnerDataColumnHeader(dataSeries.data)
            npData = rrp.getNumpyData(dataSeries.data)
            rrp.plotRoadRunnerData(npData, hdr)
@@ -167,6 +192,9 @@ class Plugin:
             aList.append ([names[i], hint])
         return aList
 
+    def viewManual (self):
+        rrp.displayPluginManual(self.plugin)
+
 def extractColumn (data, index):
     return data[:,index]
 
@@ -178,25 +206,26 @@ def plot (data, myColor="red", myLinestyle="None", myMarker="None", myLabel=""):
         plt.legend(bbox_to_anchor=(1.05, 1), loc=1, borderaxespad=0.)
         return p
 
-if __name__=='__main__':
+def show():
+    plt.show()
 
-    def sayHello (arg1, arg2):
-        print "Hello"
+
+if __name__=='__main__':
 
     print "Starting Test"
 
     p = Plugin ("rrp_add_noise")
-    pl = p.listOfParameters()
-    for item in pl:
-        print item
+    p.viewManual()
+    #pl = p.listOfProperties()
+    #for item in pl:
+    #    print item
 
-    p.OnProgress (sayHello)
-#    p.setParameter ("Sigma", 0.0001)
-#
-#    series = p.loadDataSeries (".\\Examples\\testData.dat")
-#    p.plotTimeSeriesHandle (series)
-#    p.setParameter ("InputData", series)
-#    p.execute()
-#    p.plotTimeSeriesHandle (series)
+    p.Sigma = 0.00005
+
+    series = p.loadDataSeries ("..\\Examples\\testData.dat")
+    p.plotDataSeries (series)
+    p.InputData = series
+    p.execute()
+    p.plotDataSeries (p.InputData)
 
     print "Test Finished"
