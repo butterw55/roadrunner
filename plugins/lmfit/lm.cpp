@@ -173,7 +173,7 @@ string LM::getResult()
 
     for(int i = 0; i < pars.count(); i++)
     {
-        msg<<pars[i]->asString();
+        msg<<pars[i]->getName()<<" = "<< pars[i]->getValueAsString()<<"\n";
     }
     msg<<"Norm: "<<mNorm.getValue();
     return msg.str();

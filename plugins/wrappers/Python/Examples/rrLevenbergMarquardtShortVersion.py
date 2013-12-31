@@ -41,6 +41,9 @@ res = lm.execute()
 ##while isPluginWorking(lm.plugin):
 ##    print 'Working'
 
+print 'Fitting finished. \n==== Result ==== ' 
+print getPluginResult(lm.plugin)
+
 # Get the experimental data as a numpy array
 experimentalData = experimentalData.AsNumpy
 
@@ -56,11 +59,7 @@ rrp.plot (experimentalData[:,[0,1]], myColor="red", myLinestyle="", myMarker="*"
 rrp.plot (experimentalData[:,[0,2]], myColor="blue", myLinestyle="", myMarker="*", myLabel="S2 Data")
 rrp.plt.show()
 
-print getPluginResult(lm.plugin)
-print getPluginCategory(lm.plugin)
-print getPluginDescription(lm.plugin)
-print getPluginHint(lm.plugin)
-#Observe that getPluginProperties prings out the value for each parameter, including the parameters that are RoadRunnerData
-print getPluginStatus(lm.plugin)
+
+
 
 

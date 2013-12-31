@@ -259,6 +259,7 @@ void evaluate(const double *par,       //Property vector
               int          *userBreak  //Non zero value means termination
 )
 {
+    static int nrOfIterations = 0;
     const LM *thePlugin = (const LM*) userData;
     LM* plugin = const_cast<LM*>(thePlugin);
 	const lmDataStructure* myData = &(thePlugin->mLMData);
@@ -332,7 +333,7 @@ void evaluate(const double *par,       //Property vector
     {
         double norm = lm_enorm(m_dat, fvec);
 		plugin->mNorm.setValue(norm);
-        plugin->mNrOfIter.setValue(myData->mNrOfIterations);       
+        plugin->mNrOfIter.setValue(++nrOfIterations);       
         thePlugin->mLMData.mProgressEvent(NULL, thePlugin->mLMData.mProgressEventContextData);
     }
 
