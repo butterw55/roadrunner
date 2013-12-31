@@ -39,9 +39,9 @@ class LM : public CPPPlugin
         Property<double>                        gtol;       /* orthogonality desired between fvec and its derivs. */
         Property<double>                        epsilon;    /* step used to calculate the jacobian. */
         Property<double>                        stepbound;  /* initial bound to steps in the outer loop. */
-        Property<int>                           maxcall;    /* maximum number of iterations. */
+        Property<int>                           patience;   /* maximum number of iterations. */
         Property<int>                           scale_diag; /* UNDOCUMENTED, TESTWISE automatical diag rescaling? */
-        Property<int>                           printflags; /* OR'ed to produce more noise */
+//        Property<int>                           verbosity; /* OR'ed to produce more noise */
 		
 		
 		//Utility functions for the thread

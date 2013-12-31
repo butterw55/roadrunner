@@ -5,7 +5,6 @@ import rrPlugins as rrp
 lm = rrp.Plugin ("rrp_lm")
 ##========== LMFIT EVENT FUNCTIONS ==================
 def pluginIsProgressing(msg, lmP):
-    print msg #Uncomment if more info is wanted
     # The plugin don't know what a python object is.
     # We need to cast it here, to a proper python object
     lmObject = cast(lmP, ctypes.py_object).value

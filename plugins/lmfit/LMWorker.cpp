@@ -6,6 +6,7 @@
 #include "lib/lmmin.h"
 #include "rrStringUtils.h"
 #include "rrUtils.h"
+#include "rrProperty.h"
 #include "../wrappers/C/rrp_api.h"
 #include "../../wrappers/C/rrc_api.h"
 #include "../../wrappers/C/rrc_utilities.h"
@@ -74,18 +75,13 @@ void LMWorker::run()
     control.gtol                    =       *(double*)  mTheHost.gtol.getValueHandle();
     control.epsilon                 =       *(double*)  mTheHost.epsilon.getValueHandle();
     control.stepbound               =       *(double*)  mTheHost.stepbound.getValueHandle();
-    control.maxcall                 =       *(int*)     mTheHost.maxcall.getValueHandle();
+    control.patience                =       *(int*)     mTheHost.patience.getValueHandle();
     control.scale_diag              =       *(int*)     mTheHost.scale_diag.getValueHandle();
-    control.printflags              =       *(int*)     mTheHost.printflags.getValueHandle();
-
-    //control.printflags = 3;
+//    control.verbosity               =       *(int*)     mTheHost.verbosity.getValueHandle();
+    control.msgfile = NULL;
+    control.verbosity = 0;
     //Setup data structures
     setup();
-
-    /*if(mTheHost.mWorkProgressEvent)
-    {
-        mTheHost.mWorkProgressEvent(mTheHost.mWorkProgressData1, mTheHost.mWorkProgressData2);
-    }*/
 
     //This is the library function doing the minimization..
     lmmin(  mLMData.nrOfParameters,
@@ -95,8 +91,8 @@ void LMWorker::run()
 			(const void*) &mTheHost,
             evaluate,
             &control,
-            &status,
-            ui_printout);
+            &status);
+            //,            ui_printout); //Removed! i the new lmfit version??
 
     //The user may have aborted the minization... check..
     if(mTheHost.mTerminate)
@@ -108,16 +104,17 @@ void LMWorker::run()
         return;
     }
     /* print results */
-    Log(lInfo)<<"Results:";
-    Log(lInfo)<<"Status after "<<status.nfev<<" function evaluations: "<<lm_infmsg[status.info] ;
-    Log(lInfo)<<"Obtained parameters: ";
+    Log(lInfo)<<"==================== Fitting Result ================================";
+    Log(lInfo)<<"Nr of function evaluations: "<<status.nfev;
+    Log(lInfo)<<"Status message: " << lm_infmsg[status.outcome];
+    Log(lInfo)<<"Minimized parameter values: ";
 
     for (int i = 0; i < mLMData.nrOfParameters; ++i)
     {
-        Log(lInfo)<<"Property "<<mLMData.parameterLabels[i]<<" = "<< mLMData.parameters[i];
+        Log(lInfo)<<"Parameter "<<mLMData.parameterLabels[i]<<" = "<< mLMData.parameters[i];
     }
 
-    Log(lInfo)<<"Obtained norm:  "<<status.fnorm;
+    Log(lInfo)<<"Norm:  "<<status.fnorm;
 
     //Populate with data to report back
     Properties& parsOut = mTheHost.mOutputParameterList.getValueReference();
@@ -259,16 +256,17 @@ void evaluate(const double *par,       //Property vector
               int          m_dat,      //Dimension of residue vector
               const void   *userData,  //Data structure
               double       *fvec,      //residue vector..
-              int          *infoIndex  //Index into info message array
+              int          *userBreak  //Non zero value means termination
 )
 {
     const LM *thePlugin = (const LM*) userData;
+    LM* plugin = const_cast<LM*>(thePlugin);
 	const lmDataStructure* myData = &(thePlugin->mLMData);
 	
     //Check if user have asked for termination..
     if(isBeingTerminated(myData->mLMPlugin))
     {
-        (*infoIndex)= -1; //This signals lmfit algorithm to break
+        (*userBreak) = -1; //This signals lmfit algorithm to break
         return;
     }
 
@@ -328,6 +326,16 @@ void evaluate(const double *par,       //Property vector
         }
     }
     freeRRCData(rrcData);
+
+
+    if(thePlugin->mLMData.mProgressEvent)
+    {
+        double norm = lm_enorm(m_dat, fvec);
+		plugin->mNorm.setValue(norm);
+        plugin->mNrOfIter.setValue(myData->mNrOfIterations);       
+        thePlugin->mLMData.mProgressEvent(NULL, thePlugin->mLMData.mProgressEventContextData);
+    }
+
 }
 
 void LMWorker::createModelData(RoadRunnerData* _data)

@@ -48,9 +48,9 @@ xtol(                      LM_USERTOL,              "xtol"       ,              
 gtol(                      LM_USERTOL,              "gtol"       ,                           " Orthogonality desired between fvec and its derivs. "),
 epsilon(                   LM_USERTOL,              "epsilon"    ,                           " Step used to calculate the jacobian. "),
 stepbound(                 100.,                    "stepbound"  ,                           " Initial bound to steps in the outer loop. "),
-maxcall(                   100,                     "maxcall"    ,                           " Maximum number of iterations. "),
-scale_diag(                1,                       "scale_diag" ,                           " UNDOCUMENTED, TESTWISE automatical diag rescaling? "),
-printflags(                1,                       "printflags" ,                           " OR'ed to produce more noise ")
+patience(                   100,                     "patience"    ,                           " Maximum number of iterations. "),
+scale_diag(                 1,                       "scale_diag" ,                           " UNDOCUMENTED, TESTWISE automatical diag rescaling? ")
+//verbosity(                  0,                       "verbosity" ,                           " OR'ed to produce more noise ")
 
 {
     mVersion = "1.0";
@@ -72,9 +72,9 @@ printflags(                1,                       "printflags" ,              
     mLMFit.addProperty(&gtol);
     mLMFit.addProperty(&epsilon);
     mLMFit.addProperty(&stepbound);
-    mLMFit.addProperty(&maxcall);
+    mLMFit.addProperty(&patience);
     mLMFit.addProperty(&scale_diag);
-    mLMFit.addProperty(&printflags);
+//    mLMFit.addProperty(&verbosity);
 
     mProperties.add(mLMFit);
     //Allocate model and Residuals data
@@ -290,16 +290,16 @@ s << "Initial bound to steps in the outer loop.";
 s.str("");
 
 s << "Maximum number of iterations.";
-    maxcall.setDescription(s.str());  
+    patience.setDescription(s.str());
 s.str("");
 
 s << "UNDOCUMENTED, TESTWISE automatical diag rescaling? ";
     scale_diag.setDescription(s.str());
 s.str("");
 
-s << "ORed to produce more noise.";
-    printflags.setDescription(s.str());
-s.str("");
+//s << "ORed to produce more noise.";
+//    verbosity.setDescription(s.str());
+//s.str("");
 
 }
 }
