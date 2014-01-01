@@ -65,36 +65,37 @@ void LMWorker::run()
         Log(lInfo)<<Paras[i]->getName()<<" with initial value: "<<Paras[i]->getValueAsString();
     }
 
+    mTheHost.mNrOfIter.setValue(0);
+    mTheHost.mNorm.setValue(0.0);
     //Some parameters to the Algorithm..
-    lm_status_struct status;
     lm_control_struct control = lm_control_double;
-    //Set defaults from Plugin
 
+    //Set defaults from Plugin
     control.ftol                    =       *(double*)  mTheHost.ftol.getValueHandle();
     control.xtol                    =       *(double*)  mTheHost.xtol.getValueHandle();
     control.gtol                    =       *(double*)  mTheHost.gtol.getValueHandle();
     control.epsilon                 =       *(double*)  mTheHost.epsilon.getValueHandle();
     control.stepbound               =       *(double*)  mTheHost.stepbound.getValueHandle();
     control.patience                =       *(int*)     mTheHost.patience.getValueHandle();
-    control.scale_diag              =       *(int*)     mTheHost.scale_diag.getValueHandle();
-//    control.verbosity               =       *(int*)     mTheHost.verbosity.getValueHandle();
+//    control.scale_diag              =       *(int*)     mTheHost.scale_diag.getValueHandle();
+
     control.msgfile = NULL;
     control.verbosity = 0;
+
     //Setup data structures
     setup();
+
 
     //This is the library function doing the minimization..
     lmmin(  mLMData.nrOfParameters,
             mLMData.parameters,
             mLMData.nrOfResiduePoints,
-            //(const void*) &mLMData,
 			(const void*) &mTheHost,
             evaluate,
             &control,
-            &status);
-            //,            ui_printout); //Removed! i the new lmfit version??
+            &mTheHost.mLMStatus);
 
-    //The user may have aborted the minization... check..
+    //The user may have aborted the minization... check here..
     if(mTheHost.mTerminate)
     {
         //user did set the terminate flag to true.. discard any minimization data and get out of the
@@ -105,8 +106,8 @@ void LMWorker::run()
     }
     /* print results */
     Log(lInfo)<<"==================== Fitting Result ================================";
-    Log(lInfo)<<"Nr of function evaluations: "<<status.nfev;
-    Log(lInfo)<<"Status message: " << lm_infmsg[status.outcome];
+    Log(lInfo)<<"Nr of function evaluations: "  <<  mTheHost.mLMStatus.nfev;
+    Log(lInfo)<<"Status message: "              <<  lm_infmsg[mTheHost.mLMStatus.outcome];
     Log(lInfo)<<"Minimized parameter values: ";
 
     for (int i = 0; i < mLMData.nrOfParameters; ++i)
@@ -114,7 +115,7 @@ void LMWorker::run()
         Log(lInfo)<<"Parameter "<<mLMData.parameterLabels[i]<<" = "<< mLMData.parameters[i];
     }
 
-    Log(lInfo)<<"Norm:  "<<status.fnorm;
+    Log(lInfo)<<"Norm:  "<<mTheHost.mLMStatus.fnorm;
 
     //Populate with data to report back
     Properties& parsOut = mTheHost.mOutputParameterList.getValueReference();
@@ -124,7 +125,7 @@ void LMWorker::run()
         parsOut.add(new Property<double>(mLMData.parameters[i], mLMData.parameterLabels[i], ""), true);
     }
 
-    mTheHost.mNorm.setValue(status.fnorm);
+    mTheHost.mNorm.setValue(mTheHost.mLMStatus.fnorm);
     createModelData(mTheHost.mModelData.getValuePointer());
 
     createResidualsData(mTheHost.mResidualsData.getValuePointer());
@@ -259,11 +260,10 @@ void evaluate(const double *par,       //Property vector
               int          *userBreak  //Non zero value means termination
 )
 {
-    static int nrOfIterations = 0;
     const LM *thePlugin = (const LM*) userData;
     LM* plugin = const_cast<LM*>(thePlugin);
 	const lmDataStructure* myData = &(thePlugin->mLMData);
-	
+
     //Check if user have asked for termination..
     if(isBeingTerminated(myData->mLMPlugin))
     {
@@ -333,7 +333,7 @@ void evaluate(const double *par,       //Property vector
     {
         double norm = lm_enorm(m_dat, fvec);
 		plugin->mNorm.setValue(norm);
-        plugin->mNrOfIter.setValue(++nrOfIterations);       
+        plugin->mNrOfIter.setValue(plugin->mNrOfIter.getValue() + 1);
         thePlugin->mLMData.mProgressEvent(NULL, thePlugin->mLMData.mProgressEventContextData);
     }
 
@@ -341,7 +341,7 @@ void evaluate(const double *par,       //Property vector
 
 void LMWorker::createModelData(RoadRunnerData* _data)
 {
-    RoadRunnerData& data = *(_data);        
+    RoadRunnerData& data = *(_data);
     //We now have the parameters
     StringList selList("time");
     selList.Append(mTheHost.mModelDataSelectionList.getValue());

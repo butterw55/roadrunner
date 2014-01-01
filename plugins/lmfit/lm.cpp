@@ -36,22 +36,20 @@ mInputParameterList(         Properties(),          "InputParameterList",       
 mOutputParameterList(        Properties(),          "OutputParameterList",                   "List of parameters that was fittedt"),
 mExperimentalDataSelectionList( StringList(),       "ExperimentalDataSelectionList",        "Experimental data selection list"),
 mModelDataSelectionList(    StringList(),           "FittedDataSelectionList",              "Fitted data selection list"),
-mNorm(                      -1.0,                   "Norm",                                 "Norm of fitting. An estimate of goodness of fit"),
-mNrOfIter(                  -1,                     "NrOfIter",                             "Number of iterations"),
+mNorm(                      0,                      "Norm",                                 "Norm of fitting. An estimate of goodness of fit"),
+mNrOfIter(                  0,                      "NrOfIter",                             "Number of iterations"),
 mLMWorker(*this),
 mLMData(mLMWorker.mLMData),
 
 //The following Properties are the members of lmfits control_structure.
 //Changing their default values may be needed depending on the problem.
-ftol(                      LM_USERTOL,              "ftol"       ,                           " Relative error desired in the sum of squares. "),
-xtol(                      LM_USERTOL,              "xtol"       ,                           " Relative error between last two approximations. "),
-gtol(                      LM_USERTOL,              "gtol"       ,                           " Orthogonality desired between fvec and its derivs. "),
-epsilon(                   LM_USERTOL,              "epsilon"    ,                           " Step used to calculate the jacobian. "),
-stepbound(                 100.,                    "stepbound"  ,                           " Initial bound to steps in the outer loop. "),
-patience(                   100,                     "patience"    ,                           " Maximum number of iterations. "),
-scale_diag(                 1,                       "scale_diag" ,                           " UNDOCUMENTED, TESTWISE automatical diag rescaling? ")
-//verbosity(                  0,                       "verbosity" ,                           " OR'ed to produce more noise ")
-
+ftol(                      LM_USERTOL,              "ftol"       ,              "Relative error desired in the sum of squares. "),
+xtol(                      LM_USERTOL,              "xtol"       ,              "Relative error between last two approximations. "),
+gtol(                      LM_USERTOL,              "gtol"       ,              "Orthogonality desired between fvec and its derivs. "),
+epsilon(                   LM_USERTOL,              "epsilon"    ,              "Step used to calculate the jacobian. "),
+stepbound(                 100.,                    "stepbound"  ,              "Initial bound to steps in the outer loop. "),
+patience(                  100,                     "patience"    ,             "Maximum number of iterations as patience*(nr_of_parameters +1). ")
+//scale_diag(                 1,                       "scale_diag" ,              " UNDOCUMENTED, TESTWISE automatical diag rescaling? ")
 {
     mVersion = "1.0";
     //Setup the plugins capabilities
@@ -73,14 +71,14 @@ scale_diag(                 1,                       "scale_diag" ,             
     mLMFit.addProperty(&epsilon);
     mLMFit.addProperty(&stepbound);
     mLMFit.addProperty(&patience);
-    mLMFit.addProperty(&scale_diag);
-//    mLMFit.addProperty(&verbosity);
+//    mLMFit.addProperty(&scale_diag);
 
     mProperties.add(mLMFit);
+
     //Allocate model and Residuals data
     mResidualsData.setValue(new RoadRunnerData());
     mModelData.setValue(new RoadRunnerData());
-    
+
     mHint ="Parameter fitting using the Levenberg-Marquardt algorithm";
     mDescription="The Levenberg-Marquardt plugin is used to fit a proposed \
 SBML models parameters to experimental data. \
@@ -158,6 +156,7 @@ bool LM::resetPlugin()
     mOutputParameterList.getValueReference().clear();
     mExperimentalDataSelectionList.getValueReference().clear();
     mModelDataSelectionList.getValueReference().clear();
+//    mNrOfIter = 0;
     return true;
 }
 
@@ -293,13 +292,10 @@ s << "Maximum number of iterations.";
     patience.setDescription(s.str());
 s.str("");
 
-s << "UNDOCUMENTED, TESTWISE automatical diag rescaling? ";
-    scale_diag.setDescription(s.str());
-s.str("");
-
-//s << "ORed to produce more noise.";
-//    verbosity.setDescription(s.str());
+//s << "UNDOCUMENTED, TESTWISE automatical diag rescaling? ";
+//    scale_diag.setDescription(s.str());
 //s.str("");
+
 
 }
 }
