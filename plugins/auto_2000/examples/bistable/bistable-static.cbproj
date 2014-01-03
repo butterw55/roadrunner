@@ -40,10 +40,10 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <Multithreaded>true</Multithreaded>
-        <IncludePath>R:\rre\plugins\bifurcation\examples\bistable\;$(IncludePath)</IncludePath>
+        <IncludePath>..\..\..\..\third_party\poco\Foundation\src\;R:\rre\plugins\bifurcation\examples\bistable\;$(IncludePath)</IncludePath>
         <ProjectType>CppConsoleApplication</ProjectType>
         <_TCHARMapping>char</_TCHARMapping>
-        <ILINK_LibraryPath>R:\rre\plugins\bifurcation\examples\bistable\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <ILINK_LibraryPath>..\..\..\..\third_party\poco\Foundation\src\;R:\rre\plugins\bifurcation\examples\bistable\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
         <IntermediateOutputDir>.\$(Platform)\$(Config)</IntermediateOutputDir>
@@ -85,13 +85,14 @@
         <ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\debug\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <BCC_CPPCompileAlways>true</BCC_CPPCompileAlways>
         <IntermediateOutputDir>.\$(Platform)\$(Config)-static</IntermediateOutputDir>
         <BCC_PCHInject>bistable_pch.h</BCC_PCHInject>
         <IncludePath>$(RR_ROOT)\source;$(RR_ROOT)\plugins\source;$(RR_INSTALL)\include;$(RR_ROOT)\wrappers\C;$(IncludePath)</IncludePath>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Manifest_File>None</Manifest_File>
         <ILINK_LibraryPath>$(RR_INSTALL)\lib;$(RR_INSTALL)\plugins;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-        <Defines>POCO_STATIC;STATIC_RR;STATIC_AUTO;STATIC_RR_AUTO;STATIC_RRC;STATIC_APP;STATIC_PLUGINS_API;$(Defines)</Defines>
+        <Defines>POCO_STATIC;STATIC_RR;STATIC_AUTO;STATIC_RR_AUTO;STATIC_RRC;STATIC_APP;STATIC_PLUGIN_API;$(Defines)</Defines>
         <Debugger_DebugSourcePath>R:\rre\plugins\bifurcation\rrAutoInterface\;R:\rre\plugins\bifurcation\libAuto\;$(Debugger_DebugSourcePath)</Debugger_DebugSourcePath>
         <FinalOutputDir>$(RR_INSTALL)\bin</FinalOutputDir>
     </PropertyGroup>
@@ -100,6 +101,54 @@
         <TASM_Debugging>None</TASM_Debugging>
     </PropertyGroup>
     <ItemGroup>
+        <CppCompile Include="auto_link.cpp">
+            <BuildOrder>1</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="main.cpp">
+            <BuildOrder>0</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_chartables.c">
+            <BuildOrder>2</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_compile.c">
+            <BuildOrder>3</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_exec.c">
+            <BuildOrder>4</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_fullinfo.c">
+            <BuildOrder>5</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_globals.c">
+            <BuildOrder>6</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_maketables.c">
+            <BuildOrder>7</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_newline.c">
+            <BuildOrder>8</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_ord2utf8.c">
+            <BuildOrder>9</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_study.c">
+            <BuildOrder>10</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_tables.c">
+            <BuildOrder>11</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_try_flipped.c">
+            <BuildOrder>12</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_ucd.c">
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_valid_utf8.c">
+            <BuildOrder>14</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_xclass.c">
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

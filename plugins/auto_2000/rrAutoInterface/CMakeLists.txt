@@ -29,7 +29,7 @@ if(WIN32)
         PROPERTY  COMPILE_DEFINITIONS 
         STATIC_AUTO
         STATIC_RR_AUTO
-        STATIC_PLUGINS_API
+        STATIC_PLUGIN_API
         )
     
     target_link_libraries ( ${target}-static

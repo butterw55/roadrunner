@@ -27,7 +27,6 @@ using rr::StringList;
 LM::LM(rr::RoadRunner* aRR)
 :
 CPPPlugin(                      "Levenberg-Marquardt", "Fitting",       aRR, NULL),
-mLMFit(                         "LMFit",                                "Fit a models parameters using the Levenberg-Marquardt algorithm"),    //The 'capability'
 mSBML(                          "<none>",               "SBML",                                 "SBML document as a string. Model to be used in the fitting"),
 mExperimentalData(              RoadRunnerData(),       "ExperimentalData",                     "Data object holding Experimental data: Provided by client"),
 mModelData(                     RoadRunnerData(),       "FittedData",                           "Data object holding model data: Handed to client"),
@@ -52,28 +51,26 @@ patience(                       100,                     "patience"    ,        
 //scale_diag(                 1,                       "scale_diag" ,              " UNDOCUMENTED, TESTWISE automatical diag rescaling? ")
 {
     mVersion = "1.0";
-    //Setup the plugins capabilities
-    mLMFit.addProperty(&mSBML);
-    mLMFit.addProperty(&mExperimentalData);
-    mLMFit.addProperty(&mModelData);
-    mLMFit.addProperty(&mResidualsData);
-    mLMFit.addProperty(&mInputParameterList);
-    mLMFit.addProperty(&mOutputParameterList);
-    mLMFit.addProperty(&mExperimentalDataSelectionList);
-    mLMFit.addProperty(&mModelDataSelectionList);
-    mLMFit.addProperty(&mNorm);
-    mLMFit.addProperty(&mNrOfIter);
+    //Add plugin properties to property container
+    mProperties.add(&mSBML);
+    mProperties.add(&mExperimentalData);
+    mProperties.add(&mModelData);
+    mProperties.add(&mResidualsData);
+    mProperties.add(&mInputParameterList);
+    mProperties.add(&mOutputParameterList);
+    mProperties.add(&mExperimentalDataSelectionList);
+    mProperties.add(&mModelDataSelectionList);
+    mProperties.add(&mNorm);
+    mProperties.add(&mNrOfIter);
 
     //Add the lmfit parameters
-    mLMFit.addProperty(&ftol);
-    mLMFit.addProperty(&xtol);
-    mLMFit.addProperty(&gtol);
-    mLMFit.addProperty(&epsilon);
-    mLMFit.addProperty(&stepbound);
-    mLMFit.addProperty(&patience);
-//    mLMFit.addProperty(&scale_diag);
-
-    mProperties.add(mLMFit);
+    mProperties.add(&ftol);
+    mProperties.add(&xtol);
+    mProperties.add(&gtol);
+    mProperties.add(&epsilon);
+    mProperties.add(&stepbound);
+    mProperties.add(&patience);
+//    mProperties.addProperty(&scale_diag);
 
     //Allocate model and Residuals data
     mResidualsData.setValue(new RoadRunnerData());

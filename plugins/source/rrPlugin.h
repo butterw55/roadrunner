@@ -44,7 +44,7 @@
 #include <string>
 #include "rrpExporter.h"
 #include "rrPluginsAPISettings.h"
-#include "rrCapabilities.h"
+#include "rrProperties.h"
 
 namespace rr
 {
@@ -76,9 +76,7 @@ typedef void    (event_cc *PluginEvent)(void* data1, void* data2);
 
   -# A plugin may belong to a category and is identified by a name. It has properties like Author, Version, Copyright etc.
 
-  -# A Plugin typically expose various \a Capabilities, available to a client of a plugin trough the \a Capabilites conatiner.
-
-  -# Each Capability may have various numbers of \a Properties that a client of the Plugin may \a set or \a get.
+  -# A Plugin typically expose various \a Properties, available to a client of a plugin trough the \a Properties conatiner.
 
   -# The internal work a plugin is designed to do may be executed in a separate thread, and various functions to monitor and manage
   the work of a Plugin is exposed, e.g. isWorking(), terminate(), isBeingTerminated() etc.
@@ -193,24 +191,14 @@ class RRP_DECLSPEC Plugin
         string                          getPluginPropertiesAsXML();
 
         /**
-            Retieves a specific parameter, in a specific capability.
+            Retieves a specific property
         */
-        PropertyBase*                   getProperty(const string& param, const string& capability = "");
-
-        /**
-            Retieves a specific parameter, in a specific capability.
-        */
-        PropertyBase*                   getProperty(const string& param, Capability& capability);
+        PropertyBase*                   getProperty(const string& param);
 
         /**
             Sets the value of specified Property with value as specified
         */
         bool                            setProperty(const string& nameOf, const char* value);
-
-        /**
-            Sets the value of specified Property with value as specified
-        */
-        bool                            setProperty(const string& nameOf, const char* value, Capability& capability);
 
         /**
             If the work of the plugin is carried out in a separate thread, terminate() will
@@ -417,7 +405,8 @@ class RRP_DECLSPEC Plugin
          * Properties container. Descendant add properties to this container, as they wish.
          * Property data values can be exchanged to/from the plugin by.
          */
-        Capabilities                    mProperties;
+
+         Properties                     mProperties;
 
 //        /*
 //         * Opaque data pointer. Plugin designer may use this to communicat data of any type out/in to the plugin

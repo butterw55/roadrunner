@@ -7,7 +7,6 @@
 #include "rrPlugin.h"
 #include "rrUtils.h"
 #include "rrException.h"
-#include "rrCapabilities.h"
 #include "rrLogger.h"
 #include "rrRoadRunner.h"
 #include "rrCPlugin.h"

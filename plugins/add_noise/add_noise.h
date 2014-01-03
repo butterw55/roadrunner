@@ -1,6 +1,5 @@
 #ifndef add_noiseH
 #define add_noiseH
-#include "rrCapability.h"
 #include "rrProperty.h"
 #include "rrCPPPlugin.h"
 #include "add_noise_worker.h"
@@ -20,10 +19,9 @@ class AddNoise : public CPPPlugin
         enum NoiseType {ntGaussian = 0, ntPsychological, ntUndefined};
 
     private:
-        Capability                  mAddNoise;
-        Property<int>              mNoiseType;
-        Property<double>           mSigma;
-        Property<RoadRunnerData>   mData;
+        Property<int>               mNoiseType;
+        Property<double>            mSigma;
+        Property<RoadRunnerData>    mData;
         AddNoiseWorker              mAddNoiseWorker;
 
     public:

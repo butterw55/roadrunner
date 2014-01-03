@@ -29,7 +29,7 @@ if(WIN32)
         POCO_STATIC
         STATIC_LIBSTRUCT
         STATIC_RR
-        STATIC_PLUGINS_API
+        STATIC_PLUGIN_API
         )
 
     target_link_libraries ( ${target}

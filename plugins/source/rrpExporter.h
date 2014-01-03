@@ -2,7 +2,7 @@
 #define rrpExporterH
 
 #if defined(_WIN32) || defined(__WIN32__)
-    #if defined(STATIC_PLUGINS_API)
+    #if defined(STATIC_PLUGIN_API)
         #define RRP_DECLSPEC
     #else
         #if defined(EXPORT_PLUGINS_API)

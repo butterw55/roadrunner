@@ -1,7 +1,6 @@
 #ifndef lmH
 #define lmH
 #include <vector>
-#include "rrCapability.h"
 #include "rrProperty.h"
 #include "rrCPPPlugin.h"
 #include "rrRoadRunner.h"
@@ -22,7 +21,6 @@ class LM : public CPPPlugin
     friend class LMWorker;
 
     public:
-        Capability                              mLMFit;        
         Property<string>                        mSBML;                          //This is the model
         Property<RoadRunnerData>				mExperimentalData;
         Property<RoadRunnerData>			    mModelData;

@@ -1,4 +1,4 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{3EEF470A-FFEF-4E8E-9BA7-0E06A4AB11D0}</ProjectGuid>
         <ProjectVersion>14.4</ProjectVersion>
@@ -93,7 +93,7 @@
         <BCC_PCHInject>bistable_pch.h</BCC_PCHInject>
         <IncludePath>$(RR_INSTALL)\include;$(IncludePath)</IncludePath>
         <ILINK_LibraryPath>$(RR_INSTALL)\plugins;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-        <Defines>POCO_STATIC;PCRE_STATIC;STATIC_RR;STATIC_AUTO;STATIC_RR_AUTO;STATIC_RRC;STATIC_APP;STATIC_PLUGINS_API;$(Defines)</Defines>
+        <Defines>POCO_STATIC;PCRE_STATIC;STATIC_RR;STATIC_AUTO;STATIC_RR_AUTO;STATIC_RRC;STATIC_APP;STATIC_PLUGIN_API;$(Defines)</Defines>
         <Debugger_DebugSourcePath>R:\rre\plugins\bifurcation\rrAutoInterface\;R:\rre\plugins\bifurcation\libAuto\;$(Debugger_DebugSourcePath)</Debugger_DebugSourcePath>
         <FinalOutputDir>$(RR_INSTALL)\bin</FinalOutputDir>
     </PropertyGroup>

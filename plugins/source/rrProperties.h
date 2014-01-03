@@ -54,7 +54,6 @@ namespace rrp
 using std::vector;
 using std::list;
 using std::pair;
-//using rr::StringList;
 using std::string;
 
 /**
@@ -66,86 +65,97 @@ class RRP_DECLSPEC Properties
         /**
            Create a parameter container
         */
-                                                Properties(bool canClear = true);
+                                            Properties(bool canClear = true);
         /**
            Deallocate memory allocated
         */
-        virtual                                ~Properties();
+        virtual                            ~Properties();
 
         /**
            Copy constructor
         */
-                                                Properties(const Properties& cpyMe);
+                                            Properties(const Properties& cpyMe);
         /**
            Add a parameter. By default, the container do not owe memory allocated by the parameter.
            If the ownMemory flag is set to true, the container will de allocate memory for the parameter as well
            \param para A pointer to a Plugin parameter
            \param ownMemory Boolean flag indicating if the container is owing the memory of the parameter or not.
         */
-        void                                    add(PropertyBase* para, bool ownMemory = false);
+        void                                add(PropertyBase* para, bool ownMemory = false);
 
         /**
            Return parameters in the container as a list of strings.
         */
-        rr::StringList                          getNames() const;
+        rr::StringList                      getNames() const;
 
         /**
            Return number of parameters in the container.
         */
-        u_int                                   count() const;
+        u_int                               count() const;
 
         /**
            Access a parameter using operator []
            \return A const Pointer to a PropertyBase
         */
-        const PropertyBase*                  operator[](const int& i) const;
+        const PropertyBase*                 operator[](const int& i) const;
 
         /**
            Access a parameter using operator []
            \return A Pointer to a PropertyBase
         */
-        PropertyBase*                        operator[](const int& i);
+        PropertyBase*                       operator[](const int& i);
 
         /**
            Get a parameter with a specific name
            \return A Pointer to a PropertyBase if present, NULL otherwise
         */
-        PropertyBase*                        getProperty(const string& paraName);
+        PropertyBase*                       getProperty(const string& paraName);
 
+        /**
+           Set the value of a property, from string
+           \return true or false, indicating success/failure
+           \note may be renamed to setPropertyValue
+        */
+        bool                                setProperty(const string& name, const string& value);
         /**
            Get First Property. Resets the internal iterator to first element
            \return A Pointer to a PropertyBase if present, NULL otherwise
         */
-        PropertyBase*                        getFirst();
+        PropertyBase*                       getFirst();
 
         /**
            Get Next Property. Advances the internal iterator to next element
            \return A Pointer to a PropertyBase if present, NULL otherwise
         */
-        PropertyBase*                        getNext();
+        PropertyBase*                       getNext();
 
         /**
            Get Previous Property. De Advances the internal iterator to next element
            \return A Pointer to a PropertyBase if present, NULL otherwise
         */
-        PropertyBase*                        getPrevious();
-        
+        PropertyBase*                       getPrevious();
+
         /**
            Get Current Property. De Advances the internal iterator to next element
            \return A Pointer to a PropertyBase if present, NULL otherwise
         */
-        PropertyBase*                        getCurrent();
-        
+        PropertyBase*                       getCurrent();
+
         /**
            Empty the parameter container
-        */  
-        bool                                    clear();
+        */
+        bool                                clear();
+
+        /**
+        Get properties as XML
+        */
+        string                              asXML();
 
         /**
            Output the container to a output stream (ostream)
         */
         RRP_DECLSPEC
-        friend ostream&                         operator <<(ostream& os, const Properties& pars);
+        friend ostream&                     operator <<(ostream& os, const Properties& pars);
 
     protected:
         /**
@@ -159,8 +169,8 @@ class RRP_DECLSPEC Properties
 
         /**
             Boolean indicating if a client of the container can clear the list. True by default
-        */            
-        bool                                                    mCanClientClearList;
+        */
+        bool                                                 mCanClientClearList;
 };
 
 }

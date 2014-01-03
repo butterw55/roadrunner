@@ -17,7 +17,7 @@ rrReadDataFromFile.py
 )
 
 install(    
-FILES ${examples} README.txt testData.dat
+FILES ${examples} README.txt testData.dat lmFitTestModel.xml
 DESTINATION plugins/Examples 	
 COMPONENT plugins_api
 )

@@ -58,8 +58,8 @@
         <ProjectType>CppDynamicLibrary</ProjectType>
         <ILINK_GenerateImportLibrary>true</ILINK_GenerateImportLibrary>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
-        <ILINK_LibraryPath>source\;R:\rrl\third_party\poco\Foundation\src\;R:\rrl\plugins\source\;rrAutoInterface\;lib\lib\;..\add_noise\;..\..\vcl_source\;lmfit-3.5\lib\;..\full_space_minimization\;..\test_plugin\;R:\rrl\plugins\TestPlugin\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-        <IncludePath>source\;R:\rrl\third_party\poco\Foundation\src\;R:\rrl\plugins\source\;rrAutoInterface\;lib\lib\;..\add_noise\;..\..\vcl_source\;$(RR_ROOT)\Wrappers\C;$(RR_ROOT)\plugins\source;$(IncludePath)</IncludePath>
+        <ILINK_LibraryPath>..\..\third_party\poco\Foundation\src\;..\source\;source\;R:\rrl\third_party\poco\Foundation\src\;R:\rrl\plugins\source\;rrAutoInterface\;lib\lib\;..\add_noise\;..\..\vcl_source\;lmfit-3.5\lib\;..\full_space_minimization\;..\test_plugin\;R:\rrl\plugins\TestPlugin\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <IncludePath>..\..\third_party\poco\Foundation\src\;..\source\;source\;R:\rrl\third_party\poco\Foundation\src\;R:\rrl\plugins\source\;rrAutoInterface\;lib\lib\;..\add_noise\;..\..\vcl_source\;$(RR_ROOT)\Wrappers\C;$(RR_ROOT)\plugins\source;$(IncludePath)</IncludePath>
         <Multithreaded>true</Multithreaded>
         <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
         <IntermediateOutputDir>.\$(Platform)\$(Config)</IntermediateOutputDir>
@@ -127,9 +127,6 @@
         <Icns_MainIcns>$(BDS)\bin\cbuilder_PROJECTICNS.icns</Icns_MainIcns>
     </PropertyGroup>
     <ItemGroup>
-        <DefFile Include="rrp_auto2000.def">
-            <BuildOrder>18</BuildOrder>
-        </DefFile>
         <CppCompile Include="source\auto_link.cpp">
             <BuildOrder>19</BuildOrder>
         </CppCompile>
@@ -141,49 +138,49 @@
             <DependentOn>source\rrAutoWorker.h</DependentOn>
             <BuildOrder>18</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\plugins\source\rrUnresolvedSTDExternals.cpp">
+        <CppCompile Include="..\source\rrUnresolvedSTDExternals.cpp">
             <BuildOrder>3</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_chartables.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_chartables.c">
             <BuildOrder>4</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_compile.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_compile.c">
             <BuildOrder>5</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_exec.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_exec.c">
             <BuildOrder>6</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_fullinfo.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_fullinfo.c">
             <BuildOrder>7</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_globals.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_globals.c">
             <BuildOrder>8</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_maketables.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_maketables.c">
             <BuildOrder>9</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_newline.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_newline.c">
             <BuildOrder>10</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_ord2utf8.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_ord2utf8.c">
             <BuildOrder>11</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_study.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_study.c">
             <BuildOrder>12</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_tables.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_tables.c">
             <BuildOrder>13</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_try_flipped.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_try_flipped.c">
             <BuildOrder>14</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_ucd.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_ucd.c">
             <BuildOrder>15</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_valid_utf8.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_valid_utf8.c">
             <BuildOrder>16</BuildOrder>
         </CppCompile>
-        <CppCompile Include="R:\rrl\third_party\poco\Foundation\src\pcre_xclass.c">
+        <CppCompile Include="..\..\third_party\poco\Foundation\src\pcre_xclass.c">
             <BuildOrder>17</BuildOrder>
         </CppCompile>
         <BuildConfiguration Include="Release">

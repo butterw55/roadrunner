@@ -1,7 +1,6 @@
 #ifndef rrAutoPluginH
 #define rrAutoPluginH
 #include <vector>
-#include "rrCapability.h"
 #include "rrProperty.h"
 #include "rrCPPPlugin.h"
 #include "rrRoadRunner.h"
@@ -47,7 +46,7 @@ class AutoPlugin : public CPPPlugin
 
 
     protected:
-        Capability                              mAuto;
+        //Capability                              mAuto;
         Property<string>                        mTempFolder;
         Property<string>                        mSBML;                  //This is the model
         Property<string>                        mScanDirection;         //How auto sweeps the parameter

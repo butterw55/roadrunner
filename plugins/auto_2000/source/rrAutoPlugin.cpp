@@ -19,7 +19,7 @@ AutoPlugin::AutoPlugin(rr::RoadRunner* aRR)
 :
 CPPPlugin("Auto-2000", "Bifurcation", aRR, NULL),
 //The Capability
-mAuto(                              "Auto",               "Bifurcation"),
+//mAuto(                              "Auto",               "Bifurcation"),
 mTempFolder(                        "<none>",               "TempFolder",                                       "Tempfolder used by auto"),
 mSBML(                              "<none>",               "SBML",                                             "SBML, i.e. the model to be used to analyze"),
 mScanDirection(                     "Negative",             "ScanDirection",                                    "Direction of parameter scan"),
@@ -32,15 +32,15 @@ mRRAuto(aRR, mAutoData.getValueReference()),
 mAutoWorker(*this)
 {
     //Setup the plugins capabilities
-    mAuto.addProperty(&mTempFolder);
-    mAuto.addProperty(&mSBML);
-    mAuto.addProperty(&mAutoData);
-    mAuto.addProperty(&mScanDirection);
-    mAuto.addProperty(&mPrincipalContinuationParameter);
-    mAuto.addProperty(&mPCPLowerBound);
-    mAuto.addProperty(&mPCPUpperBound);
-    mAuto.addProperty(&mBiFurcationDiagram);
-    mProperties.add(mAuto);
+    mProperties.add(&mTempFolder);
+    mProperties.add(&mSBML);
+    mProperties.add(&mAutoData);
+    mProperties.add(&mScanDirection);
+    mProperties.add(&mPrincipalContinuationParameter);
+    mProperties.add(&mPCPLowerBound);
+    mProperties.add(&mPCPUpperBound);
+    mProperties.add(&mBiFurcationDiagram);
+
 }
 
 AutoPlugin::~AutoPlugin()

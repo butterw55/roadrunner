@@ -65,7 +65,6 @@ int main()
             throw(rr::Exception("Failed loading sbml model"));
         }
 
-
         autoPlugin->assignRoadRunnerInstance(rri);
         if(!autoPlugin->execute())
         {
@@ -84,7 +83,7 @@ int main()
         Log(lInfo)<<autoPlugin->getResult();
 
         //Check plugin data..
-//        pm.unload(autoPlugin);
+        pm.unload(autoPlugin);
     }
     catch(Exception& ex)
     {

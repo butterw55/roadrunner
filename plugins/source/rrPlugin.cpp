@@ -197,26 +197,23 @@ bool Plugin::setProperty(const string& nameOf, const char* value)
     return mProperties.setProperty(nameOf, val);
 }
 
-bool Plugin::setProperty(const string& nameOf, const char* value, Capability& capability)
-{
-    //Go trough the parameter container and look for parameter
-    for(int i = 0; i < capability.nrOfProperties(); i++)
-    {
-        PropertyBase* aPar = const_cast<PropertyBase*>( &(capability[i]) );
-
-        if(aPar->getName() == nameOf)
-        {
-//            if(dynamic_cast< Property<int>* >(aProperty))
-//            {
-//                Property<int> *aIntPar = dynamic_cast< Property<int>* >(aProperty);
-//                int aVal = rr::ToInt(value);
-                aPar->setValueFromString( value);
-//                return true;
-            //}
-        }
-    }
-    return false;
-}
+//bool Plugin::setProperty(const string& nameOf, const char* value)
+//{
+//        PropertyBase* aPar = mProperties.getProperty(nameOf);//const_cast<PropertyBase*>( &(capability[i]) );
+//
+//        if(aPar)
+//        {
+////            if(dynamic_cast< Property<int>* >(aProperty))
+////            {
+////                Property<int> *aIntPar = dynamic_cast< Property<int>* >(aProperty);
+////                int aVal = rr::ToInt(value);
+//                aPar->setValueFromString( value);
+////                return true;
+//            //}
+//        }
+//
+//    return false;
+//}
 
 
 string Plugin::getName()
@@ -286,8 +283,9 @@ string Plugin::getExtendedInfo()
 {
     stringstream msg;
     msg<<getInfo();
-    msg<<"\nProperty Info\n";
-    msg<<(*getProperties());
+    msg<<"\nPlugin Properties Info\n";
+    Properties* props = getProperties();
+    msg<<(*props);
     return msg.str();
 }
 
@@ -303,54 +301,40 @@ unsigned char* Plugin::getManualAsPDF() const
 
 StringList Plugin::getPropertyNames()
 {
-    StringList names;        
-    //For now, if capName is "" return all
-    for(int i = 0; i < mProperties.count(); i++)
-    {
-        Properties* paras = mProperties[i]->getProperties();
-        
-        names.Append(paras->getNames());
-    }    
-
-    return names;
+    return mProperties.getNames();
 }
 
 Properties* Plugin::getProperties()
 {
-    //For now, if capName is "" return all
-    for(int i = 0; i < mProperties.count(); i++)
-    {
-        return mProperties[i]->getProperties();
-    }    
-
-    return NULL;
+    return &mProperties;
 }
 
-PropertyBase* Plugin::getProperty(const string& para, const string& capability)
+PropertyBase* Plugin::getProperty(const string& propName)
 {
-    //If capability string is empty, search all capabilites
-    if(capability.size())
-    {
-        Capability* cap = mProperties.get(capability);
-        return cap ? cap->getProperty(para) : NULL;
-    }
-    else    //Search all capabilities
-    {
-        for(int i = 0; i < mProperties.count(); i++)
-        {
-            if(mProperties[i]->getProperty(para))
-            {
-                return mProperties[i]->getProperty(para);
-            }
-        }
-    }
-    return NULL;
+    return mProperties.getProperty(propName);
+//    //If capability string is empty, search all capabilites
+//    if(capability.size())
+//    {
+//        Capability* cap = mProperties.get(capability);
+//        return cap ? cap->getProperty(para) : NULL;
+//    }
+//    else    //Search all capabilities
+//    {
+//        for(int i = 0; i < mProperties.count(); i++)
+//        {
+//            if(mProperties[i]->getProperty(para))
+//            {
+//                return mProperties[i]->getProperty(para);
+//            }
+//        }
+//    }
+//    return NULL;
 }
 
-PropertyBase* Plugin::getProperty(const string& para, Capability& capability)
-{
-    return capability.getProperty(para);
-}
+//PropertyBase* Plugin::getProperty(const string& para, Capability& capability)
+//{
+//    return capability.getProperty(para);
+//}
 
 //Capability* Plugin::getCapability(const string& name)
 //{
