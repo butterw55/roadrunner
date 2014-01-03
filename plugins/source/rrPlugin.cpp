@@ -68,6 +68,45 @@ bool Plugin::wasTerminated()
     return false;
 }
 
+bool Plugin::hasStartedEvent()
+{
+    return (mWorkStartedEvent) ? true : false;
+}
+
+bool Plugin::hasProgressEvent()
+{
+    return (mWorkProgressEvent) ? true : false;
+}
+
+bool Plugin::hasFinishedEvent()
+{
+    return (mWorkFinishedEvent) ? true : false;
+}
+
+void Plugin::WorkStartedEvent(void* data1, void* data2)
+{
+    if(mWorkStartedEvent)
+    {
+        mWorkStartedEvent(data1, data2);
+    }
+}
+
+void Plugin::WorkProgressEvent(void* data1, void* data2)
+{
+    if(mWorkProgressEvent)
+    {
+        mWorkProgressEvent(data1, data2);
+    }
+}
+
+void Plugin::WorkFinishedEvent(void* data1, void* data2)
+{
+    if(mWorkFinishedEvent)
+    {
+        mWorkFinishedEvent(data1, data2);
+    }
+}
+
 bool Plugin::assignRoadRunnerInstance(RoadRunner* rr)
 {
     mRR = rr;
@@ -90,11 +129,26 @@ string Plugin::getPluginPropertiesAsXML()
     return mProperties.asXML();
 }
 
-bool Plugin::assignInput(void* userData)
+//bool Plugin::assignInput(void* userData)
+//{
+//    //Do whats needed in descendants
+//    mClientData = userData;
+//    return true;
+//}
+
+pair<void*, void*> Plugin::getWorkStartedData()
 {
-    //Do whats needed in descendants
-    mClientData = userData;
-    return true;
+    return pair<void*, void*>(mWorkStartedData1, mWorkStartedData2);
+}
+
+pair<void*, void*> Plugin::getWorkProgressData()
+{
+    return pair<void*, void*>(mWorkProgressData1, mWorkProgressData2);
+}
+
+pair<void*, void*> Plugin::getWorkFinishedData()
+{
+    return pair<void*, void*>(mWorkFinishedData1, mWorkFinishedData2);
 }
 
 bool Plugin::assignOnStartedEvent(PluginEvent startedFnc, void* userData1, void* userData2)

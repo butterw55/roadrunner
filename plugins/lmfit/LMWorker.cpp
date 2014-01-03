@@ -137,7 +137,7 @@ void LMWorker::workerStarted()
     mTheHost.mIsWorking = true;
     if(mTheHost.mWorkStartedEvent)
     {
-        mTheHost.mWorkStartedEvent(NULL, mTheHost.mWorkStartedData2);
+        mTheHost.mWorkStartedEvent(mTheHost.mWorkStartedData1, mTheHost.mWorkStartedData2);
     }
 }
 
@@ -146,7 +146,7 @@ void LMWorker::workerFinished()
     mTheHost.mIsWorking = false;//Set this flag before event so client can query plugin about termination
     if(mTheHost.mWorkFinishedEvent)
     {
-        mTheHost.mWorkFinishedEvent(NULL, mTheHost.mWorkFinishedData2);
+        mTheHost.mWorkFinishedEvent(mTheHost.mWorkFinishedData1, mTheHost.mWorkFinishedData2);
     }
 }
 
@@ -235,7 +235,7 @@ bool LMWorker::setup()
     mRRI->setSelections(species);
 
     mLMData.mProgressEvent               = mTheHost.mWorkProgressEvent;
-    mLMData.mProgressEventContextData    = mTheHost.mWorkProgressData2;
+    mLMData.mProgressEventContextData    = mTheHost.mWorkProgressData1;
     return true;
 }
 
@@ -326,17 +326,20 @@ void evaluate(const double *par,       //Property vector
             count++;
         }
     }
+
     freeRRCData(rrcData);
 
-
-    if(thePlugin->mLMData.mProgressEvent)
+    if(plugin->hasProgressEvent())
     {
+        //Assign data relevant to the progress
         double norm = lm_enorm(m_dat, fvec);
 		plugin->mNorm.setValue(norm);
         plugin->mNrOfIter.setValue(plugin->mNrOfIter.getValue() + 1);
-        thePlugin->mLMData.mProgressEvent(NULL, thePlugin->mLMData.mProgressEventContextData);
-    }
 
+        //Pass trough event data
+        pair<void*, void*> passTroughData = plugin->getWorkProgressData();
+        plugin->WorkProgressEvent(passTroughData.first, passTroughData.second);
+    }
 }
 
 void LMWorker::createModelData(RoadRunnerData* _data)

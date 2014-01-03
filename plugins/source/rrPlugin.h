@@ -149,12 +149,10 @@ class PLUGINS_API_DECLSPEC Plugin
         */
         string                          getCopyright();
 
-
         /**
             Retrieves the RoadRunner instance the plugin is using. Can be NULL.
         */
         RoadRunner*                     getRoadRunnerInstance();
-
 
         /**
             Retrieves various plugin information
@@ -177,29 +175,29 @@ class PLUGINS_API_DECLSPEC Plugin
         virtual unsigned int            getPDFManualByteSize();
 
         /**
-            Retieves the parameters 
+            Retieves the parameters
         */
         Properties*                     getProperties(); //Each capability has a set of parameters
 
         /**
-            Retieves the names of the parameters 
+            Retieves the names of the parameters
         */
         StringList                      getPropertyNames(); //Each capability has a set of parameters
 
         /**
             Retieves a plugin properties, as XML
         */
-        string                          getPluginPropertiesAsXML(); 
+        string                          getPluginPropertiesAsXML();
 
         /**
             Retieves a specific parameter, in a specific capability.
         */
-        PropertyBase*                getProperty(const string& param, const string& capability = "");
+        PropertyBase*                   getProperty(const string& param, const string& capability = "");
 
         /**
             Retieves a specific parameter, in a specific capability.
         */
-        PropertyBase*                getProperty(const string& param, Capability& capability);
+        PropertyBase*                   getProperty(const string& param, Capability& capability);
 
         /**
             Sets the value of specified Property with value as specified
@@ -210,7 +208,6 @@ class PLUGINS_API_DECLSPEC Plugin
             Sets the value of specified Property with value as specified
         */
         bool                            setProperty(const string& nameOf, const char* value, Capability& capability);
-
 
         /**
             If the work of the plugin is carried out in a separate thread, terminate() will
@@ -258,11 +255,6 @@ class PLUGINS_API_DECLSPEC Plugin
         virtual bool                    resetPlugin();
 
         /**
-            Function allowing opaque data being passed to a plugin. This
-        */
-        virtual bool                    assignInput(void* data);
-
-        /**
             Retrieve the status of the plugin.
         */
         virtual string                  getStatus();
@@ -271,6 +263,52 @@ class PLUGINS_API_DECLSPEC Plugin
             Retrieve the implementation language of the plugin.
         */
         virtual string                  getImplementationLanguage() = 0;
+
+
+        /**
+            Check if the plugin as an assigned WorkerStartedEvent
+        */
+        bool                            hasStartedEvent();
+
+        /**
+            Check if the plugin as an assigned WorkerProgressEvent
+        */
+        bool                            hasProgressEvent();
+
+        /**
+            Check if the plugin as an assigned WorkerFinishedEvent
+        */
+        bool                            hasFinishedEvent();
+
+        /**
+         * Call WorkStarted event function
+         */
+        void                            WorkStartedEvent(void* data1, void* data2);
+
+        /**
+         * Call WorkProgress event function
+         */
+        void                            WorkProgressEvent(void* data1, void* data2);
+
+        /**
+         * Call WorkFinished event function
+         */
+        void                            WorkFinishedEvent(void* data1, void* data2);
+
+        /**
+         * get WorkStarted event data variables
+         */
+        pair<void*, void*>              getWorkStartedData();
+
+        /**
+         * get WorkProgress event data variables
+         */
+        pair<void*, void*>              getWorkProgressData();
+
+        /**
+         * get WorkFinished event data variables
+         */
+        pair<void*, void*>              getWorkFinishedData();
 
         /**
             Execute the plugin
@@ -378,12 +416,12 @@ class PLUGINS_API_DECLSPEC Plugin
          */
         Capabilities                    mProperties;
 
-        /**
-         * Opaque data pointer. Plugin designer may use this to communicat data of any type out/in to the plugin
-         * using the assignPluginInput() function.
-         *
-         */
-        void                           *mClientData;
+//        /*
+//         * Opaque data pointer. Plugin designer may use this to communicat data of any type out/in to the plugin
+//         * using the assignPluginInput() function.
+//         *
+//         */
+//        void                           *mClientData;
 
 };
 

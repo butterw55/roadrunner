@@ -346,13 +346,13 @@ char* rrp_cc getPluginResult(RRPluginHandle handle)
     catch_ptr_macro
 }
 
-bool rrp_cc assignPluginInput(RRPluginHandle handle, void* data)
-{
-    start_try
-        Plugin* aPlugin = castToPlugin(handle);
-        return (aPlugin) ? aPlugin->assignInput(data) : false;
-    catch_bool_macro
-}
+//bool rrp_cc assignPluginInput(RRPluginHandle handle, void* data)
+//{
+//    start_try
+//        Plugin* aPlugin = castToPlugin(handle);
+//        return (aPlugin) ? aPlugin->assignInput(data) : false;
+//    catch_bool_macro
+//}
 
 bool rrp_cc resetPlugin(RRPluginHandle handle)
 {

@@ -1,37 +1,48 @@
-import sys; import numpy; import rrPython; import rrPlugins;
-import matplotlib.pyplot as plot
+import ctypes
+from rrPlugins_CAPI import *
+from rrPlugins import *
 
-rr = rrPython; rrp = rrPlugins_CAPI
+try:
+    #Create a plugin manager
+    pm = createPluginManager()
 
-sbmlModel ="../models/bistable.xml"
+    #Create a roadrunner instance
+    rr = roadrunner.RoadRunner()
+    
+    sbmlModel ="../../models/bistable.xml"
+    
+    rr.load(sbmlModel)
+        
+    #Get a auto_2000 plugin object
+    auto = Plugin("rrp_auto")
+    
+    #Load Auto plugin
+    if not auto.plugin:
+        print 'LastError: ' + getLastError()
+        exit()
+    
+    print getPluginInfo(plugin)
+    
+    #Set Auto Propertys
+    setPluginProperty(plugin, "ScanDirection", "Negative")
+    setPluginProperty(plugin, "PrincipalContinuationProperty", "k3")
+    setPluginProperty(plugin, "PCPLowerBound", "0.2")
+    setPluginProperty(plugin, "PCPUpperBound", "1.2")
+    
+    #get handle to a parameter
+    paraHandle = getPluginProperty(plugin,"PCPLowerBound")
+    test = getPropertyValueAsString(paraHandle)
+    print 'Current value is ' + test
+    
+    #Execute the plugin
+    executePlugin(plugin)
+    
+    biFurcationDiagram = getPluginProperty(plugin, "BiFurcationDiagram")
+    if biFurcationDiagram:
+        print `getPropertyValueAsString(biFurcationDiagram)`
+    
+    print "done"
 
-result = rr.loadSBMLFromFile(sbmlModel)
-print 'Result of loading sbml: %r' % (result);
-
-#Load Auto plugin
-plugin = rrp.loadPlugin("rrp_auto2000")
-if not plugin:
-    print rr.getLastError()
-    exit()
-
-print rrp.getPluginInfo(plugin)
-
-#Set Auto Parameters
-rrp.setPluginParameter(plugin, "ScanDirection", "Negative")
-rrp.setPluginParameter(plugin, "PrincipalContinuationParameter", "k3")
-rrp.setPluginParameter(plugin, "PCPLowerBound", "0.2")
-rrp.setPluginParameter(plugin, "PCPUpperBound", "1.2")
-
-#get handle to a parameter
-paraHandle = rrp.getPluginParameter(plugin,"PCPLowerBound")
-test = rrp.getParameterValueAsString(paraHandle)
-print 'Current value is ' + test
-
-#Execute the plugin
-rrp.executePlugin(plugin)
-
-biFurcationDiagram = rrp.getPluginParameter(plugin, "BiFurcationDiagram")
-if biFurcationDiagram:
-    print `rrp.getParameterValueAsString(biFurcationDiagram)`
-
-print "done"
+except Exception as e:  
+    print "There was a problem: " + `e`
+    

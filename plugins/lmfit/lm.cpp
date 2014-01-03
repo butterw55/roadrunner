@@ -26,29 +26,29 @@ using namespace rrc;
 
 LM::LM(rr::RoadRunner* aRR)
 :
-CPPPlugin(                  "Levenberg-Marquardt", "Fitting",       aRR, NULL),
-mLMFit(                     "LMFit",                                "Fit Model Propertys Using the Levenberg-Marquardt Algorithm"),    //The 'capability'
-mSBML(                      "<none>",               "SBML",                                 "SBML document as a string. Model to be used in the fitting"),
-mExperimentalData(          RoadRunnerData(),       "ExperimentalData",                     "Data object holding Experimental data: Provided by client"),
-mModelData(                 RoadRunnerData(),       "FittedData",                           "Data object holding model data: Handed to client"),
-mResidualsData(             RoadRunnerData(),       "Residuals",                            "Data object holding residuals: Handed to client"),
-mInputParameterList(         Properties(),          "InputParameterList",                    "List of parameters to fit"),
-mOutputParameterList(        Properties(),          "OutputParameterList",                   "List of parameters that was fittedt"),
-mExperimentalDataSelectionList( StringList(),       "ExperimentalDataSelectionList",        "Experimental data selection list"),
-mModelDataSelectionList(    StringList(),           "FittedDataSelectionList",              "Fitted data selection list"),
-mNorm(                      0,                      "Norm",                                 "Norm of fitting. An estimate of goodness of fit"),
-mNrOfIter(                  0,                      "NrOfIter",                             "Number of iterations"),
+CPPPlugin(                      "Levenberg-Marquardt", "Fitting",       aRR, NULL),
+mLMFit(                         "LMFit",                                "Fit a models parameters using the Levenberg-Marquardt algorithm"),    //The 'capability'
+mSBML(                          "<none>",               "SBML",                                 "SBML document as a string. Model to be used in the fitting"),
+mExperimentalData(              RoadRunnerData(),       "ExperimentalData",                     "Data object holding Experimental data: Provided by client"),
+mModelData(                     RoadRunnerData(),       "FittedData",                           "Data object holding model data: Handed to client"),
+mResidualsData(                 RoadRunnerData(),       "Residuals",                            "Data object holding residuals: Handed to client"),
+mInputParameterList(            Properties(),           "InputParameterList",                   "List of parameters to fit"),
+mOutputParameterList(           Properties(),           "OutputParameterList",                  "List of parameters that was fittedt"),
+mExperimentalDataSelectionList( StringList(),           "ExperimentalDataSelectionList",        "Experimental data selection list"),
+mModelDataSelectionList(        StringList(),           "FittedDataSelectionList",              "Fitted data selection list"),
+mNorm(                          0,                      "Norm",                                 "Norm of fitting. An estimate of goodness of fit"),
+mNrOfIter(                      0,                      "NrOfIter",                             "Number of iterations"),
 mLMWorker(*this),
 mLMData(mLMWorker.mLMData),
 
 //The following Properties are the members of lmfits control_structure.
 //Changing their default values may be needed depending on the problem.
-ftol(                      LM_USERTOL,              "ftol"       ,              "Relative error desired in the sum of squares. "),
-xtol(                      LM_USERTOL,              "xtol"       ,              "Relative error between last two approximations. "),
-gtol(                      LM_USERTOL,              "gtol"       ,              "Orthogonality desired between fvec and its derivs. "),
-epsilon(                   LM_USERTOL,              "epsilon"    ,              "Step used to calculate the jacobian. "),
-stepbound(                 100.,                    "stepbound"  ,              "Initial bound to steps in the outer loop. "),
-patience(                  100,                     "patience"    ,             "Maximum number of iterations as patience*(nr_of_parameters +1). ")
+ftol(                           LM_USERTOL,              "ftol"       ,                         "Relative error desired in the sum of squares. "),
+xtol(                           LM_USERTOL,              "xtol"       ,                         "Relative error between last two approximations. "),
+gtol(                           LM_USERTOL,              "gtol"       ,                         "Orthogonality desired between fvec and its derivs. "),
+epsilon(                        LM_USERTOL,              "epsilon"    ,                         "Step used to calculate the jacobian. "),
+stepbound(                      100.,                    "stepbound"  ,                         "Initial bound to steps in the outer loop. "),
+patience(                       100,                     "patience"    ,                        "Maximum number of iterations as patience*(nr_of_parameters +1). ")
 //scale_diag(                 1,                       "scale_diag" ,              " UNDOCUMENTED, TESTWISE automatical diag rescaling? ")
 {
     mVersion = "1.0";

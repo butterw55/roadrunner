@@ -372,14 +372,14 @@ RRP_DECLSPEC bool rrp_cc assignOnProgressEvent(RRPluginHandle handle, PluginEven
 */
 RRP_DECLSPEC bool rrp_cc assignOnFinishedEvent(RRPluginHandle handle, PluginEvent cb, void* userData1, void* userData2);
 
-/*!
- \brief Hand external data to a plugin
- \param handle Handle to a plugin
- \param userData void* pointer to user data. Plugin dependent.
- \return Returns true or false indicating success/failure
- \ingroup plugins
-*/
-RRP_DECLSPEC bool rrp_cc assignPluginInput(RRPluginHandle handle, void* userData);
+///*
+// \brief Hand external data to a plugin
+// \param handle Handle to a plugin
+// \param userData void* pointer to user data. Plugin dependent.
+// \return Returns true or false indicating success/failure
+// \ingroup plugins
+//*/
+//RRP_DECLSPEC bool rrp_cc assignPluginInput(RRPluginHandle handle, void* userData);
 
 /*!
  \brief Get roadrunner instance handle from plugin

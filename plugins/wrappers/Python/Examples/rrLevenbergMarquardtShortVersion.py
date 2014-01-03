@@ -1,47 +1,40 @@
-from rrPlugins_CAPI import *
 import ctypes
+from rrPlugins_CAPI import *
 import rrPlugins as rrp
 
-lm = rrp.Plugin ("rrp_lm")
-##========== LMFIT EVENT FUNCTIONS ==================
-def pluginIsProgressing(msg, lmP):
+#Get a lmfit plugin object
+lm = rrp.Plugin("rrp_lm")
+
+#========== EVENT FUNCTION SETUP ===========================
+def pluginIsProgressing(lmP, dummy):
     # The plugin don't know what a python object is.
     # We need to cast it here, to a proper python object
     lmObject = cast(lmP, ctypes.py_object).value
-    print 'Iterations = ' + `lmObject.getProperty("NrOfIter")` + '\tNorm = ' + `lmObject.getProperty("Norm")`
+    print 'Iterations = ' + `lmObject.getProperty("NrOfIter")` \
+        + '\tNorm = ' + `lmObject.getProperty("Norm")`
 
 progressEvent =  NotifyPluginEvent(pluginIsProgressing)
+
+#The ID of the plugin is passed as the last argument in the assignOnProgressEvent. 
+#The plugin ID is later on retrieved in the plugin Event handler, see above
 theId = id(lm)
+assignOnProgressEvent(lm.plugin, progressEvent, theId, None)
+#============================================================
 
-#In the assignOnProgress, we pass the identity of the plugin as last argument.
-#It is later on retrieved in the plugin Event handler, see above
-assignOnProgressEvent(lm.plugin, progressEvent, None, theId)
-##===================================================
-
-#Set a lmfit parametere. Printflags control the output in the callback message
-#lm.setProperty("printflags", 2)
-#lm.setProperty("ftol", 2.e-2)
+#Setup lmfit properties.
+lm.setProperty("SBML", lm.readAllText("lmFitTestModel.xml"))
 experimentalData = lm.loadDataSeries ("testData.dat")
+lm.setProperty("ExperimentalData", experimentalData)
 
-lm.setProperty ("ExperimentalData", experimentalData)
-lm.setProperty ("SBML", lm.readAllText("sbml_test_0001.xml"))
-
-# Add the parameters that we're going to fit and the initial value
-lm.setProperty ("InputParameterList", ["k1", 10.2])
-
+# Add the parameters that we're going to fit and a initial 'start' value
+lm.setProperty("InputParameterList", ["k1", 5.2])
 lm.setProperty("FittedDataSelectionList", "[S1] [S2]")
 lm.setProperty("ExperimentalDataSelectionList", "[S1] [S2]")
 
+# Start minimization
+lm.execute()
 
-# Execute lmfit plugin
-res = lm.execute()
-
-## ----------- Uncomment the following to test in a thread
-##res = lm.executeEx(True)
-##while isPluginWorking(lm.plugin):
-##    print 'Working'
-
-print 'Fitting finished. \n==== Result ==== ' 
+print 'Minimization finished. \n==== Result ====' 
 print getPluginResult(lm.plugin)
 
 # Get the experimental data as a numpy array
@@ -51,15 +44,10 @@ experimentalData = experimentalData.AsNumpy
 fittedData = lm.getProperty ("FittedData").AsNumpy
 residuals  = lm.getProperty ("Residuals").AsNumpy
 
-rrp.plot (fittedData[:,[0,1]], myColor="blue", myLinestyle="-", myMarker="", myLabel="S1 Fitted")
-rrp.plot (fittedData[:,[0,2]], myColor="blue", myLinestyle="-", myMarker="", myLabel="S2 Fitted")
-rrp.plot (residuals[:,[0,1]], myColor="blue", myLinestyle="None", myMarker="x", myLabel="S1 Residual")
-rrp.plot (residuals[:,[0,2]], myColor="red", myLinestyle="None", myMarker="x", myLabel="S2 Residual")
-rrp.plot (experimentalData[:,[0,1]], myColor="red", myLinestyle="", myMarker="*", myLabel="S1 Data")
-rrp.plot (experimentalData[:,[0,2]], myColor="blue", myLinestyle="", myMarker="*", myLabel="S2 Data")
+rrp.plot(fittedData         [:,[0,1]], "blue", "-",    "",    "S1 Fitted")
+rrp.plot(fittedData         [:,[0,2]], "blue", "-",    "",    "S2 Fitted")
+rrp.plot(residuals          [:,[0,1]], "blue", "None", "x",   "S1 Residual")
+rrp.plot(residuals          [:,[0,2]], "red",  "None", "x",   "S2 Residual")
+rrp.plot(experimentalData   [:,[0,1]], "red",  "",     "*",   "S1 Data")
+rrp.plot(experimentalData   [:,[0,2]], "blue", "",     "*",   "S2 Data")
 rrp.plt.show()
-
-
-
-
-

@@ -19,19 +19,19 @@ rrDataHandle = getRoadRunnerDataHandle(rr)
 #Load the 'noise' plugin in order to add some noise to the data
 noisePlugin = loadPlugin(pm, "rrp_add_noise")
 
-#Set data "input" parameter, named InputData
-dataPara = getPluginParameter(noisePlugin, "InputData")
-setParameter(dataPara, rrDataHandle)
+#Set data "input" Property, named InputData
+dataPara = getPluginProperty(noisePlugin, "InputData")
+setProperty(dataPara, rrDataHandle)
 
-#get parameter for the 'size' of the noise
+#get Property for the 'size' of the noise
 #Set size of noise
-setPluginParameter(noisePlugin,"Sigma", 1.e-5)
+setPluginProperty(noisePlugin,"Sigma", 1.e-5)
 
 #Execute the noise plugin which will add some noise to the data
 executePlugin(noisePlugin)
 
 #Retrieve data from NOISE plugin, pass this to the LMFIt plugin
-inputDataHandle = getParameter(dataPara)
+inputDataHandle = getProperty(dataPara)
 inputData = getNumpyData(inputDataHandle)
 
 #Load the LevenbergMarquardt plugin
@@ -40,27 +40,27 @@ lmPlugin = loadPlugin(pm, "rrp_lm")
 #Setup the plugin for minimization
 #set input sbml model
 sbml = getText("../../models/sbml_test_0001.xml")
-setPluginParameter(lmPlugin, "SBML", sbml)
+setPluginProperty(lmPlugin, "SBML", sbml)
 
-#See documentation for available parameters
-experimentalData    = getPluginParameter(lmPlugin, "ExperimentalData");
-paraList            = getPluginParameter(lmPlugin, "InputParameterList");
+#See documentation for available Propertys
+experimentalData    = getPluginProperty(lmPlugin, "ExperimentalData");
+paraList            = getPluginProperty(lmPlugin, "InputPropertyList");
 
-#Add parameters to fit
-para1 = createParameter("k1", "double", "", 0.2)
-addParameterToList(paraList, para1)
+#Add Propertys to fit
+para1 = createProperty("k1", "double", "", 0.2)
+addPropertyToList(paraList, para1)
 
 #Input Data
-setRoadRunnerDataParameter(experimentalData, inputDataHandle)
+setRoadRunnerDataProperty(experimentalData, inputDataHandle)
 
 #set species to fit
 species = "[S1] [S2]"
-paraHandle = getPluginParameter(lmPlugin, "FittedDataSelectionList");
-setParameterByString(paraHandle, species)
+paraHandle = getPluginProperty(lmPlugin, "FittedDataSelectionList");
+setPropertyByString(paraHandle, species)
 
 #Get species list in observed data
-paraHandle = getPluginParameter(lmPlugin, "ExperimentalDataSelectionList");
-setParameterByString(paraHandle, species)
+paraHandle = getPluginProperty(lmPlugin, "ExperimentalDataSelectionList");
+setPropertyByString(paraHandle, species)
 
 #Check plugin status, input
 print '=========================== Levenberg-Marquardt report before minimization '
@@ -78,14 +78,14 @@ y1Input = inputData[:,1]
 y2Input = inputData[:,2]
 
 # Look at the data
-dataPHandle = getPluginParameter(lmPlugin, "FittedData");
-dataHandle = getParameterValue(dataPHandle)
+dataPHandle = getPluginProperty(lmPlugin, "FittedData");
+dataHandle = getPropertyValue(dataPHandle)
 npData = getNumpyData(dataHandle)
 S1Model = npData[:,1]
 S2Model = npData[:,2]
 
-dataPHandle = getPluginParameter(lmPlugin, "Residuals");
-dataHandle = getParameterValue(dataPHandle)
+dataPHandle = getPluginProperty(lmPlugin, "Residuals");
+dataHandle = getPropertyValue(dataPHandle)
 npData = getNumpyData(dataHandle)
 s1Residual= npData[:,1]
 s2Residual= npData[:,2]

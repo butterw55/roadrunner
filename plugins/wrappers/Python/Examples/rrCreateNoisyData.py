@@ -16,17 +16,17 @@ rr.simulate(0, 10, 511) #Want 512 points
 
 #The plugin will need a handle to the underlying roadrunner data
 rrDataHandle = getRoadRunnerDataHandle(rr)
-dataPara = getPluginParameter(noisePlugin, "InputData")
-setRoadRunnerDataParameter(dataPara, rrDataHandle)
+dataPara = getPluginProperty(noisePlugin, "InputData")
+setRoadRunnerDataProperty(dataPara, rrDataHandle)
 
 #get parameter for the 'size' of the noise
-setPluginParameter(noisePlugin, "Sigma", 1.e-5)
+setPluginProperty(noisePlugin, "Sigma", 1.e-5)
 
 #Execute the noise plugin which will add some noise to the (internal) data
 executePlugin(noisePlugin)
 
 #Read result from the plugin -----RECENTLY UPDATED
-rrDataHandle = getParameter(dataPara)
+rrDataHandle = getProperty(dataPara)
 
 hdr = getRoadRunnerDataColumnHeader(rrDataHandle)
 npData = getNumpyData(rrDataHandle)

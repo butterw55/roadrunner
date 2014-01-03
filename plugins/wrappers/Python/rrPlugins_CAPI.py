@@ -163,7 +163,7 @@ NotifyStringEvent  = CFUNCTYPE(None, c_char_p)
 ## \endhtmlonly
 ## \ingroup plugin_manager
 
-NotifyPluginEvent = CFUNCTYPE(None, c_char_p, c_void_p)
+NotifyPluginEvent = CFUNCTYPE(None, c_void_p, c_void_p)
 
 
 rrpLib.createPluginManager.restype = c_void_p
@@ -589,14 +589,14 @@ rrpLib.assignOnFinishedEvent.args =[c_void_p, NotifyEvent, c_void_p]
 def assignOnFinishedEvent(pluginHandle, pluginEvent, userData1 = None, userData2 = None):
     return rrpLib.assignOnFinishedEvent(pluginHandle, pluginEvent, userData1, userData2)
 
-## \brief Hand external data to a plugin: THIS METHOD IS UNDER REVIEW
-## \param pluginHandle Handle to a plugin
-## \param userData void* pointer to user data. Plugin dependent, see the specific documentation on the plugin for details.
-## \return Returns true or false indicating success/failure
-## \ingroup plugins
-rrpLib.assignPluginInput.restype = c_bool
-def assignPluginInput(pluginHandle, userData):
-    return rrpLib.assignPluginInput(pluginHandle, c_void_p(userData))
+#### \brief Hand external data to a plugin: THIS METHOD IS UNDER REVIEW
+#### \param pluginHandle Handle to a plugin
+#### \param userData void* pointer to user data. Plugin dependent, see the specific documentation on the plugin for details.
+#### \return Returns true or false indicating success/failure
+#### \ingroup plugins
+##rrpLib.assignPluginInput.restype = c_bool
+##def assignPluginInput(pluginHandle, userData):
+##    return rrpLib.assignPluginInput(pluginHandle, c_void_p(userData))
 
 ## \brief Get the roadrunner instance handle from plugin assuming the plugin has one
 ## \param pluginHandle Handle to a Plugin instance
@@ -612,7 +612,7 @@ def getRRHandleFromPlugin(pluginHandle):
 ## \return Returns a handle to a list of Properties on success, None otherwise
 ## \ingroup plugin_properties
 rrpLib.getPluginProperties.restype = c_void_p
-def getPluginproperties(pluginHandle):
+def getPluginProperties(pluginHandle):
     return rrpLib.getPluginProperties(pluginHandle)
 
 ## \brief Get a list of property names in a plugin

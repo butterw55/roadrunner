@@ -25,6 +25,6 @@ if(aPlugin == None):
 
 print 'PluginName: ' + `getPluginName(aPlugin)`
 print getPluginInfo(aPlugin)
-print 'PluginParameters: ' + `getListOfPluginParameterNames(aPlugin)`
+print 'PluginParameters: ' + `getListOfPluginPropertyNames(aPlugin)`
 print `unLoadPlugins(pm)`
 print "done"

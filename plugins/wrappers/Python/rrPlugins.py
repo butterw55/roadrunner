@@ -69,9 +69,12 @@ class Plugin (object):
     def __init__(self, pluginName):
         self.pluginName = pluginName
         self.plugin = rrp.loadPlugin (_pluginManager, pluginName)
-        lp = self.listOfProperties()
-        for element in lp:
-            self._propertyNames.append (element[0])
+        if not self.plugin:
+            return
+        else:     
+            lp = self.listOfProperties()
+            for element in lp:
+                self._propertyNames.append (element[0])
 
     def setProperty(self, name, value):
         if (isinstance (value, DataSeries)):
@@ -119,6 +122,8 @@ class Plugin (object):
         else:  raise AttributeError, name
 
     def listOfProperties (self):
+        if not self:
+            return []
         nameList = rrp.getListOfPluginPropertyNames (self.plugin)
         aList = []
         for i in range (0, len (nameList)):
