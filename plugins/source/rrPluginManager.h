@@ -42,7 +42,7 @@
 #define rrPluginManagerH
 #include <vector>
 #include <string>
-#include "rrPluginsAPIExporter.h"
+#include "rrpExporter.h"
 #include "rrConstants.h"
 #include "rrStringList.h"
 #include "Poco/SharedLibrary.h"
@@ -56,7 +56,7 @@ using std::string;
 using std::vector;
 using std::pair;
 using rr::gEmptyString;
-using rr::StringList;
+//using rr::StringList;
 using Poco::SharedLibrary;
 
 class Plugin;
@@ -76,7 +76,7 @@ typedef pair< Poco::SharedLibrary*, Plugin* > rrPlugin;
  *
  * Plugins are by default placed in a Plugins folder, found in RoadRunners install folder.
  */
-class PLUGINS_API_DECLSPEC PluginManager
+class RRP_DECLSPEC PluginManager
 {
     public:
     /**
@@ -167,13 +167,13 @@ class PLUGINS_API_DECLSPEC PluginManager
             Retrieves the names of all loaded plugins as a list of strings.
             \return StringList A Stringlist containing the name of each loaded Plugin.
         */
-        StringList                      getPluginNames();
+        rr::StringList                      getPluginNames();
 
         /**
             Retrieves the shared library names of all loaded plugins as a list of strings.
             \return StringList A Stringlist containing the file name of each loaded Plugin.
         */
-        StringList                      getPluginLibraryNames();
+        rr::StringList                      getPluginLibraryNames();
     private:
         string                          mPluginFolder;
         string                          mPluginExtension;    //Different on different OS's

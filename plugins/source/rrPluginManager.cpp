@@ -20,6 +20,7 @@ static bool  hasFileExtension(const string& fName);
 static char* getPluginExtension();
 
 using namespace std;
+using namespace rr;
 using Poco::SharedLibrary;
 using Poco::Glob;
 
@@ -195,7 +196,10 @@ bool PluginManager::loadPlugin(const string& _libName)
         //Validate the plugin
         if(!checkImplementationLanguage(libHandle))
         {
-            return false;
+            stringstream msg;
+            msg<<"The plugin: "<<_libName<<" has not implemented the function getImplementationLanguage properly. Plugin can not be loaded";
+
+            throw(msg.str());            
         }
 
         //Check plugin language
@@ -238,6 +242,12 @@ bool PluginManager::loadPlugin(const string& _libName)
             Log(lWarning)<<msg.str();
             return false;
         }
+    }
+    //We have to catch exceptions here. Failing to load a plugin should not throw, just return false.
+    catch(const string& msg)
+    {
+        Log(lError)<<"Plugin loading exception: "<<msg;
+        return false;
     }
     catch(const Exception& e)
     {

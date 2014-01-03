@@ -3,7 +3,7 @@
         #pragma comment(lib, "roadrunner-static.lib")
         #pragma comment(lib, "rrAutoInterface-static.lib")
         #pragma comment(lib, "libAuto-static.lib")
-        #pragma comment(lib, "rre-static.lib")
+        #pragma comment(lib, "rrp-static.lib")
     #else
         #pragma comment(lib, "roadrunner.lib")
         #pragma comment(lib, "rrAutoInterface.lib")

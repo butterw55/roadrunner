@@ -2,7 +2,7 @@
 #define rrAutoPluginH
 #include <vector>
 #include "rrCapability.h"
-#include "rrParameter.h"
+#include "rrProperty.h"
 #include "rrCPPPlugin.h"
 #include "rrRoadRunner.h"
 #include "rrPluginManager.h"
@@ -21,8 +21,9 @@ using namespace rrauto;
 class AutoPlugin : public CPPPlugin
 {
     public:
-                                                AutoPlugin(rr::RoadRunner* aRR = NULL, const PluginManager* pm = NULL);
+                                                AutoPlugin(rr::RoadRunner* aRR = NULL);
                                                ~AutoPlugin();
+        bool                                    assignRoadRunnerInstance(RoadRunner* rr);
         //Data input
         void                                    setScanDirection(ScanDirection dir);
         void                                    setPrincipalContinuationParameter(const string& para);
@@ -30,8 +31,8 @@ class AutoPlugin : public CPPPlugin
         void                                    setPCPUpperBound(double ub);
         void                                    setSBML(const string& sbml);
 
-        bool                                    execute(void* inputData = NULL, bool useThread = false);
-
+        bool                                    execute(bool inThread = false);
+        
         string                                  getResult();
         string                                  getConstants();
         bool                                    resetPlugin();
@@ -46,15 +47,15 @@ class AutoPlugin : public CPPPlugin
 
     protected:
         Capability                              mAuto;
-        Parameter<string>                       mTempFolder;
-        Parameter<string>                       mSBML;                  //This is the model
-        Parameter<rrauto::ScanDirection>        mScanDirection;         //How auto sweeps the parameter
+        Property<string>                        mTempFolder;
+        Property<string>                        mSBML;                  //This is the model
+        Property<string>                        mScanDirection;         //How auto sweeps the parameter
 
-        Parameter<string>                       mPrincipalContinuationParameter;
-        Parameter<double>                       mPCPLowerBound;
-        Parameter<double>                       mPCPUpperBound;
-        Parameter<string>                       mBiFurcationDiagram;    //This is generated data
-        Parameter<AutoData>                     mAutoData;              //This plugin generates a lot of data
+        Property<string>                        mPrincipalContinuationParameter;
+        Property<double>                        mPCPLowerBound;
+        Property<double>                        mPCPUpperBound;
+        Property<string>                        mBiFurcationDiagram;    //This is generated data
+        Property<AutoData>                      mAutoData;              //This plugin generates a lot of data
 
         RRAuto                                  mRRAuto;                //The interface to auto. Takes mAutoData as reference
         //Utility functions for the thread
@@ -73,34 +74,36 @@ class AutoPlugin : public CPPPlugin
 
 extern "C"
 {
-RR_PLUGIN_DECLSPEC AutoPlugin* plugins_cc       createPlugin(rr::RoadRunner* aRR, const PluginManager* rrp);
+RR_PLUGIN_DECLSPEC AutoPlugin* plugins_cc       createPlugin(rr::RoadRunner* aRR);
 RR_PLUGIN_DECLSPEC const char* plugins_cc       getImplementationLanguage();
 }
 
 }
 
+
 namespace rrp
 {
-template<>
-inline std::string Parameter< rrauto::ScanDirection >::getType() const
-{
-    return "ScanDirection";
-}
+
+//template<>
+//inline std::string Property< rrauto::ScanDirection >::getType() const
+//{
+//    return "ScanDirection";
+//}
 
 template<>
-inline string Parameter< rrauto::ScanDirection >::getValueAsString() const
+inline string Property< rrauto::ScanDirection >::getValueAsString() const
 {
     return mValue == rrauto::sdPositive ? "Positive" : "Negative";
 }
 
 template<>
-inline void Parameter< rrauto::ScanDirection >::setValueFromString(const string& val)
+inline void Property< rrauto::ScanDirection >::setValueFromString(const string& val)
 {
-    mValue = compareNoCase(val, "Positive") == 0 ? rrauto::sdPositive : rrauto::sdNegative;
+    mValue = rr::compareNoCase(val, "Positive") == 0 ? rrauto::sdPositive : rrauto::sdNegative;
 }
 
 template<>
-inline void Parameter< rrauto::ScanDirection >::setValue(const rrauto::ScanDirection& val)
+inline void Property< rrauto::ScanDirection >::setValue(const rrauto::ScanDirection& val)
 {
     mValue = (val);
 }

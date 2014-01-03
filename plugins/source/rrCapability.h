@@ -42,7 +42,7 @@
 #define rrCapabilityH
 #include <string>
 #include <vector>
-#include "rrPluginsAPIExporter.h"
+#include "rrpExporter.h"
 #include "rrProperties.h"
 //---------------------------------------------------------------------------
 
@@ -53,7 +53,7 @@ namespace rrp
     A Capability. A capability is a basically a container of parameters, with the addition of a name and description.
     \todo Might be better just inherit from Properties and add the name, descr variables.
 */
-class PLUGINS_API_DECLSPEC Capability
+class RRP_DECLSPEC Capability
 {
     public:
         /**
@@ -120,7 +120,7 @@ class PLUGINS_API_DECLSPEC Capability
         /**
             Output the capability to a output stream
         */
-        PLUGINS_API_DECLSPEC
+        RRP_DECLSPEC
         friend ostream&                     operator <<(ostream& os, const Capability& caps);
 
     protected:

@@ -4,13 +4,13 @@
 #include "rrExecutableModel.h"
 #include "../libAuto/vsAuto.h"
 #include "rrLogger.h"
-#include "rreStringList.h"
-#include "rreUtils.h"
+#include "rrStringList.h"
+#include "rrPluginUtils.h"
 
 namespace rrauto
 {
 using namespace rr;
-using namespace rre;
+using namespace rrp;
 using namespace autolib;
 
 //Statics
@@ -27,6 +27,11 @@ mAutoData(data)
 
 RRAuto::~RRAuto()
 {}
+
+void RRAuto::assignRoadRunner(RoadRunner* rrInstance)
+{
+    mRR = rrInstance;
+}
 
 AutoData& RRAuto::getAutoData()
 {
@@ -293,7 +298,7 @@ void autoCallConv RRAuto::ModelFunctionCallback(const double* oVariables, const 
 //
 //
     static vector<rr::SelectionRecord> selRecs = mRR->getSteadyStateSelections();
-    static rre::StringList selList = getRecordsAsStrings(selRecs);
+    static rr::StringList selList = getRecordsAsStrings(selRecs);
 //    vector<string> selList = mRR->getSteadyStateSelections();
 //    var variableTemp = new double[CurrentModel.y.Length];
 

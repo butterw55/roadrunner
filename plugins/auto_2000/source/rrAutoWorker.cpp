@@ -3,7 +3,6 @@
 #include "rrLogger.h"
 #include "rrAutoWorker.h"
 #include "rrAutoPlugin.h"
-#include "lmfit/lmmin.h"
 #include "rrStringUtils.h"
 #include "rrUtils.h"
 #include "rrc_api.h"
@@ -63,7 +62,7 @@ void AutoWorker::run()
 {
     if(threadEnterCB)
     {
-        threadEnterCB(mUserData);    //Tell anyone who wants to know
+        threadEnterCB(mUserData, NULL);    //Tell anyone who wants to know
     }
 
     if(!setup())
@@ -71,7 +70,7 @@ void AutoWorker::run()
         Log(lError)<<"Failed to setup auto..";
         if(threadExitCB)
         {
-            threadExitCB(mUserData);
+            threadExitCB(mUserData, NULL);
         }
         return;
     }
@@ -85,7 +84,7 @@ void AutoWorker::run()
     mRRAuto.setEndParameterValue(spvU);
     mRRAuto.setScanDirection(sdNegative);
 
-    ScanDirection sDirection = mTheHost.mScanDirection.getValue();
+    ScanDirection sDirection = mTheHost.mScanDirection.getValue() == "Positive" ? sdPositive : sdNegative;
 
     string str = mRRAuto.getConstantsAsString();
     Log(lInfo)<<str;
@@ -98,7 +97,7 @@ void AutoWorker::run()
     mTheHost.mBiFurcationDiagram.setValue(mAutoData.getBifurcationDiagram());
     if(threadExitCB)
     {
-        threadExitCB(mUserData);
+        threadExitCB(mUserData, NULL);
     }
 }
 

@@ -29,8 +29,8 @@ class LM : public CPPPlugin
         Property<RoadRunnerData>			    mResidualsData;
         Property<Properties>                    mInputParameterList;            //Parameters to fit
         Property<Properties>                    mOutputParameterList;           //Parameters that was fitted
-        Property<StringList>                    mExperimentalDataSelectionList; //Species selection list for observed data
-        Property<StringList>                    mModelDataSelectionList;        //Species selection list for observed data
+        Property<rr::StringList>                mExperimentalDataSelectionList; //Species selection list for observed data
+        Property<rr::StringList>                mModelDataSelectionList;        //Species selection list for observed data
         Property<double>                        mNorm;                          //Part of minimization result
         Property<int>                           mNrOfIter;                      //Part of minimization result
 
@@ -66,7 +66,7 @@ class LM : public CPPPlugin
 
         unsigned char*                          getManualAsPDF() const;
         unsigned int                            getPDFManualByteSize();
-        StringList                              getExperimentalDataSelectionList();
+        rr::StringList                              getExperimentalDataSelectionList();
         void                                    assignPropertyDescriptions();
 };
 

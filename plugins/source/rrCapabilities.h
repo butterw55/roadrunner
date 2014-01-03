@@ -41,20 +41,20 @@
 #ifndef rrCapabilitiesH
 #define rrCapabilitiesH
 #include <vector>
-#include "rrPluginsAPIExporter.h"
+#include "rrpExporter.h"
 #include "rrCapability.h"
 #include "rrStringList.h"
 //---------------------------------------------------------------------------
 
 namespace rrp
 {
-using rr::StringList;
+//using rr::StringList;
 using std::vector;
 
 /**
     Container for Capabilitities
 */
-class PLUGINS_API_DECLSPEC Capabilities
+class RRP_DECLSPEC Capabilities
 {
     public:
         /**
@@ -105,7 +105,7 @@ class PLUGINS_API_DECLSPEC Capabilities
         /**
             Get capabilities as a list of strings
         */
-        StringList                      asStringList();
+        rr::StringList                      asStringList();
 
         /**
             Get capabilities as XML
@@ -115,7 +115,7 @@ class PLUGINS_API_DECLSPEC Capabilities
         /**
             Output capabilities to a ostream
         */
-        PLUGINS_API_DECLSPEC
+        RRP_DECLSPEC
         friend ostream&                 operator<<(ostream& stream, const Capabilities& caps);
 
     protected:

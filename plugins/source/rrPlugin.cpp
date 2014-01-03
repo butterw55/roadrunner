@@ -9,6 +9,7 @@
 namespace rrp
 {
 using namespace std;
+using namespace rr;
 Plugin::Plugin( const string&           name,
                 const string&           category,
                 RoadRunner*             aRR,

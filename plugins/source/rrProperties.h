@@ -44,7 +44,7 @@
 #include <list>
 #include <vector>
 #include <utility>
-#include "rrPluginsAPIExporter.h"
+#include "rrpExporter.h"
 #include "rrPropertyBase.h"
 #include "rrStringList.h"
 //---------------------------------------------------------------------------
@@ -54,13 +54,13 @@ namespace rrp
 using std::vector;
 using std::list;
 using std::pair;
-using rr::StringList;
+//using rr::StringList;
 using std::string;
 
 /**
     Container for Plugin parameters.
 */
-class PLUGINS_API_DECLSPEC Properties
+class RRP_DECLSPEC Properties
 {
     public:
         /**
@@ -144,7 +144,7 @@ class PLUGINS_API_DECLSPEC Properties
         /**
            Output the container to a output stream (ostream)
         */
-        PLUGINS_API_DECLSPEC
+        RRP_DECLSPEC
         friend ostream&                         operator <<(ostream& os, const Properties& pars);
 
     protected:

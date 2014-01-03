@@ -16,8 +16,9 @@
 //---------------------------------------------------------------------------
 namespace rrp
 {
-using namespace rr;
-using std::string;
+
+    using rr::RoadRunnerData;
+    using std::string;
 
 /**
     Template class implementing a PluginProperty. As this class is a template, it can be of any type.
@@ -248,47 +249,6 @@ inline void Property<rr::RoadRunnerData>::setValue(rr::RoadRunnerData* val)
     mValue = (*val);
 }
 
-//template<>
-//inline string Property<rr::RoadRunnerData>::getType() const
-//{
-//    return "roadRunnerData";
-//}
-
-////Pointer to data
-//template<>
-//inline string Property<rr::RoadRunnerData*>::getValueAsString() const
-//{
-//    std::stringstream rrData;
-//    rrData << (mValue);
-//    return rrData.str();
-//}
-//
-//template<>
-//inline void Property<rr::RoadRunnerData*>::setValueFromString(const string& val)
-//{
-//    //This is not implemented, but could easily be.
-//}
-//
-//template<>
-//inline void Property<rr::RoadRunnerData*>::setValue(const (rr::RoadRunnerData*) &val)
-//{
-//    //Deep copy
-//    (*mValue) = **(val);
-//}
-//
-//template<>
-//inline void Property<rr::RoadRunnerData*>::setValue(rr::RoadRunnerData** val)
-//{
-//    //Deep copy
-//    (*mValue) = **(val);
-//}
-//
-//template<>
-//inline string Property<rr::RoadRunnerData*>::getType() const
-//{
-//    return "roadRunnerDataShared";
-//}
-
 //============ RRStringArray
 template<>
 inline string Property<rrc::RRStringArray>::getValueAsString() const
@@ -313,7 +273,7 @@ inline void Property<rrc::RRStringArray>::setValueFromString(const string& val)
 template<>
 inline string Property<Properties>::getValueAsString() const
 {
-    StringList list = mValue.getNames();
+    rr::StringList list = mValue.getNames();
     return list.AsString();
 }
 
@@ -361,11 +321,6 @@ inline string getParaType<string>(const string& a)
     return "std::string";
 }
 
-//template<>
-//string getParaType<char*>(const char* &a)
-//{
-//    return "char*";
-//}
 
 template<>
 inline string getParaType< vector<string> >(const vector<string> &a)
@@ -374,7 +329,7 @@ inline string getParaType< vector<string> >(const vector<string> &a)
 }
 
 template<>
-inline string getParaType<StringList>(const StringList& a)
+inline string getParaType<rr::StringList>(const rr::StringList& a)
 {
     return "StringList";
 }

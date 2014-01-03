@@ -42,7 +42,7 @@
 #define rrPluginH
 #include <sstream>
 #include <string>
-#include "rrPluginsAPIExporter.h"
+#include "rrpExporter.h"
 #include "rrPluginsAPISettings.h"
 #include "rrCapabilities.h"
 
@@ -53,9 +53,12 @@ class RoadRunner;
 
 namespace rrp
 {
-using namespace rr;
-using std::string;
-class PluginManager;
+    using rr::RoadRunner;
+    using rr::gEmptyString;
+    using rr::gNoneString;
+    using std::string;
+
+    class PluginManager;
 
 /**
  * Typedef for a Plugin event function
@@ -91,7 +94,7 @@ typedef void    (event_cc *PluginEvent)(void* data1, void* data2);
 
 
  */
-class PLUGINS_API_DECLSPEC Plugin
+class RRP_DECLSPEC Plugin
 {
     friend PluginManager;
     public:
@@ -182,7 +185,7 @@ class PLUGINS_API_DECLSPEC Plugin
         /**
             Retieves the names of the parameters
         */
-        StringList                      getPropertyNames(); //Each capability has a set of parameters
+        rr::StringList                  getPropertyNames(); //Each capability has a set of parameters
 
         /**
             Retieves a plugin properties, as XML
@@ -227,7 +230,7 @@ class PLUGINS_API_DECLSPEC Plugin
         virtual bool                    isWorking();
 
                                         //!Assign a roadrunner instance for the plugin to use
-        bool                            assignRoadRunnerInstance(RoadRunner* rr);
+        virtual bool                    assignRoadRunnerInstance(RoadRunner* rr);
 
         /**
             Assign function pointer and data the event

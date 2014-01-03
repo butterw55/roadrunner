@@ -1,7 +1,7 @@
 
 #if defined(CG_UI)
     #if defined(STATIC_PLUGIN)
-        #pragma comment(lib, "rre_api-static.lib")
+        #pragma comment(lib, "rrp_api-static.lib")
         #pragma comment(lib, "roadrunner-static.lib")
         #pragma comment(lib, "libAuto-static.lib")
         #pragma comment(lib, "rrplugins_api-static.lib")

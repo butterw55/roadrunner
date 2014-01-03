@@ -1,18 +1,18 @@
-#ifndef rrPluginsAPIExporterH
-#define rrPluginsAPIExporterH
+#ifndef rrpExporterH
+#define rrpExporterH
 
 #if defined(_WIN32) || defined(__WIN32__)
     #if defined(STATIC_PLUGINS_API)
-        #define PLUGINS_API_DECLSPEC
+        #define RRP_DECLSPEC
     #else
         #if defined(EXPORT_PLUGINS_API)
-            #define PLUGINS_API_DECLSPEC __declspec(dllexport)
+            #define RRP_DECLSPEC __declspec(dllexport)
         #else
-            #define PLUGINS_API_DECLSPEC __declspec(dllimport)
+            #define RRP_DECLSPEC __declspec(dllimport)
         #endif
     #endif
 #else
-    #define PLUGINS_API_DECLSPEC
+    #define RRP_DECLSPEC
 #endif
 
 //Helper macro for plugins

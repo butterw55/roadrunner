@@ -1,15 +1,16 @@
 #pragma hdrstop
-#include "rreStringBuilder.h"
-#include "rreStringList.h"
-#include "rreStringUtils.h"
+#include "rrStringList.h"
+#include "c/rrStringBuilder.h"
+#include "rrStringUtils.h"
 #include "rrAutoInputConstants.h"
+#include "rrPluginUtils.h"
 //---------------------------------------------------------------------------
 
 namespace rrauto
 {
-using namespace rr;
-using namespace rre;
-using namespace std;
+    using namespace rrp;
+    using namespace rr;
+    using namespace std;
 
 string WhiteSpaces(string& line, int maxLength);
 InputConstants::InputConstants()
@@ -95,7 +96,7 @@ string InputConstants::GetICP()
 
 string InputConstants::ToInputString()
 {
-    string line1  = rre::formatN("{0} {1} {2} {3}", NDIM, IPS, IRS, ILP);
+    string line1  = formatN("{0} {1} {2} {3}", NDIM, IPS, IRS, ILP);
     string line2  = GetICP();
     string line3  = formatN("{0} {1} {2} {3} {4} {5} {6} {7}", NTST, NCOL, IAD, ISP, ISW, IPLT, NBC, NINT);
     string line4  = formatN("{0} {1} {2} {3} {4}", NMX, RL0, RL1, A0, A1);

@@ -61,14 +61,14 @@ namespace rrp { extern "C" {
  \param value The parameters initial value casted to a (void*) pointer
  \return Returns a handle to a new parameter, if succesful, NULL otherwise
 */
-RRP_DECLSPEC RRPropertyHandle rrp_cc createProperty(const char* label, const char* type, const char* hint, void* value);
+RRP_C_DS RRPropertyHandle rrp_cc createProperty(const char* label, const char* type, const char* hint, void* value);
 
 /*!
  \brief Free the memory created by a parameter
  \param paraHandle A handle to the parameter
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc freeProperty(RRPropertyHandle para);
+RRP_C_DS bool rrp_cc freeProperty(RRPropertyHandle para);
 
 
 /*!
@@ -77,7 +77,7 @@ RRP_DECLSPEC bool rrp_cc freeProperty(RRPropertyHandle para);
  \param para Handle to a roadrunner parameter
  \return Returns a booelan indicating success
 */
-RRP_DECLSPEC bool rrp_cc addPropertyToList(RRPropertiesHandle handle, RRPropertyHandle para);
+RRP_C_DS bool rrp_cc addPropertyToList(RRPropertiesHandle handle, RRPropertyHandle para);
 
 /*!
  \brief Set a parameter by a string
@@ -85,7 +85,7 @@ RRP_DECLSPEC bool rrp_cc addPropertyToList(RRPropertiesHandle handle, RRProperty
  \param value Pointer to string holding the value to assign to the parameter, e.g. "0.01" to set a double to 0.01
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc setPropertyByString(RRPropertyHandle handle, const char* value);
+RRP_C_DS bool rrp_cc setPropertyByString(RRPropertyHandle handle, const char* value);
 
 /*!
  \brief Get a boolean parameter
@@ -93,7 +93,7 @@ RRP_DECLSPEC bool rrp_cc setPropertyByString(RRPropertyHandle handle, const char
  \param value to assign to the parameter.
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc getBoolProperty(RRPropertyHandle handle, bool* value);
+RRP_C_DS bool rrp_cc getBoolProperty(RRPropertyHandle handle, bool* value);
 
 /*!
  \brief Set a boolean parameter
@@ -101,7 +101,7 @@ RRP_DECLSPEC bool rrp_cc getBoolProperty(RRPropertyHandle handle, bool* value);
  \param value to assign to the parameter.
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc setBoolProperty(RRPropertyHandle handle, bool value);
+RRP_C_DS bool rrp_cc setBoolProperty(RRPropertyHandle handle, bool value);
 
 /*!
  \brief Set an int parameter
@@ -109,7 +109,7 @@ RRP_DECLSPEC bool rrp_cc setBoolProperty(RRPropertyHandle handle, bool value);
  \param value to assign to the parameter.
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc setIntProperty(RRPropertyHandle handle, int value);
+RRP_C_DS bool rrp_cc setIntProperty(RRPropertyHandle handle, int value);
 
 /*!
  \brief Get the value of an int parameter
@@ -117,7 +117,7 @@ RRP_DECLSPEC bool rrp_cc setIntProperty(RRPropertyHandle handle, int value);
  \param value to assign to the parameter.
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc getIntProperty(RRPropertyHandle handle, int *value);
+RRP_C_DS bool rrp_cc getIntProperty(RRPropertyHandle handle, int *value);
 
 /*!
  \brief Set a double parameter
@@ -125,7 +125,7 @@ RRP_DECLSPEC bool rrp_cc getIntProperty(RRPropertyHandle handle, int *value);
  \param value to assign to the parameter.
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc setDoubleProperty(RRPropertyHandle handle, double value);
+RRP_C_DS bool rrp_cc setDoubleProperty(RRPropertyHandle handle, double value);
 
 /*!
  \brief Get the value of a double parameter
@@ -133,7 +133,7 @@ RRP_DECLSPEC bool rrp_cc setDoubleProperty(RRPropertyHandle handle, double value
  \param value to assign to the parameter.
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc getDoubleProperty(RRPropertyHandle handle, double *value);
+RRP_C_DS bool rrp_cc getDoubleProperty(RRPropertyHandle handle, double *value);
 
 /*!
  \brief Set a string (char*) parameter
@@ -141,7 +141,7 @@ RRP_DECLSPEC bool rrp_cc getDoubleProperty(RRPropertyHandle handle, double *valu
  \param value to assign to the parameter.
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc setStringProperty(RRPropertyHandle handle, char* value);
+RRP_C_DS bool rrp_cc setStringProperty(RRPropertyHandle handle, char* value);
 
 /*!
  \brief Get the value of a string (char*) parameter
@@ -149,7 +149,7 @@ RRP_DECLSPEC bool rrp_cc setStringProperty(RRPropertyHandle handle, char* value)
  \param value to assign to the parameter.
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc getStringProperty(RRPropertyHandle handle, const char* (*value));
+RRP_C_DS bool rrp_cc getStringProperty(RRPropertyHandle handle, const char* (*value));
 
 /*!
  \brief Set a listOfProperties (Properties) parameter
@@ -157,7 +157,7 @@ RRP_DECLSPEC bool rrp_cc getStringProperty(RRPropertyHandle handle, const char* 
  \param value to assign to the parameter.
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc setListProperty(RRPropertyHandle handle, void* (value));
+RRP_C_DS bool rrp_cc setListProperty(RRPropertyHandle handle, void* (value));
 
 /*!
  \brief Get the value of a listOfProperties (Properties) parameter
@@ -165,7 +165,7 @@ RRP_DECLSPEC bool rrp_cc setListProperty(RRPropertyHandle handle, void* (value))
  \param value to assign to the parameter.
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc getListProperty(RRPropertyHandle handle, void* (value));
+RRP_C_DS bool rrp_cc getListProperty(RRPropertyHandle handle, void* (value));
 
 
 /*!
@@ -174,7 +174,7 @@ RRP_DECLSPEC bool rrp_cc getListProperty(RRPropertyHandle handle, void* (value))
  \param value to assign to the parameter.
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc setRoadRunnerDataProperty(RRPropertyHandle handle, void* value);
+RRP_C_DS bool rrp_cc setRoadRunnerDataProperty(RRPropertyHandle handle, void* value);
 
 /*!
  \brief Get the value of a roadRunnerDataProperty parameter
@@ -182,42 +182,42 @@ RRP_DECLSPEC bool rrp_cc setRoadRunnerDataProperty(RRPropertyHandle handle, void
  \param value to assign to the parameter.
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc getRoadRunnerDataProperty(RRPropertyHandle handle, void* value);
+RRP_C_DS bool rrp_cc getRoadRunnerDataProperty(RRPropertyHandle handle, void* value);
 
 /*!
  \brief Get a parameters info
  \param handle Handle to a parameter instance
  \return Returns informational text about the parameter if sucessful, NULL otherwise
 */
-RRP_DECLSPEC char* rrp_cc getPropertyInfo(RRPropertyHandle handle);
+RRP_C_DS char* rrp_cc getPropertyInfo(RRPropertyHandle handle);
 
 /*!
  \brief Get a parameters value as char*
  \param handle to a Property instance
  \return Returns the parameters value if sucessful, NULL otherwise
 */
-RRP_DECLSPEC char* rrp_cc getPropertyValueAsString(RRPropertyHandle handle);
+RRP_C_DS char* rrp_cc getPropertyValueAsString(RRPropertyHandle handle);
 
 /*!
  \brief Get a handle to a parameters value
  \param handle to a Property instance
  \return Returns a Handle to the parameters value if sucessful, NULL otherwise
 */
-RRP_DECLSPEC void* rrp_cc getPropertyValueHandle(RRPropertyHandle handle);
+RRP_C_DS void* rrp_cc getPropertyValueHandle(RRPropertyHandle handle);
 
 /*!
  \brief Get a parameters name
  \param handle to a Property instance
  \return Returns the parameters name if sucessful, NULL otherwise
 */
-RRP_DECLSPEC char* rrp_cc getPropertyName(RRPropertyHandle handle);
+RRP_C_DS char* rrp_cc getPropertyName(RRPropertyHandle handle);
 
 /*!
  \brief Get a parameters hint
  \param handle to a Property instance
  \return Returns the parameters hint if sucessful, NULL otherwise
 */
-RRP_DECLSPEC char* rrp_cc getPropertyHint(RRPropertyHandle handle);
+RRP_C_DS char* rrp_cc getPropertyHint(RRPropertyHandle handle);
 
 /*!
  \brief Set a parameters hint
@@ -225,14 +225,14 @@ RRP_DECLSPEC char* rrp_cc getPropertyHint(RRPropertyHandle handle);
  \param value The parameter hint as a string
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc setPropertyHint(RRPropertyHandle handle, const char* value);
+RRP_C_DS bool rrp_cc setPropertyHint(RRPropertyHandle handle, const char* value);
 
 /*!
  \brief Get a parameters description
  \param handle to a Property instance
  \return Returns the parameters description as a string sucessful, NULL otherwise
 */
-RRP_DECLSPEC char* rrp_cc getPropertyDescription(RRPropertyHandle handle);
+RRP_C_DS char* rrp_cc getPropertyDescription(RRPropertyHandle handle);
 
 /*!
  \brief Set a parameters Description
@@ -240,20 +240,20 @@ RRP_DECLSPEC char* rrp_cc getPropertyDescription(RRPropertyHandle handle);
  \param value The parameter description as a string
  \return Returns true if sucessful, false otherwise
 */
-RRP_DECLSPEC bool rrp_cc setPropertyDescription(RRPropertyHandle handle, const char* value);
+RRP_C_DS bool rrp_cc setPropertyDescription(RRPropertyHandle handle, const char* value);
 
 /*!
  \brief Get a parameters type
  \param handle to a Property instance
  \return Returns the parameters type if sucessful, NULL otherwise
 */
-RRP_DECLSPEC char* rrp_cc getPropertyType(RRPropertyHandle handle);
+RRP_C_DS char* rrp_cc getPropertyType(RRPropertyHandle handle);
 
 
-RRP_DECLSPEC RRPropertyHandle rrp_cc getFirstProperty(RRPropertiesHandle handle);
-RRP_DECLSPEC RRPropertyHandle rrp_cc getNextProperty(RRPropertiesHandle handle);
-RRP_DECLSPEC RRPropertyHandle rrp_cc getPreviousProperty(RRPropertiesHandle handle);
-RRP_DECLSPEC RRPropertyHandle rrp_cc getCurrentProperty(RRPropertiesHandle handle);
+RRP_C_DS RRPropertyHandle rrp_cc getFirstProperty(RRPropertiesHandle handle);
+RRP_C_DS RRPropertyHandle rrp_cc getNextProperty(RRPropertiesHandle handle);
+RRP_C_DS RRPropertyHandle rrp_cc getPreviousProperty(RRPropertiesHandle handle);
+RRP_C_DS RRPropertyHandle rrp_cc getCurrentProperty(RRPropertiesHandle handle);
 
 /*!
  \brief Get a list of names for a plugins parameters.
@@ -261,7 +261,7 @@ RRP_DECLSPEC RRPropertyHandle rrp_cc getCurrentProperty(RRPropertiesHandle handl
  \return Returns a string with the names of each parameter, NULL otherwise
  \ingroup plugins
 */
-RRP_DECLSPEC char* rrp_cc getNamesFromPropertyList(RRPropertiesHandle handle);
+RRP_C_DS char* rrp_cc getNamesFromPropertyList(RRPropertiesHandle handle);
 
 /*!
  \brief Clear a list of parameters
@@ -269,7 +269,7 @@ RRP_DECLSPEC char* rrp_cc getNamesFromPropertyList(RRPropertiesHandle handle);
   \return Returns true or false indicating result
  \ingroup plugins
 */
-RRP_DECLSPEC bool rrp_cc clearPropertyList(RRPropertiesHandle handle);
+RRP_C_DS bool rrp_cc clearPropertyList(RRPropertiesHandle handle);
 
 /*! @} */
 

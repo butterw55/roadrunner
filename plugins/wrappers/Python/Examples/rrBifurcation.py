@@ -3,43 +3,41 @@ from rrPlugins_CAPI import *
 from rrPlugins import *
 
 try:
-    #Create a plugin manager
-    pm = createPluginManager()
-
     #Create a roadrunner instance
     rr = roadrunner.RoadRunner()
     
     sbmlModel ="../../models/bistable.xml"
     
     rr.load(sbmlModel)
-        
-    #Get a auto_2000 plugin object
-    auto = Plugin("rrp_auto")
+                    
+    #Get an auto2000 plugin object
+    auto = Plugin("rrp_auto2000")
     
+    rrHandle = cast(int(rr.this), c_void_p)
+    assignRoadRunnerInstance(auto.plugin, rrHandle)    
     #Load Auto plugin
     if not auto.plugin:
         print 'LastError: ' + getLastError()
         exit()
     
-    print getPluginInfo(plugin)
+    print getPluginInfo(auto.plugin)
     
     #Set Auto Propertys
-    setPluginProperty(plugin, "ScanDirection", "Negative")
-    setPluginProperty(plugin, "PrincipalContinuationProperty", "k3")
-    setPluginProperty(plugin, "PCPLowerBound", "0.2")
-    setPluginProperty(plugin, "PCPUpperBound", "1.2")
+    auto.setProperty("ScanDirection", "Negative")
+    auto.setProperty("PrincipalContinuationParameter", "k3")
+    auto.setProperty("PCPLowerBound", 0.2)
+    auto.setProperty("PCPUpperBound", 1.2)
     
     #get handle to a parameter
-    paraHandle = getPluginProperty(plugin,"PCPLowerBound")
-    test = getPropertyValueAsString(paraHandle)
-    print 'Current value is ' + test
-    
+    print 'PCPLowerBound = ' + `auto.PCPLowerBound`
+   
+        
     #Execute the plugin
-    executePlugin(plugin)
+    auto.execute()
     
-    biFurcationDiagram = getPluginProperty(plugin, "BiFurcationDiagram")
+    biFurcationDiagram = auto.BiFurcationDiagram
     if biFurcationDiagram:
-        print `getPropertyValueAsString(biFurcationDiagram)`
+        print biFurcationDiagram
     
     print "done"
 

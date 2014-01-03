@@ -4,7 +4,7 @@
 #include "Poco/Runnable.h"
 #include "rrRoadRunner.h"
 #include "rrOSSpecifics.h"
-#include "rrPluginsAPIExporter.h"
+#include "rrpExporter.h"
 #include "../rrAutoInterface/rrAutoData.h"
 #include "auto_utils.h"
 //---------------------------------------------------------------------------
@@ -16,7 +16,7 @@ class RRAuto;
 
 namespace autoplugin
 {
-typedef void (*ThreadCB)(void*);
+typedef void (*ThreadCB)(void*, void*);
 
 class AutoPlugin;
 

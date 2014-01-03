@@ -33,8 +33,8 @@ class AutoOutputParser : public CPPPlugin
 
     protected:
         Capability                              mAutoOutputParser;
-        Parameter<string>                       mBiFurcationDiagram;        //This is the input
-        Parameter< rr::StringList >             mLabeledSolutionPoints;     //Part of output
+        Property<string>                       mBiFurcationDiagram;        //This is the input
+        Property< rr::StringList >             mLabeledSolutionPoints;     //Part of output
 
 
         //The worker
@@ -56,25 +56,25 @@ RR_PLUGIN_DECLSPEC const char* plugins_cc           getImplementationLanguage();
 namespace rrp
 {
 template<>
-inline std::string Parameter< rrauto::ScanDirection >::getType() const
+inline std::string Property< rrauto::ScanDirection >::getType() const
 {
     return "ScanDirection";
 }
 
 template<>
-inline string Parameter< rrauto::ScanDirection >::getValueAsString() const
+inline string Property< rrauto::ScanDirection >::getValueAsString() const
 {
     return mValue == rrauto::sdPositive ? "Positive" : "Negative";
 }
 
 template<>
-inline void Parameter< rrauto::ScanDirection >::setValueFromString(const string& val)
+inline void Property< rrauto::ScanDirection >::setValueFromString(const string& val)
 {
     mValue = compareNoCase(val, "Positive") == 0 ? rrauto::sdPositive : rrauto::sdNegative;
 }
 
 template<>
-inline void Parameter< rrauto::ScanDirection >::setValue(const rrauto::ScanDirection& val)
+inline void Property< rrauto::ScanDirection >::setValue(const rrauto::ScanDirection& val)
 {
     mValue = (val);
 }

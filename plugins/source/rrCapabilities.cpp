@@ -11,6 +11,7 @@
 namespace rrp
 {
 using namespace std;
+using rr::StringList;
 
 Capabilities::Capabilities()//const string& name, const string& description)
 //:

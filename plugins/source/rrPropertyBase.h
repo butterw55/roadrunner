@@ -40,7 +40,7 @@
 */
 #ifndef rrPluginPropertyH
 #define rrPluginPropertyH
-#include "rrPluginsAPIExporter.h"
+#include "rrpExporter.h"
 #include <string>
 #include <ostream>
 //---------------------------------------------------------------------------
@@ -55,14 +55,14 @@ using std::ostream;
  * The PluginProperty class is an interface for derived Properties, that can be of any type.
  * A parameter has a name, description and a hint, encapsulating the the purpose of the actual parameter.
  */
-class PLUGINS_API_DECLSPEC PropertyBase
+class RRP_DECLSPEC PropertyBase
 {
     public:
     //Friends first
         /**
          * Ouput the parameter to an output stream.
          */
-        PLUGINS_API_DECLSPEC
+        RRP_DECLSPEC
         friend ostream&                     operator<<(ostream& stream, const PropertyBase& outMe);
 
     public:

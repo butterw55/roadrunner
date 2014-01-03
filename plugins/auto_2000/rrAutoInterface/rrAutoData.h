@@ -9,7 +9,7 @@
 #include "rrLogger.h"
 //---------------------------------------------------------------------------
 
-using namespace rr;
+//using namespace rr;
 using namespace rrp;
 using std::ostream;
 
@@ -33,14 +33,14 @@ class RRA_DECLSPEC AutoData
 template<>
 inline string Property< AutoData >::getValueAsString() const
 {
-    Log(lDebug2)<<"Getting AutoData value as a string is not implemented";
+    Log(rr::lDebug2)<<"Getting AutoData value as a string is not implemented";
     return "";
 }
 
 template<>
 inline void Property< AutoData >::setValueFromString(const string& val)
 {
-    Log(lDebug2)<<"Setting AutoData value from string is not implemented";
+    Log(rr::lDebug2)<<"Setting AutoData value from string is not implemented";
     return;
 }
 
@@ -50,10 +50,13 @@ inline void Property< AutoData >::setValue(AutoData* val)
     mValue = *(val);
 }
 
+namespace rrp{
+
 template<>
-inline std::string getParaType(const AutoData& val)
+inline std::string getParaType<AutoData>(const AutoData& val)
 {
     return "Auto Data";
 }
 
+}
 #endif

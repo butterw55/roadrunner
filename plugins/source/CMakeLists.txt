@@ -18,6 +18,7 @@ rrCPPPlugin
 rrProperties
 rrPlugin
 rrPluginManager
+rrPluginUtils
 )
 
 
@@ -81,8 +82,8 @@ add_library(${target}-static STATIC ${sources})
 
 set_property(TARGET ${target}-static
     PROPERTY COMPILE_DEFINITIONS
-#    STATIC_RR
     STATIC_PLUGINS_API
+    #STATIC_RR  //Plugins are linking with shared roadrunner, so we must do too
     LIBSBML_USE_CPP_NAMESPACE
     LIBSBML_STATIC
     LIBLAX_STATIC

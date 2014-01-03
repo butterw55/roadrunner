@@ -34,6 +34,7 @@ class RRA_DECLSPEC RRAuto
         bool                        setStartParameterValue(const double& val);
         bool                        setEndParameterValue(const double& val);
         bool                        setScanDirection(ScanDirection val);
+        void                        assignRoadRunner(RoadRunner* rrInstance);
 
     private:
         static string               mSelectedParameter;
@@ -47,5 +48,17 @@ class RRA_DECLSPEC RRAuto
         static void autoCallConv    ModelFunctionCallback(const double* oVariables, const double* par, double* oResult);
 };
 
+
 }
+
+namespace rrp
+{
+
+template<>
+inline string getParaType<rrauto::ScanDirection>(const rrauto::ScanDirection& a)
+{
+    return "ScanDirection";
+}
+}
+
 #endif

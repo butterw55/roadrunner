@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 set(target rrAutoInterface)
 
 include_directories(
-../../../source
+../../source        #Plugin lib source
+../../../source     #RoadRunner lib source
+
 )
 
 link_directories(
@@ -27,14 +29,12 @@ if(WIN32)
         PROPERTY  COMPILE_DEFINITIONS 
         STATIC_AUTO
         STATIC_RR_AUTO
-        STATIC_RR
-        STATIC_RRE
+        STATIC_PLUGINS_API
         )
     
     target_link_libraries ( ${target}-static
         libAuto-static
-        rrextended-static
-        roadrunner-static
+        roadrunner
         rrplugins_api-static
         poco_foundation-static
         IPHLPAPI

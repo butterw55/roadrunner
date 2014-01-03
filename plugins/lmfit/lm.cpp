@@ -22,7 +22,7 @@ namespace lmfit
 {
 using namespace rr;
 using namespace rrc;
-
+using rr::StringList;
 
 LM::LM(rr::RoadRunner* aRR)
 :

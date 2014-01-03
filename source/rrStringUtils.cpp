@@ -480,13 +480,13 @@ string format(const string& str1, const unsigned int& arg1, const unsigned int& 
     string tok1("{0}");
     string tok2("{1}");
     string tok3("{2}");
-    string tok4("{2}");
+    string tok4("{3}");
     string newString(str1);
 
     newString = substitute(newString, tok1, arg1);
     newString = substitute(newString, tok2, arg2);
-      newString = substitute(newString, tok3, arg3);
-      newString = substitute(newString, tok4, arg4);
+    newString = substitute(newString, tok3, arg3);
+    newString = substitute(newString, tok4, arg4);
 
     return newString;
 }

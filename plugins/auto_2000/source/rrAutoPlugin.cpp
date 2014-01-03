@@ -1,4 +1,5 @@
 #pragma hdrstop
+#include <sstream>
 #include "rrLogger.h"
 #include "rrAutoPlugin.h"
 #include "rrc_api.h"
@@ -10,35 +11,36 @@
 namespace autoplugin
 {
 
-using namespace rr;
+//using namespace rr;
 using namespace rrc;
+using namespace std;
 
-AutoPlugin::AutoPlugin(rr::RoadRunner* aRR, const PluginManager* pm)
+AutoPlugin::AutoPlugin(rr::RoadRunner* aRR)
 :
-CPPPlugin("Auto-2000", "Bifurcation", aRR, pm),
+CPPPlugin("Auto-2000", "Bifurcation", aRR, NULL),
 //The Capability
-mAuto(                          "Auto",                                 "<none>",               "Bifurcation"),
-mTempFolder(                    "TempFolder",                           "<none>",               "Tempfolder used by auto"),
-mSBML(                          "SBML",                                 "<none>",               "SBML, i.e. the model to be used to analyze"),
-mScanDirection(                 "ScanDirection",                        sdPositive,             "Direction of parameter scan"),
-mPrincipalContinuationParameter("PrincipalContinuationParameter",       "<none>",               "Principal Continuation Parameter"),
-mPCPLowerBound(                 "PCPLowerBound",                        0,                      "Principal Continuation Parameter Lower Bound"),
-mPCPUpperBound(                 "PCPUpperBound",                        0,                      "Principal Continuation Parameter Upper Bound"),
-mBiFurcationDiagram(            "BiFurcationDiagram",                   "<none>",               "BifurcationDiagram"),
-mAutoData(                      "AutoData",                             AutoData(),             "Data structure holding auto data"),
+mAuto(                              "Auto",               "Bifurcation"),
+mTempFolder(                        "<none>",               "TempFolder",                                       "Tempfolder used by auto"),
+mSBML(                              "<none>",               "SBML",                                             "SBML, i.e. the model to be used to analyze"),
+mScanDirection(                     "Negative",             "ScanDirection",                                    "Direction of parameter scan"),
+mPrincipalContinuationParameter(    "<none>",               "PrincipalContinuationParameter",                   "Principal Continuation Property"),
+mPCPLowerBound(                     0,                      "PCPLowerBound",                                    "Principal Continuation Parameter Lower Bound"),
+mPCPUpperBound(                     0,                      "PCPUpperBound",                                    "Principal Continuation Parameter Upper Bound"),
+mBiFurcationDiagram(                "<none>",               "BiFurcationDiagram",                               "BifurcationDiagram"),
+mAutoData(                          AutoData(),             "AutoData",                                         "Data structure holding auto data"),
 mRRAuto(aRR, mAutoData.getValueReference()),
 mAutoWorker(*this)
 {
     //Setup the plugins capabilities
-    mAuto.addParameter(&mTempFolder);
-    mAuto.addParameter(&mSBML);
-    mAuto.addParameter(&mAutoData);
-    mAuto.addParameter(&mScanDirection);
-    mAuto.addParameter(&mPrincipalContinuationParameter);
-    mAuto.addParameter(&mPCPLowerBound);
-    mAuto.addParameter(&mPCPUpperBound);
-    mAuto.addParameter(&mBiFurcationDiagram);
-    mCapabilities.add(mAuto);
+    mAuto.addProperty(&mTempFolder);
+    mAuto.addProperty(&mSBML);
+    mAuto.addProperty(&mAutoData);
+    mAuto.addProperty(&mScanDirection);
+    mAuto.addProperty(&mPrincipalContinuationParameter);
+    mAuto.addProperty(&mPCPLowerBound);
+    mAuto.addProperty(&mPCPUpperBound);
+    mAuto.addProperty(&mBiFurcationDiagram);
+    mProperties.add(mAuto);
 }
 
 AutoPlugin::~AutoPlugin()
@@ -49,9 +51,23 @@ RRAuto& AutoPlugin::getRRAuto()
     return mRRAuto;
 }
 
+bool AutoPlugin::assignRoadRunnerInstance(RoadRunner* rr)
+{
+    mRRAuto.assignRoadRunner(rr);
+    mRR = rr;
+    return mRR ? true : false;
+}
+
 void AutoPlugin::setScanDirection(ScanDirection dir)
 {
-    mScanDirection.setValue(dir);
+    if(dir == sdPositive)
+    {
+        mScanDirection.setValue("Positive");
+    }
+    else
+    {
+        mScanDirection.setValue("Negative");
+    }
 }
 
 void AutoPlugin::setPrincipalContinuationParameter(const string& para)
@@ -90,7 +106,7 @@ string AutoPlugin::getStatus()
     msg<<Plugin::getStatus();
     msg<<"TempFolder: "<<mTempFolder<<"\n";
     msg<<"SBML: "<<mSBML<<"\n";
-    AutoData* autoData = (AutoData*) (mAutoData.getValueAsPointer());
+    AutoData* autoData = (AutoData*) (mAutoData.getValuePointer());
     msg<<"MinData"<<(*autoData)<<"\n";
     return msg.str();
 }
@@ -136,25 +152,24 @@ bool AutoPlugin::setInputData(void* inputData)
     return true;
 }
 
-bool AutoPlugin::execute(void* inputData, bool useThread)
+bool AutoPlugin::execute(bool inThread)
 {
-    Log(lInfo)<<"Executing the AutoPlugin plugin";
+    Log(rr::lInfo)<<"Executing the AutoPlugin plugin";
 
     //go away and carry out the work in a thread
     //Assign callback functions to communicate the progress of the thread
-    mAutoWorker.assignCallBacks(mWorkStartedCB, mWorkFinishedCB, mUserData);
 
-    mAutoWorker.start(useThread);
+    //mAutoWorker.assignCallBacks(mWorkStartedEvent, mWorkFinishedEvent, mUserData);
+    mAutoWorker.start(inThread);
     return true;
 }
 
 // Plugin factory function
-AutoPlugin* plugins_cc createPlugin(rr::RoadRunner* aRR, const PluginManager* pm)
+AutoPlugin* plugins_cc createPlugin(rr::RoadRunner* aRR)
 {
     //allocate a new object and return it
-    return new AutoPlugin(aRR, pm);
+    return new AutoPlugin(aRR);
 }
-
 
 const char* plugins_cc getImplementationLanguage()
 {
