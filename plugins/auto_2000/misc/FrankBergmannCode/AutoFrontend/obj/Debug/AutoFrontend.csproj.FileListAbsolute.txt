@@ -1,0 +1,17 @@
+R:\FBAuto\AutoFrontend.exe.config
+R:\FBAuto\AutoFrontend.exe
+R:\FBAuto\AutoFrontend.pdb
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.csprojResolveAssemblyReference.cache
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.Properties.Resources.resources
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.Controls.CodeTextBox.resources
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.Controls.GraphControl.resources
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.Controls.SelectControl.resources
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.Controls.SetupControl.resources
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.MainForm.resources
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.Forms.FormChangeBifurcationPlot.resources
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.Forms.FormChangeTimeCoursePlot.resources
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.Forms.FormGraphPopup.resources
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.Forms.FormSelectVariables.resources
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.csproj.GenerateResource.Cache
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.exe
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoFrontend\obj\Debug\AutoFrontend.pdb

@@ -1,0 +1,7 @@
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoTestCSharp\bin\Debug\AutoTestCSharp.exe
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoTestCSharp\bin\Debug\AutoTestCSharp.pdb
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoTestCSharp\bin\Debug\LibAutoCSharp.dll
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoTestCSharp\bin\Debug\LibAutoCSharp.pdb
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoTestCSharp\obj\Debug\AutoTestCSharp.csprojResolveAssemblyReference.cache
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoTestCSharp\obj\Debug\AutoTestCSharp.exe
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\AutoTestCSharp\obj\Debug\AutoTestCSharp.pdb

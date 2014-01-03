@@ -1,0 +1,84 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{3851988A-0E28-42E3-8A54-6085F95A1ACC}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="R:\rrl\source\roadrunner-static.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\source\rre-static.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="third_party\libAuto\libAuto-static.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="rrAutoInterface\rrAutoInterface-static.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="app\rrAuto-static.cbproj">
+            <Dependencies>third_party\libAuto\libAuto-static.cbproj;rrAutoInterface\rrAutoInterface-static.cbproj</Dependencies>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="roadrunner-static">
+        <MSBuild Projects="R:\rrl\source\roadrunner-static.cbproj"/>
+    </Target>
+    <Target Name="roadrunner-static:Clean">
+        <MSBuild Projects="R:\rrl\source\roadrunner-static.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="roadrunner-static:Make">
+        <MSBuild Projects="R:\rrl\source\roadrunner-static.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="rre-static">
+        <MSBuild Projects="..\..\source\rre-static.cbproj"/>
+    </Target>
+    <Target Name="rre-static:Clean">
+        <MSBuild Projects="..\..\source\rre-static.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="rre-static:Make">
+        <MSBuild Projects="..\..\source\rre-static.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="libAuto-static">
+        <MSBuild Projects="third_party\libAuto\libAuto-static.cbproj"/>
+    </Target>
+    <Target Name="libAuto-static:Clean">
+        <MSBuild Projects="third_party\libAuto\libAuto-static.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="libAuto-static:Make">
+        <MSBuild Projects="third_party\libAuto\libAuto-static.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="rrAutoInterface-static">
+        <MSBuild Projects="rrAutoInterface\rrAutoInterface-static.cbproj"/>
+    </Target>
+    <Target Name="rrAutoInterface-static:Clean">
+        <MSBuild Projects="rrAutoInterface\rrAutoInterface-static.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="rrAutoInterface-static:Make">
+        <MSBuild Projects="rrAutoInterface\rrAutoInterface-static.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="rrAuto-static" DependsOnTargets="libAuto-static;rrAutoInterface-static">
+        <MSBuild Projects="app\rrAuto-static.cbproj"/>
+    </Target>
+    <Target Name="rrAuto-static:Clean" DependsOnTargets="libAuto-static:Clean;rrAutoInterface-static:Clean">
+        <MSBuild Projects="app\rrAuto-static.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="rrAuto-static:Make" DependsOnTargets="libAuto-static:Make;rrAutoInterface-static:Make">
+        <MSBuild Projects="app\rrAuto-static.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="roadrunner-static;rre-static;libAuto-static;rrAutoInterface-static;rrAuto-static"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="roadrunner-static:Clean;rre-static:Clean;libAuto-static:Clean;rrAutoInterface-static:Clean;rrAuto-static:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="roadrunner-static:Make;rre-static:Make;libAuto-static:Make;rrAutoInterface-static:Make;rrAuto-static:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

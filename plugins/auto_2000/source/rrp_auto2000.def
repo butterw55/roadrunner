@@ -1,0 +1,5 @@
+LIBRARY     rrp_auto2000.dll
+
+EXPORTS
+createPlugin                = _createPlugin
+getImplementationLanguage   = _getImplementationLanguage
