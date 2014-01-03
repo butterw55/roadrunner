@@ -6,8 +6,8 @@ rrPluginTester.py
 #rrBifurcationDemo.py
 rrEvents.py
 rrPluginDocumentation.py
-rrPluginParameters.py
-rrPluginParameterLists.py
+rrPluginProperties.py
+rrPluginPropertyLists.py
 rrLevenbergMarquardt.py
 rrLevenbergMarquardtShortVersion.py
 rrNoisePlugin.py
