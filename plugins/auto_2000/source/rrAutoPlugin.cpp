@@ -155,11 +155,7 @@ bool AutoPlugin::setInputData(void* inputData)
 bool AutoPlugin::execute(bool inThread)
 {
     Log(rr::lInfo)<<"Executing the AutoPlugin plugin";
-
-    //go away and carry out the work in a thread
-    //Assign callback functions to communicate the progress of the thread
-
-    //mAutoWorker.assignCallBacks(mWorkStartedEvent, mWorkFinishedEvent, mUserData);
+    //go away and carry out the work
     mAutoWorker.start(inThread);
     return true;
 }

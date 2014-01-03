@@ -10,7 +10,7 @@ add_subdirectory(rrAutoInterface)
 add_subdirectory(source)
 
 if(${INSTALL_EXAMPLES})
-#add_subdirectory(examples)
+add_subdirectory(examples)
 endif()
 
 

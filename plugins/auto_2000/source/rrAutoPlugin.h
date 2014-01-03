@@ -20,6 +20,7 @@ using namespace rrauto;
 //If plugin is loaded by a program that is binary compatible witht he plugin, we could use class functions directly.
 class AutoPlugin : public CPPPlugin
 {
+    friend AutoWorker;
     public:
                                                 AutoPlugin(rr::RoadRunner* aRR = NULL);
                                                ~AutoPlugin();

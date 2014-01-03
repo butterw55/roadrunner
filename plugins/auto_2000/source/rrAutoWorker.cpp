@@ -16,9 +16,9 @@ using namespace rr;
 
 AutoWorker::AutoWorker(AutoPlugin& host)
 :
-threadEnterCB(NULL),
-threadExitCB(NULL),
-mUserData(NULL),
+//threadEnterCB(NULL),
+//threadExitCB(NULL),
+//mUserData(NULL),
 mTheHost(host),
 mAutoData(mTheHost.getAutoData()),
 mRRAuto(mTheHost.getRRAuto())
@@ -30,13 +30,6 @@ AutoWorker::~AutoWorker()
 bool AutoWorker::isRunning()
 {
     return mThread.isRunning();
-}
-
-void AutoWorker::assignCallBacks(ThreadCB fn1, ThreadCB fn2, void* userData)
-{
-    threadEnterCB     = fn1;
-    threadExitCB      = fn2;
-    mUserData         = userData;
 }
 
 bool AutoWorker::start(bool runInThread)
@@ -60,17 +53,19 @@ bool AutoWorker::start(bool runInThread)
 
 void AutoWorker::run()
 {
-    if(threadEnterCB)
+    if(mTheHost.hasStartedEvent())
     {
-        threadEnterCB(mUserData, NULL);    //Tell anyone who wants to know
+        pair<void*, void*> passTroughData = mTheHost.getWorkStartedData();
+        mTheHost.mWorkStartedEvent(passTroughData.first, passTroughData.second);    //Tell anyone who wants to know
     }
 
     if(!setup())
     {
         Log(lError)<<"Failed to setup auto..";
-        if(threadExitCB)
+        if(mTheHost.hasFinishedEvent())
         {
-            threadExitCB(mUserData, NULL);
+            pair<void*, void*> passTroughData = mTheHost.getWorkFinishedData();
+            mTheHost.mWorkFinishedEvent(passTroughData.first, passTroughData.second);
         }
         return;
     }
@@ -95,9 +90,10 @@ void AutoWorker::run()
     }
 
     mTheHost.mBiFurcationDiagram.setValue(mAutoData.getBifurcationDiagram());
-    if(threadExitCB)
+    if(mTheHost.hasFinishedEvent())
     {
-        threadExitCB(mUserData, NULL);
+        pair<void*, void*> passTroughData = mTheHost.getWorkFinishedData();
+        mTheHost.mWorkFinishedEvent(passTroughData.first, passTroughData.second);
     }
 }
 

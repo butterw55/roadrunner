@@ -7,6 +7,7 @@ include_directories(
 ../../../source   #RoadRunner Sources
 ../../wrappers/C
 ${CMAKE_INSTALL_PREFIX}/include
+${THIRD_PARTY_INSTALL_FOLDER}/include
 )
 
 link_directories (

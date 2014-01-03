@@ -1,5 +1,5 @@
 #pragma hdrstop
-#include "rrRoadRunner.h"
+//#include "rrRoadRunner.h"
 #include "rrPluginManager.h"
 #include "rrException.h"
 #include "rrLogger.h"
@@ -30,14 +30,8 @@ int main()
         rri->setTempFileFolder(tempFolder);
 
         //A Plugin manager, using a roadrunner instance
-        PluginManager pm;
+        PluginManager pm("../plugins");
 
-        //Where to load plugins?
-        if(!pm.setPluginDir("../plugins"))
-        {
-            Log(lError)<<"The setPluginDir returned false..";
-            return 0;
-        }
 
         //Load auto plugin
         if(!pm.load(pluginName))
@@ -57,13 +51,13 @@ int main()
         Log(lInfo)<<autoPlugin->getExtendedInfo();
 
         //A serious client would check if these calls are succesfull or not
-        autoPlugin->setParameter("ScanDirection", "Negative");
-        autoPlugin->setParameter("PrincipalContinuationParameter", "k3");
-        autoPlugin->setParameter("PCPLowerBound", "0.2");
-        autoPlugin->setParameter("PCPUpperBound", "1.2");
+        autoPlugin->setProperty("ScanDirection", "Negative");
+        autoPlugin->setProperty("PrincipalContinuationParameter", "k3");
+        autoPlugin->setProperty("PCPLowerBound", "0.2");
+        autoPlugin->setProperty("PCPUpperBound", "1.2");
 
         //We can set the sbml parameter here or load into the roadrunner instance first
-        //autoPlugin->setParameter("SBML", getFileContent(sbmlFile).c_str());
+        //autoPlugin->setProperty("SBML", getFileContent(sbmlFile).c_str());
 
         //The load function does throw if file is not found.. is that what we want??
         if(!rri->load(sbmlFile))
@@ -72,6 +66,7 @@ int main()
         }
 
 
+        autoPlugin->assignRoadRunnerInstance(rri);
         if(!autoPlugin->execute())
         {
             Log(lError)<<"Problem executing the Auto plugin";
@@ -89,7 +84,7 @@ int main()
         Log(lInfo)<<autoPlugin->getResult();
 
         //Check plugin data..
-        pm.unload(autoPlugin);
+//        pm.unload(autoPlugin);
     }
     catch(Exception& ex)
     {
@@ -101,7 +96,7 @@ int main()
     }
     catch(...)
     {
-        Log(lError)<<"Holy cow problem...!";
+        Log(lError)<<"Bad problem...!";
     }
 
     delete rri;

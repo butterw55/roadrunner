@@ -30,8 +30,7 @@ try:
     
     #get handle to a parameter
     print 'PCPLowerBound = ' + `auto.PCPLowerBound`
-   
-        
+           
     #Execute the plugin
     auto.execute()
     

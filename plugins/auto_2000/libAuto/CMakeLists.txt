@@ -12,7 +12,7 @@ autlib2
 autlib3
 autlib4
 autlib5
-auto_api
+#auto_api
 conpar
 dmatrix
 eispack

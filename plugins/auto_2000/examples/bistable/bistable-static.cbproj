@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{3EEF470A-FFEF-4E8E-9BA7-0E06A4AB11D0}</ProjectGuid>
+        <ProjectGuid>{F68491E8-B3DF-481A-A522-CF2E2F54F84F}</ProjectGuid>
         <ProjectVersion>14.4</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
@@ -100,9 +100,6 @@
         <TASM_Debugging>None</TASM_Debugging>
     </PropertyGroup>
     <ItemGroup>
-        <CppCompile Include="bistable.cpp">
-            <BuildOrder>1</BuildOrder>
-        </CppCompile>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

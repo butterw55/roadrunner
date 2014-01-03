@@ -1,5 +1,6 @@
 #pragma hdrstop
 #include <time.h>
+#include <math.h>
 #include "noise.h"
 #include "rrUtils.h"
 //---------------------------------------------------------------------------

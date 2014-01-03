@@ -27,7 +27,7 @@ class AutoWorker : public Poco::Runnable
     public:
                                     AutoWorker(AutoPlugin& host);
                                    ~AutoWorker();
-        void                        assignCallBacks(ThreadCB fn1, ThreadCB fn2, void* userData);
+//        void                        assignCallBacks(ThreadCB fn1, ThreadCB fn2, void* userData);
         bool                        start(bool runInThread = false);
         void                        run();
         bool                        isRunning();
@@ -35,10 +35,10 @@ class AutoWorker : public Poco::Runnable
     protected:
         Poco::Thread                mThread;
 
-        //Callbacks
-        ThreadCB                    threadEnterCB;
-        ThreadCB                    threadExitCB;
-        void*                       mUserData;       //Used for plugin callbacks..
+//        //Callbacks
+//        ThreadCB                    threadEnterCB;
+//        ThreadCB                    threadExitCB;
+//        void*                       mUserData;       //Used for plugin callbacks..
 
         AutoPlugin&                 mTheHost;
         rrauto::RRAuto&             mRRAuto;        //This class communicate with auto
@@ -48,7 +48,6 @@ class AutoWorker : public Poco::Runnable
         bool                        setup();
         RoadRunnerData              createModelData();
         RoadRunnerData              createResidualsData();
-
 };
 }
 #endif

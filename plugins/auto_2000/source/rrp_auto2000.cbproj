@@ -110,7 +110,7 @@
         <BPILibOutputDir>$(RR_INSTALL)\plugins</BPILibOutputDir>
         <BCC_PCHInject>auto_pch.h</BCC_PCHInject>
         <Defines>EXPORT_RR_PLUGIN;POCO_STATIC;PCRE_STATIC;STATIC_RR;$(Defines)</Defines>
-        <Debugger_HostApplication>R:\installs\cg\bin\bistable-static.exe</Debugger_HostApplication>
+        <Debugger_HostApplication>R:\installs\cg\bin\rrWinC.exe</Debugger_HostApplication>
         <ILINK_LibraryPath>$(RR_INSTALL)\lib;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
     </PropertyGroup>
