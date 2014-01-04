@@ -11,15 +11,12 @@
 namespace autoplugin
 {
 
-//using namespace rr;
 using namespace rrc;
 using namespace std;
 
 AutoPlugin::AutoPlugin(rr::RoadRunner* aRR)
 :
 CPPPlugin("Auto-2000", "Bifurcation", aRR, NULL),
-//The Capability
-//mAuto(                              "Auto",               "Bifurcation"),
 mTempFolder(                        "<none>",               "TempFolder",                                       "Tempfolder used by auto"),
 mSBML(                              "<none>",               "SBML",                                             "SBML, i.e. the model to be used to analyze"),
 mScanDirection(                     "Negative",             "ScanDirection",                                    "Direction of parameter scan"),

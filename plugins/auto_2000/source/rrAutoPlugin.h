@@ -84,12 +84,6 @@ RR_PLUGIN_DECLSPEC const char* plugins_cc       getImplementationLanguage();
 namespace rrp
 {
 
-//template<>
-//inline std::string Property< rrauto::ScanDirection >::getType() const
-//{
-//    return "ScanDirection";
-//}
-
 template<>
 inline string Property< rrauto::ScanDirection >::getValueAsString() const
 {
@@ -108,7 +102,5 @@ inline void Property< rrauto::ScanDirection >::setValue(const rrauto::ScanDirect
     mValue = (val);
 }
 }
-
-
 
 #endif

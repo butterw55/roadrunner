@@ -185,12 +185,20 @@ bool PluginManager::loadPlugin(const string& _libName)
         //Check if Plugin is already loaded first
         if(getPlugin(libName))
         {
-            Log(lWarning)<<"The Plugin: "<<libName<<" is already loaded";    
+            Log(lWarning)<<"The Plugin: "<<libName<<" is already loaded";
             return true;
         }
 
         SharedLibrary *libHandle = new SharedLibrary;
-        libHandle->load(joinPath(mPluginFolder, libName));
+        string fullName = joinPath(mPluginFolder, libName);
+
+        if(!fileExists(fullName))
+        {
+            Log(lWarning)<<"The Plugin: "<<fullName<<" could not be found";
+            return false;
+        }
+        //This one throws if there is a problem..
+        libHandle->load(fullName);
 
         //Validate the plugin
         if(!checkImplementationLanguage(libHandle))

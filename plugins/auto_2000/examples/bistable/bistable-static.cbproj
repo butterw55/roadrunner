@@ -85,6 +85,10 @@
         <ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\debug\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <BCC_MonitorGlobalAndStackData>true</BCC_MonitorGlobalAndStackData>
+        <BCC_MonitorThis>true</BCC_MonitorThis>
+        <BCC_AllCodeguardOptions>true</BCC_AllCodeguardOptions>
+        <BCC_MonitorInlinePtrAccess>true</BCC_MonitorInlinePtrAccess>
         <BCC_CPPCompileAlways>true</BCC_CPPCompileAlways>
         <IntermediateOutputDir>.\$(Platform)\$(Config)-static</IntermediateOutputDir>
         <BCC_PCHInject>bistable_pch.h</BCC_PCHInject>
@@ -93,7 +97,7 @@
         <Manifest_File>None</Manifest_File>
         <ILINK_LibraryPath>$(RR_INSTALL)\lib;$(RR_INSTALL)\plugins;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <Defines>POCO_STATIC;STATIC_RR;STATIC_AUTO;STATIC_RR_AUTO;STATIC_RRC;STATIC_APP;STATIC_PLUGIN_API;$(Defines)</Defines>
-        <Debugger_DebugSourcePath>R:\rre\plugins\bifurcation\rrAutoInterface\;R:\rre\plugins\bifurcation\libAuto\;$(Debugger_DebugSourcePath)</Debugger_DebugSourcePath>
+        <Debugger_DebugSourcePath>R:\rrl\plugins\auto_2000\source;R:\rrl\source;$(Debugger_DebugSourcePath)</Debugger_DebugSourcePath>
         <FinalOutputDir>$(RR_INSTALL)\bin</FinalOutputDir>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">

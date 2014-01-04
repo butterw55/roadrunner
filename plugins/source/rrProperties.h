@@ -163,8 +163,8 @@ class RRP_DECLSPEC Properties
             the memory of the parameter and will de allocate it on clear, or in the destruction of the container.
             \todo Change the container to a std::list.
         */
-        vector< pair<PropertyBase*, bool> >                  mParas;
-        vector< pair<PropertyBase*, bool> >::iterator        mParasIter;
+        vector< pair<PropertyBase*, bool> >                  mProperties;
+        vector< pair<PropertyBase*, bool> >::iterator        mPropertiesIter;
 
 
         /**

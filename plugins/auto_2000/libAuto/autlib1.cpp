@@ -1,13 +1,10 @@
-
-#if !defined(_WIN32) || !defined(__WIN32__)
-#include <time.h>
-//#elif defined(__CODEGEARC__)
-//#include <windows.h>
-#endif
-
+//#if !defined(_WIN32)
+//#include <time.h>
+//#endif
+#include <iostream>
 #include "auto_f2c.h"
 #include "auto_c.h"
-
+using namespace std;
 namespace autolib {
 
 /* The memory for these are taken care of in main, and setubv for the

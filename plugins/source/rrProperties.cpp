@@ -21,8 +21,8 @@ Properties::~Properties()
 Properties::Properties(const Properties& cpyMe)
 {
     this->mCanClientClearList = true;
-    this->mParas = cpyMe.mParas;
-    this->mParasIter = this->mParas.begin();
+    this->mProperties = cpyMe.mProperties;
+    this->mPropertiesIter = this->mProperties.begin();
 }
 
 bool Properties::clear()
@@ -32,20 +32,20 @@ bool Properties::clear()
         return false;
     }
 
-    for(int i = 0; i < mParas.size(); i++)
+    for(int i = 0; i < mProperties.size(); i++)
     {
-        if(mParas[i].second == true)
+        if(mProperties[i].second == true)
         {
-            delete mParas[i].first;
+            delete mProperties[i].first;
         }
     }
-    mParas.clear();
+    mProperties.clear();
     return true;
 }
 
 void Properties::add(PropertyBase* me, bool own)
 {
-    mParas.push_back( pair<PropertyBase*, bool>(me, own) );
+    mProperties.push_back( pair<PropertyBase*, bool>(me, own) );
 }
 
 StringList Properties::getNames() const
@@ -53,33 +53,33 @@ StringList Properties::getNames() const
     StringList list;
     for(int i = 0; i < count(); i++)
     {
-        list.add(mParas[i].first->getName());
+        list.add(mProperties[i].first->getName());
     }
     return list;
 }
 
 const PropertyBase* Properties::operator[](const int& i) const
 {
-    return mParas[i].first;
+    return mProperties[i].first;
 }
 
 PropertyBase* Properties::operator[](const int& i)
 {
-    return mParas[i].first;
+    return mProperties[i].first;
 }
 
 u_int Properties::count() const
 {
-    return mParas.size();
+    return mProperties.size();
 }
 
 PropertyBase* Properties::getProperty(const string& paraName)
 {
     for(int i = 0; i < count(); i++)
     {
-        if(paraName == mParas[i].first->getName())
+        if(paraName == mProperties[i].first->getName())
         {
-            return mParas[i].first;
+            return mProperties[i].first;
         }
     }
     return NULL;
@@ -87,39 +87,39 @@ PropertyBase* Properties::getProperty(const string& paraName)
 
 PropertyBase* Properties::getFirst()
 {
-    mParasIter = mParas.begin();
-    if(mParasIter != mParas.end())
+    mPropertiesIter = mProperties.begin();
+    if(mPropertiesIter != mProperties.end())
     {
-        return (*mParasIter).first;
+        return (*mPropertiesIter).first;
     }
     return NULL;
 }
 
 PropertyBase* Properties::getCurrent()
 {
-    if(mParasIter != mParas.end())
+    if(mPropertiesIter != mProperties.end())
     {
-        return (*mParasIter).first;
+        return (*mPropertiesIter).first;
     }
     return NULL;
 }
 
 PropertyBase* Properties::getNext()
 {
-    mParasIter++;
-    if(mParasIter != mParas.end())
+    mPropertiesIter++;
+    if(mPropertiesIter != mProperties.end())
     {
-        return (*mParasIter).first;
+        return (*mPropertiesIter).first;
     }
     return NULL;
 }
 
 PropertyBase* Properties::getPrevious()
 {
-    mParasIter--;
-    if(mParasIter != mParas.end())
+    mPropertiesIter--;
+    if(mPropertiesIter != mProperties.end())
     {
-        return (*mParasIter).first;
+        return (*mPropertiesIter).first;
     }
     return NULL;
 }
@@ -157,7 +157,7 @@ string Properties::asXML()
             xmlNodePtr paraNode = xmlNewChild(parameters, NULL, BAD_CAST "para", NULL);
 
             //Proiperty by property
-            PropertyBase* property = const_cast<PropertyBase*>((mParas[j].first));
+            PropertyBase* property = const_cast<PropertyBase*>((mProperties[j].first));
 
             xmlNewProp(paraNode, BAD_CAST "name",           BAD_CAST property->getName().c_str());
             xmlNewProp(paraNode, BAD_CAST "value",          BAD_CAST property->getValueAsString().c_str());
@@ -180,12 +180,12 @@ string Properties::asXML()
 }
 
 
-ostream& operator<<(ostream& stream, const Properties& paras)
+ostream& operator<<(ostream& stream, const Properties& props)
 {
-    for(int i = 0; i < paras.count(); i++)
+    for(int i = 0; i < props.count(); i++)
     {
-        
-        stream << paras.mParas[i].first;
+        PropertyBase* bProp = props.mProperties[i].first;
+        stream << *(bProp);
         
     }
     return stream;

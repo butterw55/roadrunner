@@ -47,13 +47,10 @@ class RRA_DECLSPEC RRAuto
         static int  autoCallConv    ModelInitializationCallback(long ndim, double t, double* u, double* par);
         static void autoCallConv    ModelFunctionCallback(const double* oVariables, const double* par, double* oResult);
 };
-
-
 }
 
 namespace rrp
 {
-
 template<>
 inline string getParaType<rrauto::ScanDirection>(const rrauto::ScanDirection& a)
 {

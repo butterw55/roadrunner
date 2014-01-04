@@ -16,9 +16,6 @@ using namespace rr;
 
 AutoWorker::AutoWorker(AutoPlugin& host)
 :
-//threadEnterCB(NULL),
-//threadExitCB(NULL),
-//mUserData(NULL),
 mTheHost(host),
 mAutoData(mTheHost.getAutoData()),
 mRRAuto(mTheHost.getRRAuto())

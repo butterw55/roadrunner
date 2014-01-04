@@ -3,6 +3,9 @@
         <ProjectGuid>{64CDE241-0FA0-4DF0-9600-7DA8F8712F11}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
+        <Projects Include="..\..\..\..\source\roadrunner-static.cbproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="..\..\..\source\rrplugins_api-static.cbproj">
             <Dependencies/>
         </Projects>
@@ -26,6 +29,15 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
+    <Target Name="roadrunner-static">
+        <MSBuild Projects="..\..\..\..\source\roadrunner-static.cbproj"/>
+    </Target>
+    <Target Name="roadrunner-static:Clean">
+        <MSBuild Projects="..\..\..\..\source\roadrunner-static.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="roadrunner-static:Make">
+        <MSBuild Projects="..\..\..\..\source\roadrunner-static.cbproj" Targets="Make"/>
+    </Target>
     <Target Name="rrplugins_api-static">
         <MSBuild Projects="..\..\..\source\rrplugins_api-static.cbproj"/>
     </Target>
@@ -72,13 +84,13 @@
         <MSBuild Projects="bistable-static.cbproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="rrplugins_api-static;libAuto-static;rrAutoInterface-static;rrp_auto2000-static;bistable-static"/>
+        <CallTarget Targets="roadrunner-static;rrplugins_api-static;libAuto-static;rrAutoInterface-static;rrp_auto2000-static;bistable-static"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="rrplugins_api-static:Clean;libAuto-static:Clean;rrAutoInterface-static:Clean;rrp_auto2000-static:Clean;bistable-static:Clean"/>
+        <CallTarget Targets="roadrunner-static:Clean;rrplugins_api-static:Clean;libAuto-static:Clean;rrAutoInterface-static:Clean;rrp_auto2000-static:Clean;bistable-static:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="rrplugins_api-static:Make;libAuto-static:Make;rrAutoInterface-static:Make;rrp_auto2000-static:Make;bistable-static:Make"/>
+        <CallTarget Targets="roadrunner-static:Make;rrplugins_api-static:Make;libAuto-static:Make;rrAutoInterface-static:Make;rrp_auto2000-static:Make;bistable-static:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

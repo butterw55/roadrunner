@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <fstream>
 
@@ -370,8 +371,11 @@ void autoCallConv CallAuto()
         //delete[] argv;
         free(cmd);
     }
-    catch(...)
+    catch(exception& e)
     {
+        //Re throw
+        cerr<<"Exception in LibAuto: "<<e.what();
+
     }
     autolib::CloseAllFiles();
     clearCallbacks();

@@ -1,7 +1,6 @@
 #pragma hdrstop
 #include "rrAutoData.h"
 //---------------------------------------------------------------------------
-
 AutoData::AutoData()
 {}
 

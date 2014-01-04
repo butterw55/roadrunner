@@ -48,7 +48,8 @@ int main()
             throw("AutoPlugin don't exist");
         }
 
-        Log(lInfo)<<autoPlugin->getExtendedInfo();
+        string msg(autoPlugin->getExtendedInfo());
+        Log(lInfo)<< msg;
 
         //A serious client would check if these calls are succesfull or not
         autoPlugin->setProperty("ScanDirection", "Negative");
@@ -83,7 +84,7 @@ int main()
         Log(lInfo)<<autoPlugin->getResult();
 
         //Check plugin data..
-        pm.unload(autoPlugin);
+//        pm.unload(autoPlugin);
     }
     catch(Exception& ex)
     {
@@ -98,12 +99,11 @@ int main()
         Log(lError)<<"Bad problem...!";
     }
 
-    delete rri;
+//    delete rri;
     //pause(true);
     return 0;
 }
 
-#if defined(CG_UI)
 
 #if defined(STATIC_APP)
     #pragma comment(lib, "roadrunner-static.lib")
@@ -123,6 +123,6 @@ int main()
 #endif
 
 #pragma comment(lib, "poco_foundation-static.lib")
-#pragma comment(lib, "cg32.lib")
-#endif
+//#pragma comment(lib, "cg32.lib")
+
 

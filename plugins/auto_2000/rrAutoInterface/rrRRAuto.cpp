@@ -294,6 +294,7 @@ void autoCallConv RRAuto::ModelFunctionCallback(const double* oVariables, const 
 //                                                     ? oSelectedParameters[i]
 //                                                     : oParameters[i]));
 //        }
+        delete [] oParameters;
     }
 //
 //
@@ -302,7 +303,7 @@ void autoCallConv RRAuto::ModelFunctionCallback(const double* oVariables, const 
 //    vector<string> selList = mRR->getSteadyStateSelections();
 //    var variableTemp = new double[CurrentModel.y.Length];
 
-    static vector<double> variableTemp(selList.size());
+    vector<double> variableTemp(selList.size());
     int ndim = mAutoSetup.mInputConstants.NDIM;
     int nMin = min(selList.size(), ndim);
 
@@ -319,15 +320,28 @@ void autoCallConv RRAuto::ModelFunctionCallback(const double* oVariables, const 
 //        CurrentModel.y = variableTemp;
 
         double* tempConc = new double[numFloatingSpecies];
+        if(!tempConc)
+        {
+            throw std::runtime_error("Failed to allocate memory in RRAuto ModelFunction CallBack.");
+        }
+
         for(int i = 0; i < numFloatingSpecies; i++)
         {
-            tempConc[i] = variableTemp[i];
+            if(i < variableTemp.size())
+            {
+                tempConc[i] = variableTemp[i];
+            }
+            else
+            {
+                throw("Big Problem");
+            }
         }
 
         lModel->setFloatingSpeciesConcentrations(numFloatingSpecies, NULL, tempConc);
+        delete [] tempConc;
     }
 
-    Log(lDebug)<<"Eval";
+//    Log(lDebug)<<"Eval";
 
     //PrintArray(CurrentModel.y, Console.Out);
 
@@ -347,6 +361,7 @@ void autoCallConv RRAuto::ModelFunctionCallback(const double* oVariables, const 
     {
         oResult[i] = dydts[i];
     }
+    delete [] dydts;
 
 }
 
