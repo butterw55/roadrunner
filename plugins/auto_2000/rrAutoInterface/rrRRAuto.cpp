@@ -138,33 +138,25 @@ int autoCallConv RRAuto::ModelInitializationCallback(long ndim, double t, double
 {
     ExecutableModel* lModel = mRR->getModel();
 
-    int numBoundaries = 0;  //mRR->getNumberOfBoundarySpecies();// //SelectForm.NumSelectedBoundaries;
-    int numParameters = 1; // SelectForm.NumSelectedParameters;
+    int numBoundaries = 0;  //ToDo: to be set from the outside
+    int numParameters = 1;  //ToDo: to be set from the outside
 
-    double* oBoundary           = new double[numBoundaries];
-    double* oGlobalParameters   =  new double[numParameters];
+    vector<double> oBoundary(numBoundaries);
+    vector<double> oGlobalParameters(numParameters);
 
     if (numBoundaries > 0)
     {
-        //int[] oSelectedBoundary = SelectForm.SelectedBoundarySpecies;
-        vint* oSelectedBoundary = new int[1];
-//        oSelectedBoundary[0] = 0;   //This is 'A'
-
+        vector<int> oSelectedBoundary(1);
+        oSelectedBoundary[0] = 0;           //ToDo: This need to be set from the outside!
         for (int i = 0; i < numBoundaries; i++)
         {
-            //oBoundary[i] = Simulator.getBoundarySpeciesByIndex(oSelectedBoundary[i]);
             oBoundary[i] = mRR->getBoundarySpeciesByIndex(oSelectedBoundary[i]);
         }
     }
 
     if (numParameters > 0)
     {
-        //int[] oSelectedParameters = SelectForm.SelectedParameters;
-//        vector<int> oSelectedParameters(0);
-//        double val  = mRR->getParameterDoubleValue()(mSelectedParameter);
-
         double val  = mRR->getValue(mSelectedParameter);
-
         oGlobalParameters[0] = val;
 
 //        for (int i = 0; i < numParameters; i++)
@@ -173,9 +165,9 @@ int autoCallConv RRAuto::ModelInitializationCallback(long ndim, double t, double
 //        }
     }
 
-    double* oParameters = new double[numBoundaries + numParameters];
     int oParaSize = numBoundaries + numParameters;
-//    Array.Copy(oBoundary, oParameters, oBoundary.Length);
+    vector<double> oParameters(oParaSize);
+
     for(int i = 0; i < numBoundaries; i++)
     {
         oParameters[i] = oBoundary[i];
@@ -205,6 +197,7 @@ int autoCallConv RRAuto::ModelInitializationCallback(long ndim, double t, double
     {
         u[i] = floatCon[i];
     }
+    delete [] floatCon;
     return 0;
 }
 
@@ -314,8 +307,6 @@ void autoCallConv RRAuto::ModelFunctionCallback(const double* oVariables, const 
     }
     int numFloatingSpecies = lModel->getNumFloatingSpecies();
 
-//    bool containsNaN = ContainsNaN(variableTemp);
-//    if (!containsNaN)
     {
 //        CurrentModel.y = variableTemp;
 
@@ -338,31 +329,25 @@ void autoCallConv RRAuto::ModelFunctionCallback(const double* oVariables, const 
         }
 
         lModel->setFloatingSpeciesConcentrations(numFloatingSpecies, NULL, tempConc);
-        //delete [] tempConc;
+        delete [] tempConc;
     }
 
-//    Log(lDebug)<<"Eval";
-
     //PrintArray(CurrentModel.y, Console.Out);
-
     lModel->convertToAmounts();
 
-//    CurrentModel.evalModel(CurrentModel.time, CurrentModel.y);
+    double time         = lModel->getTime();
+    int stateVecSize    = lModel->getNumFloatingSpecies() + lModel->getNumRules();
+    double* dydts       = new double[stateVecSize];
 
-    double time = lModel->getTime();
-    int stateVecSize = lModel->getNumFloatingSpecies() + lModel->getNumRules();
-    double* dydts = new double[stateVecSize];
     lModel->evalModel(time, NULL, dydts);
 
-    nMin = min(lModel->getNumRules(), ndim);
-
 //    Marshal.Copy(CurrentModel.dydt, 0, oResult, Math.Min(CurrentModel.dydt.Length, nDim));
-    for(int i = 0; i < 2; i++)
+    nMin = min(stateVecSize, ndim);
+    for(int i = 0; i < nMin; i++)
     {
         oResult[i] = dydts[i];
     }
-//    delete [] dydts;
-
+    delete [] dydts;
 }
 
 //private void ModelFunctionCallback(IntPtr oVariables, IntPtr par, IntPtr oResult)
