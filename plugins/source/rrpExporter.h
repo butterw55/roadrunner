@@ -5,7 +5,7 @@
     #if defined(STATIC_PLUGIN_API)
         #define RRP_DECLSPEC
     #else
-        #if defined(EXPORT_PLUGINS_API)
+        #if defined(EXPORT_PLUGIN_API)
             #define RRP_DECLSPEC __declspec(dllexport)
         #else
             #define RRP_DECLSPEC __declspec(dllimport)

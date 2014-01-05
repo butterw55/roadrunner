@@ -64,21 +64,20 @@ if(WIN32)
     
 endif()
 
-#--------------------
 #Don't install anything. link statically to the plugin
 ##=============== INSTALL =====================
-#install(
-#	FILES 
-#    vsAuto.h 
-#    libf2c/auto_f2c.h
-#    auto_exporter.h				 					
-#	DESTINATION include/auto_api 
-#	)
-#
-#install(   
-#	TARGETS ${target} ${target}-static
-#	RUNTIME DESTINATION bin 
-#	ARCHIVE DESTINATION lib 
-#	LIBRARY DESTINATION lib 
-#	)
+install(
+	FILES 
+    vsAuto.h 
+    libf2c/auto_f2c.h
+    auto_exporter.h				 					
+	DESTINATION include/auto_api 
+	)
+
+install(   
+	TARGETS ${target}-static
+	RUNTIME DESTINATION bin 
+	ARCHIVE DESTINATION lib 
+	LIBRARY DESTINATION lib 
+	)
 

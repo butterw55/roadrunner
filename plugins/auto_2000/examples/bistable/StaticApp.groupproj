@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{64CDE241-0FA0-4DF0-9600-7DA8F8712F11}</ProjectGuid>
+        <ProjectGuid>{8ED25196-B3FD-4309-85B2-A37A0362F243}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
         <Projects Include="..\..\..\..\source\roadrunner-static.cbproj">
@@ -15,11 +15,11 @@
         <Projects Include="..\..\rrAutoInterface\rrAutoInterface-static.cbproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\..\rrp_auto2000-static.cbproj">
+        <Projects Include="..\..\source\rrp_auto2000.cbproj">
             <Dependencies/>
         </Projects>
         <Projects Include="bistable-static.cbproj">
-            <Dependencies>..\..\rrp_auto2000-static.cbproj</Dependencies>
+            <Dependencies/>
         </Projects>
     </ItemGroup>
     <ProjectExtensions>
@@ -65,32 +65,32 @@
     <Target Name="rrAutoInterface-static:Make">
         <MSBuild Projects="..\..\rrAutoInterface\rrAutoInterface-static.cbproj" Targets="Make"/>
     </Target>
-    <Target Name="rrp_auto2000-static">
-        <MSBuild Projects="..\..\rrp_auto2000-static.cbproj"/>
+    <Target Name="rrp_auto2000">
+        <MSBuild Projects="..\..\source\rrp_auto2000.cbproj"/>
     </Target>
-    <Target Name="rrp_auto2000-static:Clean">
-        <MSBuild Projects="..\..\rrp_auto2000-static.cbproj" Targets="Clean"/>
+    <Target Name="rrp_auto2000:Clean">
+        <MSBuild Projects="..\..\source\rrp_auto2000.cbproj" Targets="Clean"/>
     </Target>
-    <Target Name="rrp_auto2000-static:Make">
-        <MSBuild Projects="..\..\rrp_auto2000-static.cbproj" Targets="Make"/>
+    <Target Name="rrp_auto2000:Make">
+        <MSBuild Projects="..\..\source\rrp_auto2000.cbproj" Targets="Make"/>
     </Target>
-    <Target Name="bistable-static" DependsOnTargets="rrp_auto2000-static">
+    <Target Name="bistable-static">
         <MSBuild Projects="bistable-static.cbproj"/>
     </Target>
-    <Target Name="bistable-static:Clean" DependsOnTargets="rrp_auto2000-static:Clean">
+    <Target Name="bistable-static:Clean">
         <MSBuild Projects="bistable-static.cbproj" Targets="Clean"/>
     </Target>
-    <Target Name="bistable-static:Make" DependsOnTargets="rrp_auto2000-static:Make">
+    <Target Name="bistable-static:Make">
         <MSBuild Projects="bistable-static.cbproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="roadrunner-static;rrplugins_api-static;libAuto-static;rrAutoInterface-static;rrp_auto2000-static;bistable-static"/>
+        <CallTarget Targets="roadrunner-static;rrplugins_api-static;libAuto-static;rrAutoInterface-static;rrp_auto2000;bistable-static"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="roadrunner-static:Clean;rrplugins_api-static:Clean;libAuto-static:Clean;rrAutoInterface-static:Clean;rrp_auto2000-static:Clean;bistable-static:Clean"/>
+        <CallTarget Targets="roadrunner-static:Clean;rrplugins_api-static:Clean;libAuto-static:Clean;rrAutoInterface-static:Clean;rrp_auto2000:Clean;bistable-static:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="roadrunner-static:Make;rrplugins_api-static:Make;libAuto-static:Make;rrAutoInterface-static:Make;rrp_auto2000-static:Make;bistable-static:Make"/>
+        <CallTarget Targets="roadrunner-static:Make;rrplugins_api-static:Make;libAuto-static:Make;rrAutoInterface-static:Make;rrp_auto2000:Make;bistable-static:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

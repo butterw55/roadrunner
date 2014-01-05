@@ -130,7 +130,8 @@ bool PluginManager::load(const string& pluginName)
 
     if(pluginName.size())
     {
-        files.insert(joinPath(mPluginFolder, pluginName + "." + mPluginExtension));
+        string temp = joinPath(mPluginFolder, pluginName + "." + mPluginExtension);
+        files.insert(temp);
      }
     else
     {
@@ -334,6 +335,7 @@ bool PluginManager::unload(Plugin* plugin)
                 if(pluginLibHandle)
                 {
                     pluginLibHandle->unload();
+                    //Research this delete pluginLibHandle;
                 }
 
                 //And remove from container

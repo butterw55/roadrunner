@@ -88,13 +88,13 @@
         <ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\debug\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <ILINK_DisableIncrementalLinking>true</ILINK_DisableIncrementalLinking>
         <DynamicRTL>true</DynamicRTL>
+        <ILINK_DisableIncrementalLinking>true</ILINK_DisableIncrementalLinking>
         <BCC_PCHInject>bistable_pch.h</BCC_PCHInject>
         <IncludePath>$(RR_ROOT)\source;$(RR_ROOT)\plugins\source;$(RR_INSTALL)\include;$(RR_ROOT)\wrappers\C;$(IncludePath)</IncludePath>
         <ILINK_LibraryPath>$(RR_INSTALL)\lib;$(RR_INSTALL)\plugins;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <Defines>POCO_STATIC;PCRE_STATIC;$(Defines)</Defines>
-        <Debugger_DebugSourcePath>R:\rre\plugins\bifurcation\rrAutoInterface\;R:\rre\plugins\bifurcation\libAuto\;R:\rre\source\;$(Debugger_DebugSourcePath)</Debugger_DebugSourcePath>
+        <Debugger_DebugSourcePath>R:\rre\plugins\bifurcation\rrAutoInterface\;R:\rre\plugins\bifurcation\libAuto\;R:\rre\source\;R:\rrl\plugins\source\;$(Debugger_DebugSourcePath)</Debugger_DebugSourcePath>
         <FinalOutputDir>$(RR_INSTALL)\bin</FinalOutputDir>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -102,6 +102,9 @@
         <TASM_Debugging>None</TASM_Debugging>
     </PropertyGroup>
     <ItemGroup>
+        <CppCompile Include="auto_link.cpp">
+            <BuildOrder>1</BuildOrder>
+        </CppCompile>
         <CppCompile Include="main.cpp">
             <BuildOrder>0</BuildOrder>
         </CppCompile>

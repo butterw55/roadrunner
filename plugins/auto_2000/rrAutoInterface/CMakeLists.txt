@@ -33,19 +33,19 @@ if(WIN32)
         )
     
     target_link_libraries ( ${target}-static
-        libAuto-static
-        roadrunner
-        rrplugins_api-static
-        poco_foundation-static
-        IPHLPAPI
+#        libAuto-static
+#        roadrunner
+#        rrplugins_api-static
+#        poco_foundation-static
+#        IPHLPAPI
         )
  
 endif()
 
-#install(   
-#	TARGETS ${target}
-#	RUNTIME DESTINATION bin 
-#	ARCHIVE DESTINATION lib 
-#	LIBRARY DESTINATION lib 
-#	)
+install(   
+	TARGETS ${target}-static
+	RUNTIME DESTINATION bin 
+	ARCHIVE DESTINATION lib 
+	LIBRARY DESTINATION lib 
+	)
 

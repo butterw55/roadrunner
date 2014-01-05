@@ -60,8 +60,8 @@
         <ProjectType>CppDynamicLibrary</ProjectType>
         <ILINK_GenerateImportLibrary>true</ILINK_GenerateImportLibrary>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
-        <ILINK_LibraryPath>..\..\..\third_party\poco\Foundation\src\;lib\;lib\lib\;..\add_noise\;..\..\vcl_source\;lmfit-3.5\lib\;..\full_space_minimization\;..\test_plugin\;R:\rrl\plugins\TestPlugin\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-        <IncludePath>..\..\..\third_party\poco\Foundation\src\;lib\;lib\lib\;..\add_noise\;..\..\vcl_source\;$(RR_ROOT)\Wrappers\C;$(RR_ROOT)\plugins\source;$(IncludePath)</IncludePath>
+        <ILINK_LibraryPath>..\..\source\;..\..\..\third_party\poco\Foundation\src\;lib\;lib\lib\;..\add_noise\;..\..\vcl_source\;lmfit-3.5\lib\;..\full_space_minimization\;..\test_plugin\;R:\rrl\plugins\TestPlugin\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <IncludePath>..\..\source\;..\..\..\third_party\poco\Foundation\src\;lib\;lib\lib\;..\add_noise\;..\..\vcl_source\;$(RR_ROOT)\Wrappers\C;$(RR_ROOT)\plugins\source;$(IncludePath)</IncludePath>
         <Multithreaded>true</Multithreaded>
         <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
         <IntermediateOutputDir>.\$(Platform)\$(Config)</IntermediateOutputDir>
@@ -107,8 +107,11 @@
         <ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\debug\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <BCC_MonitorGlobalAndStackData>true</BCC_MonitorGlobalAndStackData>
+        <BCC_MonitorInlinePtrAccess>true</BCC_MonitorInlinePtrAccess>
+        <BCC_MonitorThis>true</BCC_MonitorThis>
         <LinkPackageStatics>rtl.lib</LinkPackageStatics>
-        <Defines>EXPORT_RR_PLUGIN;POCO_STATIC;$(Defines)</Defines>
+        <Defines>EXPORT_RR_PLUGIN;POCO_STATIC;PCRE_STATIC;$(Defines)</Defines>
         <Debugger_HostApplication>R:\installs\cgd-static\bin\rrWinC.exe</Debugger_HostApplication>
         <FinalOutputDir>$(RR_INSTALL)\plugins</FinalOutputDir>
         <ILINK_LibraryPath>$(RR_INSTALL)\lib;$(ILINK_LibraryPath)</ILINK_LibraryPath>

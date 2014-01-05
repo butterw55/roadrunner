@@ -138,7 +138,7 @@ int autoCallConv RRAuto::ModelInitializationCallback(long ndim, double t, double
 {
     ExecutableModel* lModel = mRR->getModel();
 
-    int numBoundaries = 0;//mRR->getNumberOfBoundarySpecies();// //SelectForm.NumSelectedBoundaries;
+    int numBoundaries = 0;  //mRR->getNumberOfBoundarySpecies();// //SelectForm.NumSelectedBoundaries;
     int numParameters = 1; // SelectForm.NumSelectedParameters;
 
     double* oBoundary           = new double[numBoundaries];
@@ -147,7 +147,7 @@ int autoCallConv RRAuto::ModelInitializationCallback(long ndim, double t, double
     if (numBoundaries > 0)
     {
         //int[] oSelectedBoundary = SelectForm.SelectedBoundarySpecies;
-        int* oSelectedBoundary = new int[1];
+        vint* oSelectedBoundary = new int[1];
 //        oSelectedBoundary[0] = 0;   //This is 'A'
 
         for (int i = 0; i < numBoundaries; i++)
@@ -294,7 +294,7 @@ void autoCallConv RRAuto::ModelFunctionCallback(const double* oVariables, const 
 //                                                     ? oSelectedParameters[i]
 //                                                     : oParameters[i]));
 //        }
-        delete [] oParameters;
+        //delete [] oParameters;
     }
 //
 //
@@ -338,7 +338,7 @@ void autoCallConv RRAuto::ModelFunctionCallback(const double* oVariables, const 
         }
 
         lModel->setFloatingSpeciesConcentrations(numFloatingSpecies, NULL, tempConc);
-        delete [] tempConc;
+        //delete [] tempConc;
     }
 
 //    Log(lDebug)<<"Eval";
@@ -361,7 +361,7 @@ void autoCallConv RRAuto::ModelFunctionCallback(const double* oVariables, const 
     {
         oResult[i] = dydts[i];
     }
-    delete [] dydts;
+//    delete [] dydts;
 
 }
 
@@ -430,6 +430,3 @@ bool RRAuto::reset()
 }
 
 } //namespace au
-
-
-

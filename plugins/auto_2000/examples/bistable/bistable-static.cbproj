@@ -40,10 +40,10 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <Multithreaded>true</Multithreaded>
-        <IncludePath>..\..\..\..\third_party\poco\Foundation\src\;R:\rre\plugins\bifurcation\examples\bistable\;$(IncludePath)</IncludePath>
+        <IncludePath>..\..\..\source\;..\..\..\..\third_party\poco\Foundation\src\;R:\rre\plugins\bifurcation\examples\bistable\;$(IncludePath)</IncludePath>
         <ProjectType>CppConsoleApplication</ProjectType>
         <_TCHARMapping>char</_TCHARMapping>
-        <ILINK_LibraryPath>..\..\..\..\third_party\poco\Foundation\src\;R:\rre\plugins\bifurcation\examples\bistable\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <ILINK_LibraryPath>..\..\..\source\;..\..\..\..\third_party\poco\Foundation\src\;R:\rre\plugins\bifurcation\examples\bistable\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
         <IntermediateOutputDir>.\$(Platform)\$(Config)</IntermediateOutputDir>
@@ -87,7 +87,6 @@
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <BCC_MonitorGlobalAndStackData>true</BCC_MonitorGlobalAndStackData>
         <BCC_MonitorThis>true</BCC_MonitorThis>
-        <BCC_AllCodeguardOptions>true</BCC_AllCodeguardOptions>
         <BCC_MonitorInlinePtrAccess>true</BCC_MonitorInlinePtrAccess>
         <BCC_CPPCompileAlways>true</BCC_CPPCompileAlways>
         <IntermediateOutputDir>.\$(Platform)\$(Config)-static</IntermediateOutputDir>
@@ -96,8 +95,8 @@
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Manifest_File>None</Manifest_File>
         <ILINK_LibraryPath>$(RR_INSTALL)\lib;$(RR_INSTALL)\plugins;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-        <Defines>POCO_STATIC;STATIC_RR;STATIC_AUTO;STATIC_RR_AUTO;STATIC_RRC;STATIC_APP;STATIC_PLUGIN_API;$(Defines)</Defines>
-        <Debugger_DebugSourcePath>R:\rrl\plugins\auto_2000\source;R:\rrl\source;$(Debugger_DebugSourcePath)</Debugger_DebugSourcePath>
+        <Defines>POCO_STATIC;STATIC_AUTO;STATIC_RR_AUTO;STATIC_RRC;STATIC_APP;STATIC_RR;STATIC_PLUGIN_API;$(Defines)</Defines>
+        <Debugger_DebugSourcePath>R:\rrl\plugins\auto_2000\source;R:\rrl\source;R:\rrl\plugins\auto_2000\rrAutoInterface\;R:\rrl\plugins\auto_2000\libAuto\;$(Debugger_DebugSourcePath)</Debugger_DebugSourcePath>
         <FinalOutputDir>$(RR_INSTALL)\bin</FinalOutputDir>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -110,6 +109,9 @@
         </CppCompile>
         <CppCompile Include="main.cpp">
             <BuildOrder>0</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\..\source\rrUnresolvedSTDExternals.cpp">
+            <BuildOrder>16</BuildOrder>
         </CppCompile>
         <CppCompile Include="..\..\..\..\third_party\poco\Foundation\src\pcre_chartables.c">
             <BuildOrder>2</BuildOrder>

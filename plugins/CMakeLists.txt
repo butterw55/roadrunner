@@ -7,9 +7,9 @@ include_directories(
 	../wrappers/C
 )
 
-OPTION (RRP_BUILD_ADD_NOISE_PLUGIN		        "Build add noise plugin"	                ON)
-OPTION (RRP_BUILD_LEVENBERG_MARQUARDT_PLUGIN	"Build Levenberg-Marquardt plugin"	        ON)
-OPTION (RRP_BUILD_AUTO_2000_PLUGIN	            "Build Auto 2000 plugin"	                ON)
+OPTION (RRP_BUILD_ADD_NOISE_PLUGIN		        "Build Add Noise Plugin"	                ON)
+OPTION (RRP_BUILD_LEVENBERG_MARQUARDT_PLUGIN	"Build Levenberg-Marquardt Plugin"	        ON)
+OPTION (RRP_BUILD_AUTO_2000_PLUGIN	            "Build Auto 2000 Plugin"	                ON)
 OPTION (RRP_BUILD_EXAMPLES   	                "Build Plugin Examples"                     OFF)
 
 add_subdirectory(source)

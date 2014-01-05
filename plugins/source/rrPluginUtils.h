@@ -2,6 +2,7 @@
 #define rrPluginUtilsH
 #include <vector>
 #include <string>
+#include <sstream>
 #include "rrpExporter.h"
 #include "rrStringList.h"
 #include "rrSelectionRecord.h"
@@ -10,7 +11,7 @@
 
 namespace rrp
 {
-    
+
 using std::vector;
 using std::string;
 RRP_DECLSPEC rr::StringList      getRecordsAsStrings(const vector<rr::SelectionRecord>& folder);

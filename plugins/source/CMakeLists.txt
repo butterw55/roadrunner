@@ -20,60 +20,62 @@ rrPluginUtils
 )
 
 
-##SHARED VERSION ----------------
-##Link with static libs
-#add_library(${target} SHARED ${sources})
-#
-#set_property(TARGET ${target}
-#    PROPERTY  COMPILE_DEFINITIONS
-#    EXPORT_RRP
-#    LIBSBML_STATIC
-#    LIBLAX_STATIC
-#    STATIC_LIBSTRUCT
-#    STATIC_PUGI
-#    STATIC_NLEQ
-#    POCO_STATIC
-#    POCO_NO_AUTOMATIC_LIBS
-#    )
-#
-##libraries to link with our shared lib
-#if(UNIX)
-#    set(staticLibExt ".a")
-#else()
-#    set(staticLibExt "")
-#endif(UNIX)
-#
-#target_link_libraries (${target}
-#    sundials_cvode
-#    sundials_nvecserial
-#    blas
-#    lapack
-#    nleq-static
-#    rr-libstruct-static
-#    poco_foundation-static
-#    )
-#
-#if(UNIX)
-#    target_link_libraries (${target}
-#        pthread
-#        sbml
-#        dl
-#        f2c${staticLibExt}
-#        )
-#else()
-#    target_link_libraries (${target}
-#        libf2c
-#        libsbml
-#        )
-#endif(UNIX)
-#
-#install(TARGETS ${target}
-#        RUNTIME DESTINATION bin COMPONENT plugins_api
-#        LIBRARY DESTINATION lib COMPONENT plugins_api
-#        ARCHIVE DESTINATION lib COMPONENT plugins_api
-#        )
-#
-##END OF SHARED VERSION ----------------
+#SHARED VERSION ----------------
+#Link with static libs
+add_library(${target} SHARED ${sources})
+
+set_property(TARGET ${target}
+    PROPERTY  COMPILE_DEFINITIONS
+EXPORT_PLUGIN_API
+#LIBSBML_STATIC
+#LIBLAX_STATIC
+#STATIC_LIBSTRUCT
+#STATIC_NLEQ
+
+POCO_STATIC
+POCO_NO_AUTOMATIC_LIBS
+)
+
+#libraries to link with our shared lib
+if(UNIX)
+    set(staticLibExt ".a")
+else()
+    set(staticLibExt "")
+endif(UNIX)
+
+target_link_libraries (${target}
+    roadrunner
+    sundials_cvode
+    sundials_nvecserial
+    blas
+    lapack
+    nleq-static
+    rr-libstruct-static
+    poco_foundation-static
+    iphlpapi
+    )
+
+if(UNIX)
+    target_link_libraries (${target}
+        pthread
+        sbml
+        dl
+        f2c${staticLibExt}
+        )
+else()
+    target_link_libraries (${target}
+        libf2c
+        libsbml
+        )
+endif(UNIX)
+
+install(TARGETS ${target}
+        RUNTIME DESTINATION bin COMPONENT plugins_api
+        LIBRARY DESTINATION lib COMPONENT plugins_api
+        ARCHIVE DESTINATION lib COMPONENT plugins_api
+        )
+
+#END OF SHARED VERSION ----------------
 
 #STATIC VERSION
 add_library(${target}-static STATIC ${sources})
@@ -81,7 +83,6 @@ add_library(${target}-static STATIC ${sources})
 set_property(TARGET ${target}-static
     PROPERTY COMPILE_DEFINITIONS
     STATIC_PLUGIN_API
-    #STATIC_RR  //Plugins are linking with shared roadrunner, so we must do too
     LIBSBML_USE_CPP_NAMESPACE
     LIBSBML_STATIC
     LIBLAX_STATIC

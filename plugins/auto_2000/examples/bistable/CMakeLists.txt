@@ -40,5 +40,5 @@ libf2c
 install(
 TARGETS ${target} 		
 DESTINATION bin 
-#COMPONENT examples
+COMPONENT examples
 )

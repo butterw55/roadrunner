@@ -157,14 +157,15 @@ bool AutoPlugin::execute(bool inThread)
     return true;
 }
 
+//Functions allowing the plugin to be loaded by plugin manager
 // Plugin factory function
-AutoPlugin* plugins_cc createPlugin(rr::RoadRunner* aRR)
+AutoPlugin* auto_cc createPlugin(rr::RoadRunner* aRR)
 {
     //allocate a new object and return it
     return new AutoPlugin(aRR);
 }
 
-const char* plugins_cc getImplementationLanguage()
+const char* auto_cc getImplementationLanguage()
 {
     return "CPP";
 }

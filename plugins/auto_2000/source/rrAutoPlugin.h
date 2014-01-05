@@ -13,6 +13,11 @@
 
 namespace autoplugin
 {
+#if defined(__CODEGEAR__)
+#define auto_cc __stdcall
+#else
+#define auto_cc
+#endif
 
 using namespace rrauto;
 
@@ -74,8 +79,8 @@ class AutoPlugin : public CPPPlugin
 
 extern "C"
 {
-RR_PLUGIN_DECLSPEC AutoPlugin* plugins_cc       createPlugin(rr::RoadRunner* aRR);
-RR_PLUGIN_DECLSPEC const char* plugins_cc       getImplementationLanguage();
+RR_PLUGIN_DECLSPEC AutoPlugin* auto_cc       createPlugin(rr::RoadRunner* aRR);
+RR_PLUGIN_DECLSPEC const char* auto_cc       getImplementationLanguage();
 }
 
 }

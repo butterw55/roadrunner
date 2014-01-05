@@ -36,22 +36,17 @@ add_definitions(
 add_library(${target} MODULE ${sources})
 
 if(WIN32)
+if(${BORLAND})
+    set (CMAKE_CXX_FLAGS   "${CMAKE_MODULE_LINKER_FLAGS} \"/DEF:${CMAKE_CURRENT_SOURCE_DIR}/rrp_auto2000.def\"")
+message(${CMAKE_MODULE_LINKER_FLAGS} )    
+endif()
+
 
 target_link_libraries (${target}
 roadrunner
 rrAutoInterface-static
 libAuto-static
-#rrplugins_api-static
-#poco_foundation-static
-#libsbml-static
-#libxml2
-#rr-libstruct-static
-#sundials_cvode
-#sundials_nvecserial
-#blas
-#lapack
-#libf2c
-#nleq-static
+rrplugins_api-static
 )
 endif()
 
