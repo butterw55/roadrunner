@@ -19,7 +19,7 @@ namespace rrp
 
     using rr::RoadRunnerData;
     using std::string;
-
+    using rr::gNoneString;
 /**
     Template class implementing a PluginProperty. As this class is a template, it can be of any type.
 
