@@ -56,6 +56,8 @@ class RR_DECLSPEC StringList
         void                        empty();
         bool                        Contains(const string& item) const;
         bool                        DontContain(const string& item) const;
+        string                      getLongest();
+        string                      getShortest();
         void                        add(const string& item);
         vector<string>::iterator    begin();
         vector<string>::iterator    end();
@@ -69,7 +71,7 @@ class RR_DECLSPEC StringList
          * standard vector<string>
          */
         //operator vector<string>() const { return mStrings; }
-        operator const vector<string>&() const { return mStrings;}
+        operator const vector<string>&() const;
 };
 
 

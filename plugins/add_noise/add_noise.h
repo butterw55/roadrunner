@@ -1,7 +1,6 @@
 #ifndef add_noiseH
 #define add_noiseH
-#include "rrCapability.h"
-#include "rrParameter.h"
+#include "rrProperty.h"
 #include "rrCPPPlugin.h"
 #include "add_noise_worker.h"
 
@@ -9,7 +8,7 @@
 namespace addNoise
 {
 
-using namespace rr;
+//using namespace rr;
 using namespace rrc;
 using namespace rrp;
 
@@ -20,10 +19,9 @@ class AddNoise : public CPPPlugin
         enum NoiseType {ntGaussian = 0, ntPsychological, ntUndefined};
 
     private:
-        Capability                  mAddNoise;
-        Parameter<int>              mNoiseType;
-        Parameter<double>           mSigma;
-        Parameter<RoadRunnerData*>  mData;
+        Property<int>               mNoiseType;
+        Property<double>            mSigma;
+        Property<RoadRunnerData>    mData;
         AddNoiseWorker              mAddNoiseWorker;
 
     public:
@@ -47,14 +45,15 @@ RR_PLUGIN_DECLSPEC const char*  plugins_cc getImplementationLanguage();
 
 namespace rrp
 {
+
 template<>
-inline string Parameter<addNoise::AddNoise::NoiseType>::getType() const
+inline string getParaType(const addNoise::AddNoise::NoiseType& value)
 {
     return "NoiseType";
 }
 
 template<>
-inline string Parameter<addNoise::AddNoise::NoiseType>::getValueAsString() const
+inline string Property<addNoise::AddNoise::NoiseType>::getValueAsString() const
 {
     switch(mValue)
     {
@@ -67,7 +66,7 @@ inline string Parameter<addNoise::AddNoise::NoiseType>::getValueAsString() const
 }
 
 template<>
-inline void Parameter< addNoise::AddNoise::NoiseType >::setValueFromString(const string& val)
+inline void Property< addNoise::AddNoise::NoiseType >::setValueFromString(const string& val)
 {
     //Only gaussian noise is available at this time
     if(val == "0")

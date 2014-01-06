@@ -1,7 +1,57 @@
+Changes in lmfit-5.1, released 29aug13
+
+- bug fix:
+  - FILE** initialization from &stdout was not standard compliant
+    (report by Jan Krieger, cf http://stackoverflow.com/questions/18505530);
+    now FILE* initialized to NULL
+- code cleanup:
+  - better wrapper for "extern C" declaration
+
+Changes in lmfit-5.0, released 9aug13
+
+- API changes:
+  - removed callback function for printout
+  - removed control structure for printout; some par's go to lm_control_struct
+  - pivoting can no longer be switched off
+  - from now on, addition of par's to lm_control_struct is not an API change
+- bug fix:
+  - correct memory leak introduced by reversal of mallock trick
+  - restore default scale_diag=1
+- monitoring:
+  - improved text messages ("success" -> "converged", we should not say more)
+- demo: reworked examples
+  - new example nonlin1: solution of 2 nonlinear equations in 2 variables
+  - example surface1 improved and included in man page lmmin(3)
+  - otherwise testsuite started as new project fittest
+- packaging: configure now supports pkg-config
+
+Changes in lmfit-4.0, released 16jul13
+
+- binary library renamed: lmmin -> lmfit
+- API changes:
+  - lmcurve.h no longer depends on lmmin.h, but only on new lmstruct.h
+  - low-level API lmdif is removed (code integrated in lmmin)
+  - lmcurve_fit -> lmcurve
+  - new control parameter 'pivot' (default: pivoting is used, as before)
+  - new structure lm_princon_struct, generalizing printflags
+  - in consequence thereof, new parameter lists for lmcurve and lmmin
+- code cleanup:
+  - ensure strict C90 compliance: no C++ comments; replace non-standard
+    struct assignement (reported by Elio Mazzocca, using LCC)
+  - revert malloc trick of release 3.4 (readability is more important)
+  - source code comment blocks moved around, to reduce duplications
+- build scripts cleanup:
+  - demo programs are no longer installed to $bindir
+  - configure.ac: cleaned up, and inserted comments
+- documentation:
+  - new web location: apps.jcns.fz-juelich.de/lmfit
+  - new entry page (dokuwiki) instead of man page
+  - man page split and largely rewritten: lmcurve(3), lmmin(3)
+
 Changes in lmfit-3.5, released 3feb13
 
 - changed overall license to FreeBSD to facilitate inclusion in Linux
-  distributions (request by M. Hrončok)
+  distributions (request by M. Hroncok)
 - directory doc renamed man
 
 Changes in lmfit-3.4, released 21jan13
@@ -73,10 +123,10 @@ Changes in lmfit-2.4, released 27jul08:
 
 Changes in lmfit-2.3, released 5apr08:
 
-- fixed bug 1817631: replaced confusing variable names in lmmin.c:lm_qrsolv()
+- fixed bug sf#1817631: replaced confusing variable names in lmmin.c:lm_qrsolv()
 - accepted feature request 1814970: inclusion protection in headers
 - accepted feature request 1814976: cplusplus wrapper in headers
-- fixed bug 1868399: typos in debug messages
+- fixed bug sf#1868399: typos in debug messages
 - accepted proposal from M. Bydder:
      improved calculation of differences in lmmin, lines 415-417
 - reverted comments in lmmin.c to pure C style

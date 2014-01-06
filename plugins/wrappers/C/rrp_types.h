@@ -59,11 +59,11 @@ typedef void (event_cc *PluginEvent)(void*, void*);
 /*!@brief Void pointer to a Plugin instance */
 typedef void* RRPluginHandle;
 
-/*!@brief Void pointer to a Parameter instance */
-typedef void* RRParameterHandle;
+/*!@brief Void pointer to a Property instance */
+typedef void* RRPropertyHandle;
 
-/*!@brief Void pointer to a RRParameters instance (Container for parameters) */
-typedef void* RRParametersHandle;
+/*!@brief Void pointer to a RRProperties instance (Container for parameters) */
+typedef void* RRPropertiesHandle;
 
 #if defined( __cplusplus)
 } }//Namespace

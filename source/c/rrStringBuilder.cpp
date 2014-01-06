@@ -11,7 +11,10 @@ namespace rr
 
 StringBuilder::StringBuilder(const string& aStr)
 {
-    mStringing<<aStr;
+    if(aStr != gEmptyString)
+    {
+        mStringing<<aStr;
+    }
 }
 
 string StringBuilder::ToString()
@@ -38,10 +41,23 @@ stringstream& StringBuilder::operator<<(const char& ch)
     return mStringing;
 }
 
+stringstream& StringBuilder::operator<<(const int& ch)
+{
+    mStringing<<ch;
+    Log(lDebug5)<<"Appended :"<<ch;
+    return mStringing;
+}
+
 void StringBuilder::NewLine(const string& line)
 {
     mStringing<<"\n"<<line<<endl;
 }
+
+void StringBuilder::AppendLine(const string& line)
+{
+    mStringing<<"\n"<<line<<endl;
+}
+
 
 void StringBuilder::Line(const string& line)
 {

@@ -1,9 +1,9 @@
-from rrPlugins import *
+from rrPlugins_CAPI import *
 
 #Create a plugin manager
 pm = createPluginManager()
 
-pluginName = "rrp_add_noise"
+pluginName = "rrp_lm"
 plugin = loadPlugin(pm, pluginName)
 if not plugin:
     print getLastError()
@@ -14,7 +14,7 @@ print getPluginInfo(plugin)
 
 
 #Get parameters associated with a capability
-print getListOfPluginParameterNames(plugin)
+print getListOfPluginPropertyNames(plugin)
 
 #Get the manual for the plugin (bundled as embedded PDF)
 ptr = getPluginManualAsPDF(plugin)

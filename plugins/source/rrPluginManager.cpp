@@ -7,7 +7,6 @@
 #include "rrPlugin.h"
 #include "rrUtils.h"
 #include "rrException.h"
-#include "rrCapabilities.h"
 #include "rrLogger.h"
 #include "rrRoadRunner.h"
 #include "rrCPlugin.h"
@@ -20,6 +19,7 @@ static bool  hasFileExtension(const string& fName);
 static char* getPluginExtension();
 
 using namespace std;
+using namespace rr;
 using Poco::SharedLibrary;
 using Poco::Glob;
 
@@ -121,7 +121,7 @@ bool PluginManager::load(const string& pluginName)
     if(!folderExists(mPluginFolder))
     {
 
-        Log(lError)<<"Plugin folder: "<<mPluginFolder<<" do not exist..";        
+        Log(lError)<<"Plugin folder: "<<mPluginFolder<<" do not exist..";
         throw(Exception("Plugin folder don't exist"));
     }
 
@@ -130,7 +130,8 @@ bool PluginManager::load(const string& pluginName)
 
     if(pluginName.size())
     {
-        files.insert(joinPath(mPluginFolder, pluginName + "." + mPluginExtension));
+        string temp = joinPath(mPluginFolder, pluginName + "." + mPluginExtension);
+        files.insert(temp);
      }
     else
     {
@@ -146,7 +147,7 @@ bool PluginManager::load(const string& pluginName)
         Log(lInfo)<<"Loading plugin: "<<plugin;
         try
         {
-                            
+
             bool res = loadPlugin(plugin);
             if(!res)
             {
@@ -173,7 +174,7 @@ bool PluginManager::loadPlugin(const string& _libName)
         string prefix("rrp_");
         if(_libName.substr(0, prefix.size()) != prefix)
         {
-            Log(lWarning)<<"The Plugin: "<<_libName<<" lack the rrp_ prefix. Can't be loaded";    
+            Log(lWarning)<<"The Plugin: "<<_libName<<" lack the rrp_ prefix. Can't be loaded";
             return false;
         }
         string libName(_libName);
@@ -185,17 +186,28 @@ bool PluginManager::loadPlugin(const string& _libName)
         //Check if Plugin is already loaded first
         if(getPlugin(libName))
         {
-            Log(lWarning)<<"The Plugin: "<<libName<<" is already loaded";    
+            Log(lWarning)<<"The Plugin: "<<libName<<" is already loaded";
             return true;
         }
 
         SharedLibrary *libHandle = new SharedLibrary;
-        libHandle->load(joinPath(mPluginFolder, libName));
+        string fullName = joinPath(mPluginFolder, libName);
+
+        if(!fileExists(fullName))
+        {
+            Log(lWarning)<<"The Plugin: "<<fullName<<" could not be found";
+            return false;
+        }
+        //This one throws if there is a problem..
+        libHandle->load(fullName);
 
         //Validate the plugin
         if(!checkImplementationLanguage(libHandle))
         {
-            return false;
+            stringstream msg;
+            msg<<"The plugin: "<<_libName<<" has not implemented the function getImplementationLanguage properly. Plugin can not be loaded";
+
+            throw(msg.str());            
         }
 
         //Check plugin language
@@ -238,6 +250,12 @@ bool PluginManager::loadPlugin(const string& _libName)
             Log(lWarning)<<msg.str();
             return false;
         }
+    }
+    //We have to catch exceptions here. Failing to load a plugin should not throw, just return false.
+    catch(const string& msg)
+    {
+        Log(lError)<<"Plugin loading exception: "<<msg;
+        return false;
     }
     catch(const Exception& e)
     {
@@ -317,6 +335,7 @@ bool PluginManager::unload(Plugin* plugin)
                 if(pluginLibHandle)
                 {
                     pluginLibHandle->unload();
+                    //Research this delete pluginLibHandle;
                 }
 
                 //And remove from container

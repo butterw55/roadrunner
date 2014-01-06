@@ -146,13 +146,16 @@ if(RR_BUILD_SHARED_CORE)
         nleq-static
         rr-libstruct-static
         poco_foundation-static
-
         )
 
     if(WIN32)
-        target_link_libraries (${target}
-        libxml2
-        )
+        if(${BORLAND})
+            target_link_libraries (${target} libxml2_xe)
+        endif()
+
+        if(${MSVC})
+            target_link_libraries(${target} libxml2)
+        endif()
     endif(WIN32)        
 
     if (USE_POCO_NET)
@@ -269,9 +272,7 @@ endif(BUILD_LLVM)
 
 #Libxml we can't build right now
 if(${BORLAND})
-    target_link_libraries (${target}-static
-        libxml2_xe
-        )
+    target_link_libraries (${target}-static libxml2_xe)
 endif()
 
 if(${MSVC})

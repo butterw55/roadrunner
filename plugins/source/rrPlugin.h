@@ -42,9 +42,9 @@
 #define rrPluginH
 #include <sstream>
 #include <string>
-#include "rrPluginsAPIExporter.h"
+#include "rrpExporter.h"
 #include "rrPluginsAPISettings.h"
-#include "rrCapabilities.h"
+#include "rrProperties.h"
 
 namespace rr
 {
@@ -53,9 +53,12 @@ class RoadRunner;
 
 namespace rrp
 {
-using namespace rr;
-using std::string;
-class PluginManager;
+    using rr::RoadRunner;
+    using rr::gEmptyString;
+    using rr::gNoneString;
+    using std::string;
+
+    class PluginManager;
 
 /**
  * Typedef for a Plugin event function
@@ -73,9 +76,7 @@ typedef void    (event_cc *PluginEvent)(void* data1, void* data2);
 
   -# A plugin may belong to a category and is identified by a name. It has properties like Author, Version, Copyright etc.
 
-  -# A Plugin typically expose various \a Capabilities, available to a client of a plugin trough the \a Capabilites conatiner.
-
-  -# Each Capability may have various numbers of \a Parameters that a client of the Plugin may \a set or \a get.
+  -# A Plugin typically expose various \a Properties, available to a client of a plugin trough the \a Properties conatiner.
 
   -# The internal work a plugin is designed to do may be executed in a separate thread, and various functions to monitor and manage
   the work of a Plugin is exposed, e.g. isWorking(), terminate(), isBeingTerminated() etc.
@@ -91,7 +92,7 @@ typedef void    (event_cc *PluginEvent)(void* data1, void* data2);
 
 
  */
-class PLUGINS_API_DECLSPEC Plugin
+class RRP_DECLSPEC Plugin
 {
     friend PluginManager;
     public:
@@ -130,6 +131,16 @@ class PLUGINS_API_DECLSPEC Plugin
         string                          getCategory();
 
         /**
+            Get plugin description
+        */
+        string                          getDescription();
+
+        /**
+            Get plugin Hint
+        */
+        string                          getHint();
+
+        /**
             Get plugin version information
         */
         string                          getVersion();
@@ -139,12 +150,10 @@ class PLUGINS_API_DECLSPEC Plugin
         */
         string                          getCopyright();
 
-
         /**
             Retrieves the RoadRunner instance the plugin is using. Can be NULL.
         */
         RoadRunner*                     getRoadRunnerInstance();
-
 
         /**
             Retrieves various plugin information
@@ -167,40 +176,29 @@ class PLUGINS_API_DECLSPEC Plugin
         virtual unsigned int            getPDFManualByteSize();
 
         /**
-            Retieves the parameters 
+            Retieves the parameters
         */
-        Parameters*                     getParameters(); //Each capability has a set of parameters
+        Properties*                     getProperties(); //Each capability has a set of parameters
 
         /**
-            Retieves the names of the parameters 
+            Retieves the names of the parameters
         */
-        StringList                      getParameterNames(); //Each capability has a set of parameters
+        rr::StringList                  getPropertyNames(); //Each capability has a set of parameters
 
         /**
             Retieves a plugin properties, as XML
         */
-        string                          getPluginPropertiesAsXML(); 
+        string                          getPluginPropertiesAsXML();
 
         /**
-            Retieves a specific parameter, in a specific capability.
+            Retieves a specific property
         */
-        PluginParameter*                getParameter(const string& param, const string& capability = "");
+        PropertyBase*                   getProperty(const string& param);
 
         /**
-            Retieves a specific parameter, in a specific capability.
+            Sets the value of specified Property with value as specified
         */
-        PluginParameter*                getParameter(const string& param, Capability& capability);
-
-        /**
-            Sets the value of specified Parameter with value as specified
-        */
-        bool                            setParameter(const string& nameOf, const char* value);
-
-        /**
-            Sets the value of specified Parameter with value as specified
-        */
-        bool                            setParameter(const string& nameOf, const char* value, Capability& capability);
-
+        bool                            setProperty(const string& nameOf, const char* value);
 
         /**
             If the work of the plugin is carried out in a separate thread, terminate() will
@@ -220,7 +218,7 @@ class PLUGINS_API_DECLSPEC Plugin
         virtual bool                    isWorking();
 
                                         //!Assign a roadrunner instance for the plugin to use
-        bool                            assignRoadRunnerInstance(RoadRunner* rr);
+        virtual bool                    assignRoadRunnerInstance(RoadRunner* rr);
 
         /**
             Assign function pointer and data the event
@@ -248,11 +246,6 @@ class PLUGINS_API_DECLSPEC Plugin
         virtual bool                    resetPlugin();
 
         /**
-            Function allowing opaque data being passed to a plugin. This
-        */
-        virtual bool                    assignInput(void* data);
-
-        /**
             Retrieve the status of the plugin.
         */
         virtual string                  getStatus();
@@ -261,6 +254,52 @@ class PLUGINS_API_DECLSPEC Plugin
             Retrieve the implementation language of the plugin.
         */
         virtual string                  getImplementationLanguage() = 0;
+
+
+        /**
+            Check if the plugin as an assigned WorkerStartedEvent
+        */
+        bool                            hasStartedEvent();
+
+        /**
+            Check if the plugin as an assigned WorkerProgressEvent
+        */
+        bool                            hasProgressEvent();
+
+        /**
+            Check if the plugin as an assigned WorkerFinishedEvent
+        */
+        bool                            hasFinishedEvent();
+
+        /**
+         * Call WorkStarted event function
+         */
+        void                            WorkStartedEvent(void* data1, void* data2);
+
+        /**
+         * Call WorkProgress event function
+         */
+        void                            WorkProgressEvent(void* data1, void* data2);
+
+        /**
+         * Call WorkFinished event function
+         */
+        void                            WorkFinishedEvent(void* data1, void* data2);
+
+        /**
+         * get WorkStarted event data variables
+         */
+        pair<void*, void*>              getWorkStartedData();
+
+        /**
+         * get WorkProgress event data variables
+         */
+        pair<void*, void*>              getWorkProgressData();
+
+        /**
+         * get WorkFinished event data variables
+         */
+        pair<void*, void*>              getWorkFinishedData();
 
         /**
             Execute the plugin
@@ -278,6 +317,12 @@ class PLUGINS_API_DECLSPEC Plugin
 
                                         //! Plugin category
         string                          mCategory;
+
+                                        //! Plugin description
+        string                          mDescription;
+
+                                        //! Plugin Hint
+        string                          mHint;
 
                                         //! Plugin version
         string                          mVersion;
@@ -357,17 +402,18 @@ class PLUGINS_API_DECLSPEC Plugin
         void                           *mWorkFinishedData2;
 
         /**
-         * Capabilities container. Descendant add capabilites to this container, as they wish.
-         * It is basically a container for parameter data that can be exchanged to/from the plugin by using parameters
+         * Properties container. Descendant add properties to this container, as they wish.
+         * Property data values can be exchanged to/from the plugin by.
          */
-        Capabilities                    mCapabilities;
 
-        /**
-         * Opaque data pointer. Plugin designer may use this to communicat data of any type out/in to the plugin
-         * using the assignPluginInput() function.
-         * 
-         */
-        void                           *mClientData;
+         Properties                     mProperties;
+
+//        /*
+//         * Opaque data pointer. Plugin designer may use this to communicat data of any type out/in to the plugin
+//         * using the assignPluginInput() function.
+//         *
+//         */
+//        void                           *mClientData;
 
 };
 

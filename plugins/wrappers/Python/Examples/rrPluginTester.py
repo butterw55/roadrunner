@@ -1,4 +1,4 @@
-from rrPlugins import *
+from rrPlugins_CAPI import *
 
 # Create a plugin manager
 pm = createPluginManager()
@@ -25,6 +25,6 @@ if(aPlugin == None):
 
 print 'PluginName: ' + `getPluginName(aPlugin)`
 print getPluginInfo(aPlugin)
-print 'PluginParameters: ' + `getListOfPluginParameterNames(aPlugin)`
+print 'PluginParameters: ' + `getListOfPluginPropertyNames(aPlugin)`
 print `unLoadPlugins(pm)`
 print "done"

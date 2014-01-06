@@ -6,9 +6,10 @@ rrPluginTester.py
 #rrBifurcationDemo.py
 rrEvents.py
 rrPluginDocumentation.py
-rrPluginParameters.py
-rrPluginParameterLists.py
+rrPluginProperties.py
+rrPluginPropertyLists.py
 rrLevenbergMarquardt.py
+rrLevenbergMarquardtShortVersion.py
 rrNoisePlugin.py
 rrTwoPlugins.py
 rrCreateNoisyData.py
@@ -16,7 +17,7 @@ rrReadDataFromFile.py
 )
 
 install(    
-FILES ${examples} README.txt testData.dat
+FILES ${examples} README.txt testData.dat sbml_test_0001.xml lmFitTestModel.xml
 DESTINATION plugins/Examples 	
 COMPONENT plugins_api
 )

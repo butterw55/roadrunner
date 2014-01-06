@@ -1,0 +1,96 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{C3968637-A161-419F-922C-37C53A074684}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="..\..\libAuto\libAuto.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\..\..\source\roadrunner.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\..\source\rrplugins_api.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\rrAutoInterface\rrAutoInterface.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\source\rrp_auto2000.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="bistable.cbproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="libAuto">
+        <MSBuild Projects="..\..\libAuto\libAuto.cbproj"/>
+    </Target>
+    <Target Name="libAuto:Clean">
+        <MSBuild Projects="..\..\libAuto\libAuto.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="libAuto:Make">
+        <MSBuild Projects="..\..\libAuto\libAuto.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="roadrunner">
+        <MSBuild Projects="..\..\..\..\source\roadrunner.cbproj"/>
+    </Target>
+    <Target Name="roadrunner:Clean">
+        <MSBuild Projects="..\..\..\..\source\roadrunner.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="roadrunner:Make">
+        <MSBuild Projects="..\..\..\..\source\roadrunner.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="rrplugins_api">
+        <MSBuild Projects="..\..\..\source\rrplugins_api.cbproj"/>
+    </Target>
+    <Target Name="rrplugins_api:Clean">
+        <MSBuild Projects="..\..\..\source\rrplugins_api.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="rrplugins_api:Make">
+        <MSBuild Projects="..\..\..\source\rrplugins_api.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="rrAutoInterface">
+        <MSBuild Projects="..\..\rrAutoInterface\rrAutoInterface.cbproj"/>
+    </Target>
+    <Target Name="rrAutoInterface:Clean">
+        <MSBuild Projects="..\..\rrAutoInterface\rrAutoInterface.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="rrAutoInterface:Make">
+        <MSBuild Projects="..\..\rrAutoInterface\rrAutoInterface.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="rrp_auto2000">
+        <MSBuild Projects="..\..\source\rrp_auto2000.cbproj"/>
+    </Target>
+    <Target Name="rrp_auto2000:Clean">
+        <MSBuild Projects="..\..\source\rrp_auto2000.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="rrp_auto2000:Make">
+        <MSBuild Projects="..\..\source\rrp_auto2000.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="bistable">
+        <MSBuild Projects="bistable.cbproj"/>
+    </Target>
+    <Target Name="bistable:Clean">
+        <MSBuild Projects="bistable.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="bistable:Make">
+        <MSBuild Projects="bistable.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="libAuto;roadrunner;rrplugins_api;rrAutoInterface;rrp_auto2000;bistable"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="libAuto:Clean;roadrunner:Clean;rrplugins_api:Clean;rrAutoInterface:Clean;rrp_auto2000:Clean;bistable:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="libAuto:Make;roadrunner:Make;rrplugins_api:Make;rrAutoInterface:Make;rrp_auto2000:Make;bistable:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

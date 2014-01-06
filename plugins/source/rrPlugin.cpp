@@ -3,34 +3,36 @@
 #include <iomanip>
 #include "rrUtils.h"
 #include "rrPlugin.h"
-#include "rrParameter.h"
+#include "rrProperty.h"
 //---------------------------------------------------------------------------
 
 namespace rrp
 {
 using namespace std;
-Plugin::Plugin( const string& name,
-                const string& category,
-                RoadRunner* aRR,
-                const string& language,
-                const PluginManager* pm)
+using namespace rr;
+Plugin::Plugin( const string&           name,
+                const string&           category,
+                RoadRunner*             aRR,
+                const string&           language,
+                const PluginManager*    pm)
 :
 mName(name),
 mAuthor("Totte Karlsson"),
 mCategory(category),
+mDescription("<none>"),
+mHint("<none>"),
 mVersion("0.0"),
-mCopyright("Totte Karlsson, Herbert Sauro, Systems Biology, UW 2012"),
+mCopyright("Totte Karlsson, Herbert Sauro, Systems Biology, UW 2012-2014"),
 mRR(aRR),
 mWorkStartedEvent(NULL),
 mWorkProgressEvent(NULL),
 mWorkFinishedEvent(NULL),
-mCapabilities(),//name, category),
+mProperties(),//name, category),
 mImplementationLanguage(language),
 mPM(pm),
 mTerminate(false),
 mIsWorking(false)
-{
-}
+{}
 
 Plugin::~Plugin()
 {}
@@ -67,6 +69,45 @@ bool Plugin::wasTerminated()
     return false;
 }
 
+bool Plugin::hasStartedEvent()
+{
+    return (mWorkStartedEvent) ? true : false;
+}
+
+bool Plugin::hasProgressEvent()
+{
+    return (mWorkProgressEvent) ? true : false;
+}
+
+bool Plugin::hasFinishedEvent()
+{
+    return (mWorkFinishedEvent) ? true : false;
+}
+
+void Plugin::WorkStartedEvent(void* data1, void* data2)
+{
+    if(mWorkStartedEvent)
+    {
+        mWorkStartedEvent(data1, data2);
+    }
+}
+
+void Plugin::WorkProgressEvent(void* data1, void* data2)
+{
+    if(mWorkProgressEvent)
+    {
+        mWorkProgressEvent(data1, data2);
+    }
+}
+
+void Plugin::WorkFinishedEvent(void* data1, void* data2)
+{
+    if(mWorkFinishedEvent)
+    {
+        mWorkFinishedEvent(data1, data2);
+    }
+}
+
 bool Plugin::assignRoadRunnerInstance(RoadRunner* rr)
 {
     mRR = rr;
@@ -86,14 +127,29 @@ bool Plugin::resetPlugin()
 
 string Plugin::getPluginPropertiesAsXML()
 {
-    return mCapabilities.asXML();
+    return mProperties.asXML();
 }
 
-bool Plugin::assignInput(void* userData)
+//bool Plugin::assignInput(void* userData)
+//{
+//    //Do whats needed in descendants
+//    mClientData = userData;
+//    return true;
+//}
+
+pair<void*, void*> Plugin::getWorkStartedData()
 {
-    //Do whats needed in descendants
-    mClientData = userData;
-    return true;
+    return pair<void*, void*>(mWorkStartedData1, mWorkStartedData2);
+}
+
+pair<void*, void*> Plugin::getWorkProgressData()
+{
+    return pair<void*, void*>(mWorkProgressData1, mWorkProgressData2);
+}
+
+pair<void*, void*> Plugin::getWorkFinishedData()
+{
+    return pair<void*, void*>(mWorkFinishedData1, mWorkFinishedData2);
 }
 
 bool Plugin::assignOnStartedEvent(PluginEvent startedFnc, void* userData1, void* userData2)
@@ -130,37 +186,34 @@ void Plugin::setLibraryName(const string& libName)
     mLibraryName = libName;
 }
 
-bool Plugin::setParameter(const string& nameOf, const char* value)
+bool Plugin::setProperty(const string& nameOf, const char* value)
 {
-    if(!mCapabilities.count())
+    if(!mProperties.count())
     {
         return false;
     }
 
     string val(value);
-    return mCapabilities.setParameter(nameOf, val);
+    return mProperties.setProperty(nameOf, val);
 }
 
-bool Plugin::setParameter(const string& nameOf, const char* value, Capability& capability)
-{
-    //Go trough the parameter container and look for parameter
-    for(int i = 0; i < capability.nrOfParameters(); i++)
-    {
-        PluginParameter* aPar = const_cast<PluginParameter*>( &(capability[i]) );
-
-        if(aPar->getName() == nameOf)
-        {
-//            if(dynamic_cast< Parameter<int>* >(aParameter))
-//            {
-//                Parameter<int> *aIntPar = dynamic_cast< Parameter<int>* >(aParameter);
-//                int aVal = rr::ToInt(value);
-                aPar->setValueFromString( value);
-//                return true;
-            //}
-        }
-    }
-    return false;
-}
+//bool Plugin::setProperty(const string& nameOf, const char* value)
+//{
+//        PropertyBase* aPar = mProperties.getProperty(nameOf);//const_cast<PropertyBase*>( &(capability[i]) );
+//
+//        if(aPar)
+//        {
+////            if(dynamic_cast< Property<int>* >(aProperty))
+////            {
+////                Property<int> *aIntPar = dynamic_cast< Property<int>* >(aProperty);
+////                int aVal = rr::ToInt(value);
+//                aPar->setValueFromString( value);
+////                return true;
+//            //}
+//        }
+//
+//    return false;
+//}
 
 
 string Plugin::getName()
@@ -181,6 +234,16 @@ string Plugin::getAuthor()
 string Plugin::getCategory()
 {
     return mCategory;
+}
+
+string Plugin::getDescription()
+{
+    return mDescription;
+}
+
+string Plugin::getHint()
+{
+    return mHint;
 }
 
 string Plugin::getVersion()
@@ -209,6 +272,8 @@ string Plugin::getInfo()
     msg<<setw(30)<<left<<"Name"<<mName<<"\n";
     msg<<setw(30)<<left<<"Author"<<mAuthor<<"\n";
     msg<<setw(30)<<left<<"Category"<<mCategory<<"\n";
+    msg<<setw(30)<<left<<"Description"<<mDescription<<"\n";
+    msg<<setw(30)<<left<<"Hint"<<mHint<<"\n";
     msg<<setw(30)<<left<<"Version"<<mVersion<<"\n";
     msg<<setw(30)<<left<<"Copyright"<<mCopyright<<"\n";
     return msg.str();
@@ -218,8 +283,9 @@ string Plugin::getExtendedInfo()
 {
     stringstream msg;
     msg<<getInfo();
-    msg<<"\nParameter Info\n";
-    msg<<(*getParameters());
+    msg<<"\nPlugin Properties Info\n";
+    Properties* props = getProperties();
+    msg<<(*props);
     return msg.str();
 }
 
@@ -233,64 +299,50 @@ unsigned char* Plugin::getManualAsPDF() const
     return NULL;
 }
 
-StringList Plugin::getParameterNames()
+StringList Plugin::getPropertyNames()
 {
-    StringList names;        
-    //For now, if capName is "" return all
-    for(int i = 0; i < mCapabilities.count(); i++)
-    {
-        Parameters* paras = mCapabilities[i]->getParameters();
-        
-        names.Append(paras->getNames());
-    }    
-
-    return names;
+    return mProperties.getNames();
 }
 
-Parameters* Plugin::getParameters()
+Properties* Plugin::getProperties()
 {
-    //For now, if capName is "" return all
-    for(int i = 0; i < mCapabilities.count(); i++)
-    {
-        return mCapabilities[i]->getParameters();
-    }    
-
-    return NULL;
+    return &mProperties;
 }
 
-PluginParameter* Plugin::getParameter(const string& para, const string& capability)
+PropertyBase* Plugin::getProperty(const string& propName)
 {
-    //If capability string is empty, search all capabilites
-    if(capability.size())
-    {
-        Capability* cap = mCapabilities.get(capability);
-        return cap ? cap->getParameter(para) : NULL;
-    }
-    else    //Search all capabilities
-    {
-        for(int i = 0; i < mCapabilities.count(); i++)
-        {
-            if(mCapabilities[i]->getParameter(para))
-            {
-                return mCapabilities[i]->getParameter(para);
-            }
-        }
-    }
-    return NULL;
+    return mProperties.getProperty(propName);
+//    //If capability string is empty, search all capabilites
+//    if(capability.size())
+//    {
+//        Capability* cap = mProperties.get(capability);
+//        return cap ? cap->getProperty(para) : NULL;
+//    }
+//    else    //Search all capabilities
+//    {
+//        for(int i = 0; i < mProperties.count(); i++)
+//        {
+//            if(mProperties[i]->getProperty(para))
+//            {
+//                return mProperties[i]->getProperty(para);
+//            }
+//        }
+//    }
+//    return NULL;
 }
 
-PluginParameter* Plugin::getParameter(const string& para, Capability& capability)
-{
-    return capability.getParameter(para);
-}
+//PropertyBase* Plugin::getProperty(const string& para, Capability& capability)
+//{
+//    return capability.getProperty(para);
+//}
 
 //Capability* Plugin::getCapability(const string& name)
 //{
-//    for(int i = 0; i < mCapabilities.count(); i++)
+//    for(int i = 0; i < mProperties.count(); i++)
 //    {
-//        if(mCapabilities[i]->getName() == name)
+//        if(mProperties[i]->getName() == name)
 //        {
-//            return (mCapabilities[i]);
+//            return (mProperties[i]);
 //        }
 //    }
 //    return NULL;

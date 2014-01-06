@@ -57,6 +57,9 @@ StringList::StringList(const StringList& cp)
 StringList::~StringList()
 {}
 
+//Converison operator
+StringList::operator const vector<string>&() const { return mStrings;}
+
 vector<string>::iterator StringList::begin()
 {
     return mStrings.begin();
@@ -69,7 +72,7 @@ vector<string>::iterator StringList::end()
 
 string& StringList::operator[](const int& index)
 {
-    if(index > Count() -1 )
+    if((u_int) index > Count() -1 )
     {
         stringstream msg;
         msg<<"index ("<<index<<") out of bounds in StringList with count "<<Count();
@@ -81,7 +84,7 @@ string& StringList::operator[](const int& index)
 
 const string& StringList::operator[](const int& index) const
 {
-    if(index > Count() -1 )
+    if((u_int) index > Count() -1 )
     {
         stringstream msg;
         msg<<"index ("<<index<<") out of bounds in StringList with count "<<Count();
@@ -105,10 +108,10 @@ unsigned int StringList::Count() const
 string StringList::AsString(const string& delimiter) const
 {
     stringstream names;
-    for(int i = 0; i < mStrings.size(); i++)
+    for(u_int i = 0; i < mStrings.size(); i++)
     {
         names<<mStrings[i];
-        if( i < mStrings.size() - 1)
+        if( i < mStrings.size() - (u_int) 1)
         {
             names<<delimiter;
         }
@@ -136,7 +139,7 @@ StringList StringList::operator-(const StringList& rhs)
 {
     StringList newList;
 
-    for(int i = 0; i < Count(); i++)
+    for(u_int i = 0; i < Count(); i++)
     {
         string item = mStrings[i] + "-" + rhs[i];
         newList.add(item);
@@ -156,7 +159,7 @@ void StringList::InsertAt(const int& index, const string& item)
 
 void StringList::Append(const StringList& list)
 {
-    for(int i = 0; i < list.Count(); i++)
+    for(u_int i = 0; i < list.Count(); i++)
     {
         mStrings.push_back(list[i]);
     }
@@ -193,6 +196,23 @@ bool StringList::DontContain(const string& item) const
     return !Contains(item);
 }
 
+bool isRHSLonger(string const& lhs, string const& rhs)
+{
+    return lhs.size() < rhs.size();
+}
+
+string StringList::getLongest()
+{
+	mLI = std::max_element(mStrings.begin(), mStrings.end(), isRHSLonger);
+    return *mLI;
+}
+
+string StringList::getShortest()
+{
+    mLI = std::min_element(mStrings.begin(), mStrings.end(), isRHSLonger);
+    return *mLI;
+}
+
 void StringList::clear()
 {
     mStrings.clear();
@@ -218,10 +238,10 @@ StringList& StringList::operator=(const vector<string>& rhs)
 ostream& operator<<(ostream& stream, const StringList& list)
 {
     stream<<"{";
-    for(int i = 0; i < list.Count(); i++)
+    for(u_int i = 0; i < list.Count(); i++)
     {
         stream<<"\""<<list[i]<<"\"";
-        if(i < list.Count() -1)
+        if(i < list.Count() - (u_int) 1)
         {
             stream<<",";
         }

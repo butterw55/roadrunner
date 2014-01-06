@@ -18,7 +18,7 @@ mTestParameter("NrOfIterations", 123, "Hint for Nr of iterations")
 {
     mTestCapability.setup("TestPlugin", "A function in a plugin");
     mTestCapability.addParameter(&mTestParameter);
-    mCapabilities.add(mTestCapability);
+    mProperties.add(mTestCapability);
 }
 
 TestPlugin::~TestPlugin()

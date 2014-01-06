@@ -2,11 +2,11 @@
 #include "rrRoadRunnerData.h"
 #include "rrLogger.h"
 #include "LMWorker.h"
-//#include "noise.h"
 #include "lm.h"
 #include "lib/lmmin.h"
 #include "rrStringUtils.h"
 #include "rrUtils.h"
+#include "rrProperty.h"
 #include "../wrappers/C/rrp_api.h"
 #include "../../wrappers/C/rrc_api.h"
 #include "../../wrappers/C/rrc_utilities.h"
@@ -55,40 +55,47 @@ void LMWorker::run()
 
     setupRoadRunner();
 
-    StringList& species = mTheHost.mObservedDataSelectionList.getValueReference();//mMinData.getObservedDataSelectionList();
+    StringList& species = mTheHost.mExperimentalDataSelectionList.getValueReference();//mMinData.getExperimentalDataSelectionList();
     Log(lInfo)<<"The following species are selected: "<<species.AsString();
 
-    Parameters& Paras =  mTheHost.mInputParameterList.getValueReference(); //mMinData.getParameters();
+    Properties& Paras =  mTheHost.mInputParameterList.getValueReference(); //mMinData.getProperties();
     Log(lInfo)<<"The following parameters are to be minimized";
     for(int i = 0; i < Paras.count(); i++)
     {
         Log(lInfo)<<Paras[i]->getName()<<" with initial value: "<<Paras[i]->getValueAsString();
     }
 
+    mTheHost.mNrOfIter.setValue(0);
+    mTheHost.mNorm.setValue(0.0);
     //Some parameters to the Algorithm..
-    lm_status_struct status;
     lm_control_struct control = lm_control_double;
-    control.printflags = 3;
+
+    //Set defaults from Plugin
+    control.ftol                    =       *(double*)  mTheHost.ftol.getValueHandle();
+    control.xtol                    =       *(double*)  mTheHost.xtol.getValueHandle();
+    control.gtol                    =       *(double*)  mTheHost.gtol.getValueHandle();
+    control.epsilon                 =       *(double*)  mTheHost.epsilon.getValueHandle();
+    control.stepbound               =       *(double*)  mTheHost.stepbound.getValueHandle();
+    control.patience                =       *(int*)     mTheHost.patience.getValueHandle();
+//    control.scale_diag              =       *(int*)     mTheHost.scale_diag.getValueHandle();
+
+    control.msgfile = NULL;
+    control.verbosity = 0;
 
     //Setup data structures
     setup();
 
-    if(mTheHost.mWorkProgressEvent)
-    {
-        mTheHost.mWorkProgressEvent(mTheHost.mWorkProgressData1, NULL);
-    }
 
     //This is the library function doing the minimization..
     lmmin(  mLMData.nrOfParameters,
             mLMData.parameters,
             mLMData.nrOfResiduePoints,
-            (const void*) &mLMData,
+			(const void*) &mTheHost,
             evaluate,
             &control,
-            &status,
-            ui_printout);
+            &mTheHost.mLMStatus);
 
-    //The user may have aborted the minization... check..
+    //The user may have aborted the minization... check here..
     if(mTheHost.mTerminate)
     {
         //user did set the terminate flag to true.. discard any minimization data and get out of the
@@ -98,29 +105,30 @@ void LMWorker::run()
         return;
     }
     /* print results */
-    Log(lInfo)<<"Results:";
-    Log(lInfo)<<"Status after "<<status.nfev<<" function evaluations: "<<lm_infmsg[status.info] ;
-    Log(lInfo)<<"Obtained parameters: ";
+    Log(lInfo)<<"==================== Fitting Result ================================";
+    Log(lInfo)<<"Nr of function evaluations: "  <<  mTheHost.mLMStatus.nfev;
+    Log(lInfo)<<"Status message: "              <<  lm_infmsg[mTheHost.mLMStatus.outcome];
+    Log(lInfo)<<"Minimized parameter values: ";
 
     for (int i = 0; i < mLMData.nrOfParameters; ++i)
     {
         Log(lInfo)<<"Parameter "<<mLMData.parameterLabels[i]<<" = "<< mLMData.parameters[i];
     }
 
-    Log(lInfo)<<"Obtained norm:  "<<status.fnorm;
+    Log(lInfo)<<"Norm:  "<<mTheHost.mLMStatus.fnorm;
 
     //Populate with data to report back
-    Parameters& parsOut = mTheHost.mOutputParameterList.getValueReference();
+    Properties& parsOut = mTheHost.mOutputParameterList.getValueReference();
     parsOut.clear();
     for (int i = 0; i < mLMData.nrOfParameters; ++i)
     {
-        parsOut.add(new Parameter<double>(mLMData.parameterLabels[i], mLMData.parameters[i], ""), true);
+        parsOut.add(new Property<double>(mLMData.parameters[i], mLMData.parameterLabels[i], ""), true);
     }
 
-    mTheHost.mNorm.setValue(status.fnorm);
-    createModelData(mTheHost.mModelData.getValueReference());
+    mTheHost.mNorm.setValue(mTheHost.mLMStatus.fnorm);
+    createModelData(mTheHost.mModelData.getValuePointer());
 
-    createResidualsData(mTheHost.mResidualsData.getValueReference());
+    createResidualsData(mTheHost.mResidualsData.getValuePointer());
     workerFinished();
 }
 
@@ -129,7 +137,7 @@ void LMWorker::workerStarted()
     mTheHost.mIsWorking = true;
     if(mTheHost.mWorkStartedEvent)
     {
-        mTheHost.mWorkStartedEvent(NULL, mTheHost.mWorkStartedData2);
+        mTheHost.mWorkStartedEvent(mTheHost.mWorkStartedData1, mTheHost.mWorkStartedData2);
     }
 }
 
@@ -138,22 +146,22 @@ void LMWorker::workerFinished()
     mTheHost.mIsWorking = false;//Set this flag before event so client can query plugin about termination
     if(mTheHost.mWorkFinishedEvent)
     {
-        mTheHost.mWorkFinishedEvent(NULL, mTheHost.mWorkFinishedData2);
+        mTheHost.mWorkFinishedEvent(mTheHost.mWorkFinishedData1, mTheHost.mWorkFinishedData2);
     }
 }
 
 bool LMWorker::setup()
 {
-    StringList& species         = mTheHost.mObservedDataSelectionList.getValueReference();   //Model data selection..
+    StringList& species         = mTheHost.mExperimentalDataSelectionList.getValueReference();   //Model data selection..
     mLMData.nrOfSpecies         = species.Count();
-    Parameters parameters       = mTheHost.mInputParameterList.getValue();
+    Properties parameters       = mTheHost.mInputParameterList.getValue();
     mLMData.nrOfParameters      = parameters.count();
     mLMData.parameters          = new double[mLMData.nrOfParameters];
     mLMData.mLMPlugin           = static_cast<RRPluginHandle> (&mTheHost);
     //Set initial parameter values
     for(int i = 0; i < mLMData.nrOfParameters; i++)
     {
-        Parameter<double> *par = (Parameter<double>*) parameters[i];
+        Property<double> *par = (Property<double>*) parameters[i];
         if(par)
         {
             mLMData.parameters[i] = par->getValue();
@@ -164,7 +172,7 @@ bool LMWorker::setup()
         }
     }
 
-    RoadRunnerData& obsData             = *(mTheHost.mObservedData.getValueReference());
+    RoadRunnerData& obsData             = (mTheHost.mExperimentalData.getValueReference());
     mLMData.nrOfTimePoints              = obsData.rSize();
     mLMData.timeStart                   = obsData.getTimeStart();
     mLMData.timeEnd                     = obsData.getTimeEnd();
@@ -192,7 +200,7 @@ bool LMWorker::setup()
         }
     }
 
-    //Populate Observed Data
+    //Populate Experimental Data
     for (int i = 0; i < mLMData.nrOfSpecies; i++)
     {
         for(int timePoint = 0; timePoint < mLMData.nrOfTimePoints; timePoint++)
@@ -227,7 +235,7 @@ bool LMWorker::setup()
     mRRI->setSelections(species);
 
     mLMData.mProgressEvent               = mTheHost.mWorkProgressEvent;
-    mLMData.mProgressEventContextData    = mTheHost.mWorkProgressData2;
+    mLMData.mProgressEventContextData    = mTheHost.mWorkProgressData1;
     return true;
 }
 
@@ -240,24 +248,26 @@ bool LMWorker::setupRoadRunner()
 
     mRRI = new RoadRunner;
     mRRI->load(mTheHost.mSBML.getValue());
-    mRRI->setSelections(mTheHost.getObservedDataSelectionList());
+    mRRI->setSelections(mTheHost.getExperimentalDataSelectionList());
     return true;
 }
 
 /* function evaluation, determination of residues */
-void evaluate(const double *par,       //Parameter vector
+void evaluate(const double *par,       //Property vector
               int          m_dat,      //Dimension of residue vector
               const void   *userData,  //Data structure
               double       *fvec,      //residue vector..
-              int          *infoIndex  //Index into info message array
+              int          *userBreak  //Non zero value means termination
 )
 {
-    const lmDataStructure *myData = (const lmDataStructure*)userData;
+    const LM *thePlugin = (const LM*) userData;
+    LM* plugin = const_cast<LM*>(thePlugin);
+	const lmDataStructure* myData = &(thePlugin->mLMData);
 
     //Check if user have asked for termination..
     if(isBeingTerminated(myData->mLMPlugin))
     {
-        (*infoIndex)= -1; //This signals lmfit algorithm to break
+        (*userBreak) = -1; //This signals lmfit algorithm to break
         return;
     }
 
@@ -316,12 +326,25 @@ void evaluate(const double *par,       //Parameter vector
             count++;
         }
     }
+
     freeRRCData(rrcData);
+
+    if(plugin->hasProgressEvent())
+    {
+        //Assign data relevant to the progress
+        double norm = lm_enorm(m_dat, fvec);
+		plugin->mNorm.setValue(norm);
+        plugin->mNrOfIter.setValue(plugin->mNrOfIter.getValue() + 1);
+
+        //Pass trough event data
+        pair<void*, void*> passTroughData = plugin->getWorkProgressData();
+        plugin->WorkProgressEvent(passTroughData.first, passTroughData.second);
+    }
 }
 
 void LMWorker::createModelData(RoadRunnerData* _data)
 {
-    RoadRunnerData& data = *(_data);        
+    RoadRunnerData& data = *(_data);
     //We now have the parameters
     StringList selList("time");
     selList.Append(mTheHost.mModelDataSelectionList.getValue());
@@ -351,8 +374,8 @@ void LMWorker::createResidualsData(RoadRunnerData* _data)
 {
     RoadRunnerData& resData = *(_data);        
     //We now have the parameters
-    RoadRunnerData& obsData = *(mTheHost.mObservedData.getValueReference());
-    RoadRunnerData& modData = *(mTheHost.mModelData.getValueReference());
+    RoadRunnerData& obsData = (mTheHost.mExperimentalData.getValueReference());
+    RoadRunnerData& modData = (mTheHost.mModelData.getValueReference());
 
     resData.reSize(modData.rSize(), modData.cSize());
 

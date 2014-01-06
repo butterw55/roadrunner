@@ -48,7 +48,7 @@ namespace rrp
 /**
  * Plugins written in C++ should inherit from this class.
  */
-class PLUGINS_API_DECLSPEC CPPPlugin : public Plugin
+class RRP_DECLSPEC CPPPlugin : public Plugin
 {
     protected:
 

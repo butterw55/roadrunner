@@ -1,91 +1,78 @@
 /*
- * Project:  LevenbergMarquardtLeastSquaresFitting
+ * Library:   lmfit (Levenberg-Marquardt least squares fitting)
  *
- * File:     lmmin.h
+ * File:      lmmin.h
  *
- * Contents: Public interface to the Levenberg-Marquardt core implementation.
+ * Contents:  Declarations for Levenberg-Marquardt minimization.
  *
- * Author:   Joachim Wuttke 2004-2013
+ * Copyright: Joachim Wuttke, Forschungszentrum Juelich GmbH (2004-2013)
  *
- * Licence:  see ../COPYING (FreeBSD)
- *
- * Homepage: joachimwuttke.de/lmfit
+ * License:   see ../COPYING (FreeBSD)
+ * 
+ * Homepage:  apps.jcns.fz-juelich.de/lmfit
  */
 
 #ifndef LMMIN_H
 #define LMMIN_H
-
+#undef __BEGIN_DECLS
+#undef __END_DECLS
 #ifdef __cplusplus
-extern "C" {
+# define __BEGIN_DECLS extern "C" {
+# define __END_DECLS }
+#else
+# define __BEGIN_DECLS /* empty */
+# define __END_DECLS /* empty */
 #endif
 
-/** Compact high-level interface. **/
+#include "lmstruct.h"
 
-/* Collection of control (input) parameters. */
-typedef struct
-{
-    double  ftol;       /* relative error desired in the sum of squares. */
-    double  xtol;       /* relative error between last two approximations. */
-    double  gtol;       /* orthogonality desired between fvec and its derivs. */
-    double  epsilon;    /* step used to calculate the jacobian. */
-    double  stepbound;  /* initial bound to steps in the outer loop. */
-    int     maxcall;    /* maximum number of iterations. */
-    int     scale_diag; /* UNDOCUMENTED, TESTWISE automatical diag rescaling? */
-    int     printflags; /* OR'ed to produce more noise */
-} lm_control_struct;
+__BEGIN_DECLS
 
-/* Collection of status (output) parameters. */
-typedef struct
-{
-    double  fnorm;     /* norm of the residue vector fvec. */
-    int     nfev;         /* actual number of iterations. */
-    int     info;         /* status (index for lm_infmsg and lm_shortmsg). */
-} lm_status_struct;
+/* Levenberg-Marquardt minimization. */
+void lmmin( int n_par, double *par, int m_dat, const void *data, 
+            void (*evaluate) (const double *par, int m_dat, const void *data,
+                              double *fvec, int *userbreak),
+            const lm_control_struct *control, lm_status_struct *status );
+/*
+ *   This routine contains the core algorithm of our library.
+ *
+ *   It minimizes the sum of the squares of m nonlinear functions
+ *   in n variables by a modified Levenberg-Marquardt algorithm.
+ *   The function evaluation is done by the user-provided routine 'evaluate'.
+ *   The Jacobian is then calculated by a forward-difference approximation.
+ *
+ *   Parameters:
+ *
+ *      n is the number of variables (INPUT, positive integer).
+ *
+ *      x is the solution vector (INPUT/OUTPUT, array of length n).
+ *        On input it must be set to an estimated solution.
+ *        On output it yields the final estimate of the solution.
+ *
+ *      m is the number of functions to be minimized (INPUT, positive integer).
+ *        It must fulfill m>=n.
+ *
+ *      data is a pointer that is ignored by lmmin; it is however forwarded
+ *        to the user-supplied functions evaluate and printout.
+ *        In a typical application, it contains experimental data to be fitted.
+ *
+ *      evaluate is a user-supplied function that calculates the m functions.
+ *        Parameters:
+ *          n, x, m, data as above.
+ *          fvec is an array of length m; on OUTPUT, it must contain the
+ *            m function values for the parameter vector x.
+ *          userbreak is an integer pointer. When *userbreak is set to a 
+ *            nonzero value, lmmin will terminate.
+ *
+ *      control contains INPUT variables that control the fit algorithm,
+ *        as declared and explained in lmstruct.h
+ *
+ *      status contains OUTPUT variables that inform about the fit result,
+ *        as declared and explained in lmstruct.h
+ */
 
-/* Recommended control parameter settings. */
-extern const lm_control_struct lm_control_double;
-extern const lm_control_struct lm_control_float;
-
-/* Standard monitoring routine. */
-void lm_printout_std( int n_par, const double *par, int m_dat,
-                      const void *data, const double *fvec,
-                      int printflags, int iflag, int iter, int nfev );
-
-/* Refined calculation of Eucledian norm, typically used in printout routine. */
+/* Refined calculation of Eucledian norm. */
 double lm_enorm( int, const double * );
 
-/* The actual minimization. */
-void lmmin( int             n_par,
-            double         *par,
-            int             m_dat,
-            const void     *data,
-            void          (*evaluate) (const double *par, int m_dat, const void *data, double *fvec, int *info),
-            const lm_control_struct *control, lm_status_struct *status,
-            void (*printout) (int n_par, const double *par, int m_dat, const void *data, const double *fvec, int printflags, int iflag, int iter, int nfev)
-            );
-
-
-/** Legacy low-level interface. **/
-
-/* Alternative to lm_minimize, allowing full control, and read-out
-   of auxiliary arrays. For usage, see implementation of lmmin. */
-void lm_lmdif( int m, int n, double *x, double *fvec, double ftol,
-               double xtol, double gtol, int maxfev, double epsfcn,
-               double *diag, int mode, double factor, int *info, int *nfev,
-               double *fjac, int *ipvt, double *qtf, double *wa1,
-               double *wa2, double *wa3, double *wa4,
-               void (*evaluate) (const double *par, int m_dat, const void *data, double *fvec, int *info),
-               void (*printout) (int n_par, const double *par, int m_dat, const void *data, const double *fvec, int printflags, int iflag, int iter, int nfev),
-               int printflags,
-               const void *data
-               );
-
-extern const char *lm_infmsg[];
-extern const char *lm_shortmsg[];
-
-
-#ifdef __cplusplus
-}
-#endif
-
+__END_DECLS
 #endif /* LMMIN_H */

@@ -3,6 +3,8 @@ PROJECT(RR_PYTHON_EXAMPLES)
 
 set(examples 	
 #rrLevenbergMarquardtDemo.py
+#testData.py
+#lmFitTestModel.xml
 )
 
 install(    

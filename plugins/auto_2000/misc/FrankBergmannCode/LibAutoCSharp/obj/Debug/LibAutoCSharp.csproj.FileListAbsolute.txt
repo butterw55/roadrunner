@@ -1,0 +1,4 @@
+R:\FBAuto\LibAutoCSharp.dll
+R:\FBAuto\LibAutoCSharp.pdb
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\LibAutoCSharp\obj\Debug\LibAutoCSharp.dll
+R:\rrl\plugins\bifurcation\misc\FrankBergmannCode\LibAutoCSharp\obj\Debug\LibAutoCSharp.pdb

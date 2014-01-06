@@ -60,7 +60,7 @@ typedef bool  (*destroyF)();
  * The CPlugin class is containing the framework to load plugins that are written in pure C.
  * The shared library need to export an execute and destroy function.
  */
-class PLUGINS_API_DECLSPEC CPlugin : public Plugin
+class RRP_DECLSPEC CPlugin : public Plugin
 {
     friend PluginManager;
     public:
