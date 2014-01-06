@@ -359,17 +359,17 @@ char* autoCallConv getFort9File(int length)
 
 void autoCallConv CallAuto()
 {
-    char *oldDir = getcwd(NULL, 256);
+    //char *oldDir = getcwd(NULL, 256);
     try
     {
         int argc = 1;
-        char *cmd = (char*) malloc(sizeof(char)*7);
+        char cmd[512];// = (char*) malloc(sizeof(char)*7);
         strncpy(cmd, "vsAuto\0", 7);
         char *argv[] = { cmd }  ;
-        chdir(GetTempPath().c_str());
+        //chdir(GetTempPath().c_str());
         autolib::AUTO_main(argc, argv);
         //delete[] argv;
-        free(cmd);
+        
     }
     catch(exception& e)
     {
@@ -379,8 +379,8 @@ void autoCallConv CallAuto()
     }
     autolib::CloseAllFiles();
     clearCallbacks();
-    chdir(oldDir);
-    free(oldDir);
+    //chdir(oldDir);
+    //free(oldDir);
 }
 
 }
