@@ -17,7 +17,7 @@ int main()
     string tempFolder("r:/temp");
     string sbmlFile("../models/bistable.xml");
 
-    gLog.setLevel(lInfo);
+	gLog.setLevel(lInfo);
     gLog.enableConsoleLogging();
     gLog.enableFileLogging(joinPath(tempFolder, "bistable.log"));
     RoadRunner*  rri = NULL;
