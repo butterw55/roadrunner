@@ -2,6 +2,7 @@
 
 import rrPlugins_CAPI as rrp
 import matplotlib.pyplot as plt
+import os.path
 
 __version__ = "0.6.1"
 
@@ -26,7 +27,12 @@ class DataSeries(object):
     def __AsNumpy (self):
         return rrp.getNumpyData (self._data)
 
-    def writeRoadRunnerData(self, fileName):
+    def readDataSeries(self, fileName):
+        if not os.path.isfile (fileName):
+            raise Exception ("File not found: " + fileName)
+        self._data = rrp.createRoadRunnerDataFromFile (fileName)
+
+    def writeDataSeries(self, fileName):
         rrp.writeRoadRunnerData(self._data, fileName)
 
     data = property (__getHandle)

@@ -28,5 +28,7 @@ numpydata = noisePlugin.InputData.AsNumpy;
 rrp.plot (numpydata[:,[0,1]], myColor="blue", myLinestyle="-", myMarker="", myLabel="S1 Fitted")
 rrp.show()
 
-d.writeRoadRunnerData ("testData2.dat")
+d.writeDataSeries ("testData2.dat")
+
+d.readDataSeries ("testData2.dat")
 print "done"
