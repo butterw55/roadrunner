@@ -26,9 +26,9 @@ target_link_libraries (${target}
 rrplugins_api
 #nleq-static.a
 #rr-libstruct-static
-#lapack
-#blas
-#f2c
+lapack
+blas
+f2c
 #sbml-static.a
 #xml2
 #sundials_nvecserial.a

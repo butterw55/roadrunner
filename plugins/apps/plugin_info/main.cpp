@@ -10,7 +10,8 @@ int main()
 {
     try
     {
-        PluginManager pm("..\\plugins");
+        string fldr("../plugins");
+        PluginManager pm(fldr);
         cout<<"==== Loading Plugins =====\n";
         if(pm.load() == 0)
         {
@@ -22,6 +23,18 @@ int main()
         }
         cout<<"\n==== End of Loading Plugins =====\n\n";
         cout<<"Plugin Info ============\n"<<pm;
+
+
+        //Get info about each plugin
+        for(int i =0; i < pm.getNumberOfPlugins(); i++)
+        {
+        
+            Plugin* aPlugin = pm[i];
+            if(aPlugin)
+            {
+                cout<<aPlugin->getInfo();
+            }
+        }
         pm.unload();
         return 0;
 

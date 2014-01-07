@@ -17,8 +17,8 @@
 namespace rrp
 {
 static bool  hasFileExtension(const string& fName);
-static char* getPluginExtension();
-static char* getPluginPrefix();
+static const char* getPluginExtension();
+static const char* getPluginPrefix();
 
 using namespace std;
 using namespace rr;
@@ -542,28 +542,28 @@ bool destroyRRPlugin(Plugin *plugin)
 }
 
 
-char* getPluginExtension()
+const char* getPluginExtension()
 {
 
-#if defined(_WIN32) || defined(__WIN32__)
+#if defined(_WIN32)
     return "dll";
-#elif defined(UNIX)
-    return "a";
+#elif defined(__linux__)
+    return "so";
 #else
     // OSX
     return "dylib";
 #endif
 }
 
-char* getPluginPrefix()
+const char* getPluginPrefix()
 {
 
 #if defined(_WIN32)
     return "";
-#elif defined(UNIX)
+#elif defined(__linux__)
     return "lib";
 #else
-    return "PLATFORM";
+    return "DEFINE_PLATFORM";
 #endif
 }
 
