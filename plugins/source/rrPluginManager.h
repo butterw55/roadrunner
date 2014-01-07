@@ -42,6 +42,7 @@
 #define rrPluginManagerH
 #include <vector>
 #include <string>
+#include <ostream>
 #include "rrpExporter.h"
 #include "rrConstants.h"
 #include "rrStringList.h"
@@ -55,7 +56,9 @@ namespace rrp
 using std::string;
 using std::vector;
 using std::pair;
+using std::ostream;
 using rr::gEmptyString;
+
 //using rr::StringList;
 using Poco::SharedLibrary;
 
@@ -79,18 +82,24 @@ typedef pair< Poco::SharedLibrary*, Plugin* > rrPlugin;
 class RRP_DECLSPEC PluginManager
 {
     public:
-    /**
-     * The constructor of a Plugin manager creates a Plugin manager instance.
-     *
-     * @param pluginFolder Folder where the plugin manager is looking for plugins. If argument
-        is not supplied, the manager will use the default folder, which is "plugins" located in RoadRunners install folder.
-     */
+        /**
+         * The constructor of a Plugin manager creates a Plugin manager instance.
+         *
+         * @param pluginFolder Folder where the plugin manager is looking for plugins. If argument
+            is not supplied, the manager will use the default folder, which is "plugins" located in RoadRunners install folder.
+         */
                                         PluginManager(const string& pluginFolder = gEmptyString);
-    /**
-     * The destructor of a Plugin manager will free any memory allocated and also unload any plugins that it loaded.
-     */
-
+        /**
+         * The destructor of a Plugin manager will free any memory allocated and also unload any plugins that it loaded.
+         */
         virtual                        ~PluginManager();
+
+        /**
+            Get information about the current plugin manager object,
+            such as number of plugins loaded, their names and where they are loaded from
+            @return string String holding plugin manager information
+        */
+        string                          getInfo();
 
         /**
             Change the directory where the Manager loads plugins
@@ -107,9 +116,9 @@ class RRP_DECLSPEC PluginManager
 
         /**
             Load a specific plugin, or, if no argument supplied, loads ALL plugins in the current plugin folder.
-            @return Boolean indicating success
+            @return integer Returning number of succesfully loaded plugins
         */
-        bool                            load(const string& pluginName = gEmptyString);
+        int                             load(const string& pluginName = gEmptyString);
 
         /**
             Unload a specific plugin, or, if no argument supplied, unloads ALL plugins.
@@ -167,16 +176,24 @@ class RRP_DECLSPEC PluginManager
             Retrieves the names of all loaded plugins as a list of strings.
             \return StringList A Stringlist containing the name of each loaded Plugin.
         */
-        rr::StringList                      getPluginNames();
+        rr::StringList                  getPluginNames();
 
         /**
             Retrieves the shared library names of all loaded plugins as a list of strings.
             \return StringList A Stringlist containing the file name of each loaded Plugin.
         */
         rr::StringList                  getPluginLibraryNames();
+
+        /**
+            Output plugin information to a std ostream
+        */
+        RRP_DECLSPEC
+        friend ostream&                 operator<<(ostream& os, PluginManager& pm);
+
     private:
         string                          mPluginFolder;
-        string                          mPluginExtension;    //Different on different OS's
+        string                          mPluginExtension;   //Different on different OS's
+        string                          mPluginPrefix;      //Different on different OS's
         vector< rrPlugin >              mPlugins;
         vector< rrPlugin >::iterator    mPluginsIter;
 

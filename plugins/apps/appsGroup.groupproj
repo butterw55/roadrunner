@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{DC30D47F-A40A-49E0-AC38-E2270FD30FE9}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="..\source\rrplugins_api.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="plugin_info\plugin_info.cbproj">
+            <Dependencies>..\source\rrplugins_api.cbproj</Dependencies>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="rrplugins_api">
+        <MSBuild Projects="..\source\rrplugins_api.cbproj"/>
+    </Target>
+    <Target Name="rrplugins_api:Clean">
+        <MSBuild Projects="..\source\rrplugins_api.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="rrplugins_api:Make">
+        <MSBuild Projects="..\source\rrplugins_api.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="plugin_info" DependsOnTargets="rrplugins_api">
+        <MSBuild Projects="plugin_info\plugin_info.cbproj"/>
+    </Target>
+    <Target Name="plugin_info:Clean" DependsOnTargets="rrplugins_api:Clean">
+        <MSBuild Projects="plugin_info\plugin_info.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="plugin_info:Make" DependsOnTargets="rrplugins_api:Make">
+        <MSBuild Projects="plugin_info\plugin_info.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="rrplugins_api;plugin_info"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="rrplugins_api:Clean;plugin_info:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="rrplugins_api:Make;plugin_info:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
