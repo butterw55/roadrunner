@@ -314,9 +314,9 @@ bool rrp_cc getListProperty(RRPropertyHandle handle, void* (value))
 {
     start_try
         Property<Properties>* para = castToPropertiesProperty(handle);
-        //Properties* assignTo = castToProperties(value);
-        //
-        (value) = (void*) &(para->getValue());
+        Properties* assignTo = castToProperties(value);
+        
+        (assignTo) = (para->getValuePointer()); 
         return true;
     catch_bool_macro
 }
@@ -335,7 +335,7 @@ bool rrp_cc getRoadRunnerDataProperty(RRPropertyHandle handle, void* value)
     start_try
         Property<RoadRunnerData>* para = castToRoadRunnerDataProperty(handle);
         RoadRunnerData* assignTo = castToRoadRunnerData(value);
-        (assignTo) = &(para->getValue());
+        (*assignTo) = (para->getValueReference()); 
         return true;
     catch_bool_macro
 }

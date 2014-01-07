@@ -59,7 +59,7 @@ else() #Unix
     target_link_libraries ( ${target}
         rrc_api
         roadrunner-static
-        rrPluginsAPI
+        rrplugins_api
         rr-libstruct-static
         nleq-static
         sbml-static
