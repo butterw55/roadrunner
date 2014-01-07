@@ -19,6 +19,9 @@ rrplugins_api
 endif()
 
 if(UNIX)
+add_definitions(
+-DPOCO_STATIC
+)
 target_link_libraries (${target} 
 rrplugins_api
 #nleq-static.a
@@ -31,7 +34,7 @@ rrplugins_api
 #sundials_nvecserial.a
 #sundials_cvode.a
 #pthread
-#poco_foundation-static.a
+poco_foundation-static.a
 #dl
 )
 endif()

@@ -562,6 +562,8 @@ char* getPluginPrefix()
     return "";
 #elif defined(UNIX)
     return "lib";
+#else
+    return "PLATFORM";
 #endif
 }
 
