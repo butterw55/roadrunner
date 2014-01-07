@@ -1,4 +1,5 @@
 #pragma hdrstop
+#include "rrUtils.h"
 #include "rrCPlugin.h"
 //---------------------------------------------------------------------------
 
@@ -34,6 +35,20 @@ bool CPlugin::execute(bool useThread)
     return false;
 }
 
+rr::StringList CPlugin::getPropertyNames()
+{
+    char* propNames = getCPropertyNames();
+    rr::StringList names(propNames, ",");
+    rr::freeText(propNames);
+    return names;
+}
+
+PropertyBase* CPlugin::getProperty(const string& prop)
+{
+    PropertyBase* baseProp = (PropertyBase*) getCProperty(prop.c_str());
+    return baseProp;
+
+}
 }
 
 

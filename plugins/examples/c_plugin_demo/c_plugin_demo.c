@@ -27,25 +27,31 @@ const char* cc getCategory()
 
 const char* cc getListOfCPluginPropertyNames(RRPluginHandle plugin)
 {
-    return getListOfPluginPropertyNames(gProperties);
+    char* names = getNamesFromPropertyList(gProperties);
+    return names;
 }
 
-void*  cc getCPluginProperty(RRPropertyHandle property, char* name)
+void*  cc getCPluginProperty(const char* name)
 {
-    return getPlugin
+    if(gPlugin)
+    {
+        return getProperty(gProperties, name);
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 bool cc setupCPlugin(RRPluginHandle aPlugin)
 {
     gPlugin = aPlugin;
     gDemoProperty = createProperty("Demo Property", "string", "Demo Hint", 0);
-    setPropertyByString(gDemoProperty, "Demo Property Value");
-
+    setPropertyByString(gDemoProperty, "Intial Demo Property Value");
     //Add the property to the property container
     gProperties = createPropertyList();
 
     addPropertyToList(gProperties, gDemoProperty);
-
     return true;
 }
 
@@ -67,7 +73,7 @@ bool cc execute()
         return false;
     }
 
-//    *((char**) userData) = text;
+    setPropertyByString(gDemoProperty, text);
     return true;
 }
 

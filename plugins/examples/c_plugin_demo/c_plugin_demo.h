@@ -21,7 +21,7 @@ bool            RR_PLUGIN_DECLSPEC cc setupCPlugin(RRPluginHandle aPlugin);
 bool            RR_PLUGIN_DECLSPEC cc execute(void* userData);
 bool            RR_PLUGIN_DECLSPEC cc destroyPlugin(RRPluginHandle plugin);
 const char*     RR_PLUGIN_DECLSPEC cc getListOfCPluginPropertyNames(RRPluginHandle plugin);
-void*           RR_PLUGIN_DECLSPEC cc getCPluginProperty(RRPropertyHandle property, char* name);
+void*           RR_PLUGIN_DECLSPEC cc getCPluginProperty(const char* name);
 
 #endif
 

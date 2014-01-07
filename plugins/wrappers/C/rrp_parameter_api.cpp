@@ -418,13 +418,21 @@ bool rrp_cc clearPropertyList(RRPropertiesHandle handle)
     start_try
         Properties* paras = castToProperties(handle);
         return paras->clear();
-        catch_bool_macro
+    catch_bool_macro
+}
+
+RRPropertyHandle rrp_cc getProperty(RRPropertiesHandle handle, const char* name)
+{
+    start_try
+        Properties* props = castToProperties(handle);
+        return props->getProperty(name);
+    catch_ptr_macro
 }
 
 char* rrp_cc getNamesFromPropertyList(RRPropertiesHandle handle)
 {
     start_try
-        Properties* paras = castToProperties(handle);    
+        Properties* paras = castToProperties(handle);
         StringList aList;
         for(int i = 0; i < paras->count(); i++)
         {

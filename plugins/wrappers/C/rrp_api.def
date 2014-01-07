@@ -51,6 +51,7 @@ freeProperty                                   = _freeProperty
 createPropertyList                             = _createPropertyList
 freeProperties                                 = _freeProperties
 
+getProperty                                    = _getProperty
 getPropertyName                                = _getPropertyName
 getPropertyHint                                = _getPropertyHint
 getPropertyValueAsString                       = _getPropertyValueAsString

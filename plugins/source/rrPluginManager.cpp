@@ -463,8 +463,8 @@ Plugin* PluginManager::createCPlugin(SharedLibrary *libHandle)
         //Minimum bare bone plugin need these
         charStarFnc         getName                 = (charStarFnc) libHandle->getSymbol("getName");
         charStarFnc         getCategory             = (charStarFnc) libHandle->getSymbol("getCategory");
-        charStarFnc         getListOfPropertyNames  = (charStarFnc) libHandle->getSymbol("getListOfPropertyNames");
 
+        //All 'data' that we need to create the plugin
         char* name  = getName();
         char* cat   = getCategory();
         CPlugin* aPlugin = new CPlugin(name, cat);
@@ -475,7 +475,8 @@ Plugin* PluginManager::createCPlugin(SharedLibrary *libHandle)
 
         //This give the C plugin an opaque Handle to the CPlugin object
         setupCPlugin(aPlugin);
-
+        aPlugin->getCPropertyNames  =    (charStarFnc)      libHandle->getSymbol("getListOfCPluginPropertyNames");
+        aPlugin->getCProperty       =    (getAPropertyF)    libHandle->getSymbol("getCPluginProperty");
         return aPlugin;
     }
     catch(const Poco::NotFoundException& ex)

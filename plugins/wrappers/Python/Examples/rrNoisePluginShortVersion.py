@@ -12,5 +12,3 @@ p.InputData = data
 p.execute()
 
 p.plotDataSeries (p.InputData)
-
-

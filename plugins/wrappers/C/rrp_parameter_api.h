@@ -179,7 +179,6 @@ RRP_C_DS bool rrp_cc setListProperty(RRPropertyHandle handle, void* (value));
 */
 RRP_C_DS bool rrp_cc getListProperty(RRPropertyHandle handle, void* (value));
 
-
 /*!
  \brief Set a roadRunnerDataProperty property
  \param handle to a Property instance
@@ -261,7 +260,6 @@ RRP_C_DS bool rrp_cc setPropertyDescription(RRPropertyHandle handle, const char*
 */
 RRP_C_DS char* rrp_cc getPropertyType(RRPropertyHandle handle);
 
-
 /*!
  \brief Get a property containers 'first' property.
  \param handle Handle to a Properties (container for properties) instance
@@ -307,6 +305,14 @@ RRP_C_DS RRPropertyHandle rrp_cc getCurrentProperty(RRPropertiesHandle handle);
  \ingroup plugins
 */
 RRP_C_DS char* rrp_cc getNamesFromPropertyList(RRPropertiesHandle handle);
+
+/*!
+ \brief Get a handle to a particular property
+ \param handle Handle to a property list object
+ \return Returns a handle to a property if successfull, NULL otherwise
+ \ingroup plugins
+*/
+RRP_C_DS RRPropertyHandle rrp_cc getProperty(RRPropertiesHandle handle, const char* name);
 
 /*!
  \brief Clear a list of properties

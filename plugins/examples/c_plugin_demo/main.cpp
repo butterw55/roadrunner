@@ -39,28 +39,6 @@ int main()
             throw("Demo plugin could not be loaded");
         }
 
-
-        //Retrieve any properties that the plugin has
-        char* properties = getListOfPluginPropertyNames(plugin);
-        if(!properties)
-        {
-            throw("Plugin do not have any properties. For this demo, this is an error!");
-        }
-
-        StringList propNames(properties, " ");
-        for(int i = 0; i < propNames.size(); i++)
-        {
-            cout << propNames[i] << endl;
-        }
-
-
-        if(!executePlugin(plugin))
-        {
-            throw("There was a problem executing the plugin...");
-        }
-
-//        cout<< endl << "After Execute: "<< info << endl;
-
         char* pluginInfo = getPluginInfo(plugin);
 
         if(pluginInfo)
@@ -69,7 +47,37 @@ int main()
             rr::freeText(pluginInfo);
         }
 
-//        freeRRInstance(rri);
+        //Retrieve any properties that the plugin has
+        char* properties = getListOfPluginPropertyNames(plugin);
+        if(!properties)
+        {
+            throw("Plugin do not have any properties. For this demo, this is an error!");
+        }
+
+        StringList propNames(properties, ",");
+        for(int i = 0; i < propNames.size(); i++)
+        {
+            cout << propNames[i] << endl;
+        }
+
+        RRPropertyHandle prop = 0;
+        if(propNames.size())
+        {
+            prop = getPluginProperty(plugin, propNames[0].c_str());
+            if(prop)
+            {
+                cout << "Before execute: "<<getPropertyValueAsString(prop)<<endl;
+            }
+        }
+        if(!executePlugin(plugin))
+        {
+            throw("There was a problem executing the plugin...");
+        }
+
+        if(prop)
+        {
+            cout << "After execute: "<<getPropertyValueAsString(prop)<<endl;
+        }
 
         //This will also unload all plugins..
         freePluginManager(pm);
