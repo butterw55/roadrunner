@@ -14,9 +14,9 @@
 //    #pragma comment(lib, "libxml2_xe.lib")
 //#else
     #pragma comment(lib, "roadrunner.lib")
-    #pragma comment(lib, "rrplugins_api-static.lib")
-    #pragma comment(lib, "libAuto-static.lib")
-    #pragma comment(lib, "rrAutoInterface-static.lib")
+    #pragma comment(lib, "rrplugins_api.lib")
+    #pragma comment(lib, "libAuto.lib")
+    #pragma comment(lib, "rrAutoInterface.lib")
 //#endif
 
 

@@ -52,7 +52,7 @@ class RRA_DECLSPEC RRAuto
 namespace rrp
 {
 template<>
-inline string getParaType<rrauto::ScanDirection>(const rrauto::ScanDirection& a)
+inline string getPropertyType<rrauto::ScanDirection>(const rrauto::ScanDirection& a)
 {
     return "ScanDirection";
 }

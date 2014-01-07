@@ -11,7 +11,7 @@
 //#else
     #pragma comment(lib, "roadrunner.lib")
     #pragma comment(lib, "rrplugins_api.lib")
-    #pragma comment(lib, "libAuto-static.lib")
+    #pragma comment(lib, "libAuto.lib")
 //#endif
 
 

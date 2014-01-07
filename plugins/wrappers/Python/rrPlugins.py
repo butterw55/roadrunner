@@ -165,10 +165,10 @@ class Plugin (object):
         # Make sure garbage collector doens't remove the event pointer
         global _onProgressEvent
 
-        _onProgressEvent =  rrp.NotifyPluginEvent (f)
+        _onProgressEvent =  rrp.NotifyEventEx (f)
         # Pass the address of the self object
         theId = id (self)
-        rrp.assignOnProgressEvent(self.plugin, _onProgressEvent, None, theId)
+        rrp.assignOnProgressEvent(self.plugin, _onProgressEvent, theId, None)
 
     def execute (self):
         return rrp.executePlugin (self.plugin)

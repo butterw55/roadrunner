@@ -62,7 +62,7 @@ typedef void* RRPluginHandle;
 /*!@brief Void pointer to a Property instance */
 typedef void* RRPropertyHandle;
 
-/*!@brief Void pointer to a RRProperties instance (Container for parameters) */
+/*!@brief Void pointer to a RRProperties instance (Container for properties) */
 typedef void* RRPropertiesHandle;
 
 #if defined( __cplusplus)

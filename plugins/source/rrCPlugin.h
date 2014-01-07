@@ -87,6 +87,7 @@ class RRP_DECLSPEC CPlugin : public Plugin
          */
         destroyF                destroyFunction;
 
+
 };
 
 }

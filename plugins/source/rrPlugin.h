@@ -403,7 +403,7 @@ class RRP_DECLSPEC Plugin
 
         /**
          * Properties container. Descendant add properties to this container, as they wish.
-         * Property data values can be exchanged to/from the plugin by.
+         * Property data values can be exchanged to/from the plugin by accessing individual properties.
          */
 
          Properties                     mProperties;

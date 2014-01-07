@@ -344,8 +344,8 @@ ostream& operator << (ostream& ss, const RoadRunnerData& data)
     }
 
     ss<<"[INFO]"<<endl;
-    ss<<"ROAD_RUNNER_VERSION=0.5"    <<endl;
-    ss<<"CREATOR=rrWinC-0.1"        <<endl;
+    ss<<"DATA_FORMAT_VERSION=1.0"   <<endl;
+    ss<<"CREATOR=libRoadRunner"      <<endl;
     ss<<"NUMBER_OF_COLS="            <<data.cSize()<<endl;
     ss<<"NUMBER_OF_ROWS="            <<data.rSize()<<endl;
     ss<<"COLUMN_HEADERS="            <<data.getColumnNamesAsString()<<endl;

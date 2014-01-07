@@ -17,4 +17,4 @@ rr::StringList getRecordsAsStrings(const vector<rr::SelectionRecord>& _sels)
     return sels;
 }
 
-}//end of namespace
+}

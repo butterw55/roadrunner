@@ -1,6 +1,9 @@
 #include <iostream>
+#include "rrStringList.h"
+#include "rrUtils.h"
 #include "rrc_api.h"
 #include "rrp_api.h"
+using namespace rr;
 using namespace rrc;
 using namespace rrp;
 using namespace std;
@@ -13,48 +16,60 @@ int main()
         setLogLevel("LOG_Debug");
         logMsg(clInfo, "Log message....");
 
-        RRPluginManagerHandle pm = createPluginManager(NULL);
+        RRPluginManagerHandle pm = createPluginManager("..\\plugins");
         loadPlugins(pm);
-        RRStringArray* list = getPluginNames(pm);
 
+        char* list = getPluginNames(pm);
         if(!list)
         {
-            throw("No Plugins..");
+            throw("No plugins was loaded");
         }
 
-        for(int i = 0; i < list->Count; i++)
+        StringList names = splitString(list, ",");
+        rr::freeText(list);
+
+        for(int i = 0; i < names.size(); i++)
         {
-            cout << list->String[i] << endl;
+            cout << names[i] << endl;
         }
-        freeStringArray(list);
 
-        RRPluginHandle plugin = getFirstPlugin(pm);
+        RRPluginHandle plugin = getPlugin(pm, "C Plugin Demo");
         if(!plugin)
         {
             throw("Demo plugin could not be loaded");
         }
 
-        //Create a RoadRunner instance
-        RRHandle rri =  createRRInstanceEx("r:\\temp", "tcc.exe.");
-        assignRoadRunnerInstance(plugin, rri);
 
-        char* info;
-        if(!executePluginEx(plugin, &info, false))
+        //Retrieve any properties that the plugin has
+        char* properties = getListOfPluginPropertyNames(plugin);
+        if(!properties)
+        {
+            throw("Plugin do not have any properties. For this demo, this is an error!");
+        }
+
+        StringList propNames(properties, " ");
+        for(int i = 0; i < propNames.size(); i++)
+        {
+            cout << propNames[i] << endl;
+        }
+
+
+        if(!executePlugin(plugin))
         {
             throw("There was a problem executing the plugin...");
         }
 
-        cout<< endl << "After Execute: "<< info << endl;
+//        cout<< endl << "After Execute: "<< info << endl;
 
         char* pluginInfo = getPluginInfo(plugin);
 
         if(pluginInfo)
         {
             cout<<pluginInfo;
-            freeText(pluginInfo);
+            rr::freeText(pluginInfo);
         }
 
-        freeRRInstance(rri);
+//        freeRRInstance(rri);
 
         //This will also unload all plugins..
         freePluginManager(pm);

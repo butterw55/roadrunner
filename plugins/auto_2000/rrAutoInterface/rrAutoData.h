@@ -53,7 +53,7 @@ inline void Property< AutoData >::setValue(AutoData* val)
 namespace rrp{
 
 template<>
-inline std::string getParaType<AutoData>(const AutoData& val)
+inline std::string getPropertyType<AutoData>(const AutoData& val)
 {
     return "Auto Data";
 }

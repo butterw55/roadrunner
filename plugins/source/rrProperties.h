@@ -164,6 +164,10 @@ class RRP_DECLSPEC Properties
             \todo Change the container to a std::list.
         */
         vector< pair<PropertyBase*, bool> >                  mProperties;
+
+        /**
+            Iterator used to iterate trough the properties container
+        */    
         vector< pair<PropertyBase*, bool> >::iterator        mPropertiesIter;
 
 

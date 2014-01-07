@@ -59,17 +59,6 @@ namespace rrp { extern "C" {
  */
 RRP_C_DS RRPluginManagerHandle rrp_cc createPluginManager(const char* pluginDir);
 
-///*
-// \brief Create a new instance of a plugin manager.
-// \brief A PluginManager manages a collection of plugins, loaded and unloaded by
-//  the load and unload API functions respectively.
-// \param pluginDir Full path to folder containing plugins.
-// \return On success, a handle to a Plugin manager, on failure, NULL.
-//
-// \ingroup plugin_manager
-// */
-//RRP_C_DS RRPluginManagerHandle rrp_cc createPluginManagerEx(const char* pluginDir);
-
 /*!
  \brief Free the plugin manager. A call to this function will also unload any loaded plugins.
  \param handle Handle to a plugin manager. 
@@ -392,21 +381,21 @@ RRP_C_DS RRHandle rrp_cc getRRHandleFromPlugin(RRPluginHandle handle);
 /*!
  \brief Get a Plugins Propertiese as an xml document. The string returned from this function is formated as xml.
  \param handle Handle to a plugin
- \return Returns available parameters in the plugin, as a pointer to a string, NULL otherwise
+ \return Returns available properties in the plugin, as a pointer to a string, NULL otherwise
  \ingroup plugins
 */
 RRP_C_DS char* rrp_cc getPluginPropertiesAsXML(RRPluginHandle handle);
 
 /*!
- \brief Get a handle to a plugins parameters
+ \brief Get a handle to a plugins properties
  \param handle Handle to a plugin
-  \return Returns a handle to a plugins parameter container, NULL otherwise
+  \return Returns a handle to a plugins property container, NULL otherwise
  \ingroup plugins
 */
 RRP_C_DS RRPropertiesHandle rrp_cc getPluginProperties(RRPluginHandle handle);
 
 /*!
- \brief Get a list of a plugin parameter names, as a string. Space being the delimiter.
+ \brief Get a list of a plugins property names, as a string. Space being the delimiter.
  \param handle Handle to a plugin
   \return Returns a string if succesfull, NULL otherwise
  \ingroup plugins
@@ -414,23 +403,23 @@ RRP_C_DS RRPropertiesHandle rrp_cc getPluginProperties(RRPluginHandle handle);
 RRP_C_DS char* rrp_cc getListOfPluginPropertyNames(RRPluginHandle handle);
 
 /*!
- \brief Get a parameter handle to a parameter.
+ \brief Get a handle to a property.
  \param handle Handle to a plugin
- \param parameterName Name of the parameter
- \return Returns a handle to a parameter. Returns NULL if not found
+ \param propertyName Name of the property
+ \return Returns a handle to a property. Returns NULL if not found
  \ingroup plugins
 */
-RRP_C_DS RRPropertyHandle rrp_cc getPluginProperty(RRPluginHandle handle, const char* parameterName);
+RRP_C_DS RRPropertyHandle rrp_cc getPluginProperty(RRPluginHandle handle, const char* propertyName);
 
 /*!
  \brief Set the value of a PluginProperty by a string.
  \param handle Handle to a plugin
- \param parameterName Name of parameter
- \param value Value of parameter, as string
+ \param propertyName Name of property
+ \param value Value of property, as string
  \return true if succesful, false otherwise
  \ingroup plugins
 */
-RRP_C_DS bool rrp_cc setPluginProperty(RRPluginHandle handle, const char* parameterName, const char* value);
+RRP_C_DS bool rrp_cc setPluginProperty(RRPluginHandle handle, const char* propertyName, const char* value);
 
 /*!
  \brief Retrieve a handle to RoadRunners internal data
@@ -503,11 +492,56 @@ RRP_C_DS bool rrp_cc getRRCDataElementF(RRCDataPtr rrcData, int r, int c, double
  \ingroup utilities
 */
 RRP_C_DS bool           rrp_cc getRoadRunnerDataElement(RRDataHandle rrData, int r, int c, double *value);
-RRP_C_DS char*          rrp_cc getRoadRunnerDataColumnHeader(RRDataHandle _data);
+
+/*!
+ \brief Retrieves a RoadRunner data column header. The column header is a string 
+ with comma delimited values. Each value is a header for correseponding data column.
+
+ \param data A handle to a RoadRunner data type variable
+ \return Returns a string containing the header as a string, NULL if unsuccesful
+ \ingroup utilities
+*/
+RRP_C_DS char*          rrp_cc getRoadRunnerDataColumnHeader(RRDataHandle data);
+
+
+/*!
+ \brief Retrieves the number of rows in a RoadRunner data object.
+
+ \param data A handle to a RoadRunner data type variable
+ \return Returns the number of rows in the underlying data object.
+ \ingroup utilities
+*/
 RRP_C_DS int            rrp_cc getRoadRunnerDataNumRows(RRDataHandle rrData);
+
+/*!
+ \brief Retrieves the number of cols in a RoadRunner data object.
+
+ \param data A handle to a RoadRunner data type variable
+ \return Returns the number of cols in the underlying data object.
+ \ingroup utilities
+*/
 RRP_C_DS int            rrp_cc getRoadRunnerDataNumCols(RRDataHandle rrData);
+
+/*!
+ \brief Creates a RoadRunner data object, and returns a handle to it.
+
+ \param rows. Number of rows to create.
+ \param cols. Number of cols to create.
+ \param colNames. Column header as a string, e.g. "time, S1, S2". 
+ \return Returns a handle to a RoadRunner data object, NULL if unsuccessfull.
+ \ingroup utilities
+*/
 RRP_C_DS RRDataHandle   rrp_cc createRoadRunnerData(int rows, int cols, char* colNames);
+
+/*!
+ \brief Free the memory allocated by a RoadRunner data object.
+ \param handle. A RRDataHandle handle to an underlying RoadRunnerData object.
+
+ \return Returns a boolean indicating success.
+ \ingroup utilities
+*/
 RRP_C_DS bool           rrp_cc freeRoadRunnerData(RRDataHandle handle);
+
 /*!
  \brief Returns a string list in string form.
  \return Returns string list as a character string
@@ -516,10 +550,22 @@ RRP_C_DS bool           rrp_cc freeRoadRunnerData(RRDataHandle handle);
 */
 RRP_C_DS char* rrp_cc stringArrayToStringFWD(const RRStringArrayPtr list);
 
+/*!
+ \brief Write roadrunner data to file a RoadRunner data object.
+ \param rrData. A handle to RoadRunner data.
+ \param fName. Output file name as a string.
+ \return Returns a boolean indicating success.
+ \ingroup utilities
+*/
 RRP_C_DS bool rrp_cc writeRoadRunnerDataToFile(RRDataHandle rrData, char* fName);
-RRP_C_DS bool rrp_cc readRoadRunnerDataFromFile(RRDataHandle rrData, char* fName);
 
-
+/*!
+ \brief Read roadrunner data from a file, into a RoadRunner data object.
+ \param rrData. A handle to RoadRunner data.
+ \param fName. File name to read data from.
+ \return Returns a boolean indicating success.
+ \ingroup utilities
+*/RRP_C_DS bool rrp_cc readRoadRunnerDataFromFile(RRDataHandle rrData, char* fName);
 
 /*!
  \brief Return last API error
@@ -598,7 +644,7 @@ int main()
     The libRoadRunner Plugin API is centered around three important concepts:
     - A Plugin Manager (RRPluginManagerHandle)
     - A Plugin (RRPlugin)
-    - A Plugin Property (RRProperty)
+    - Plugin Properties (RRProperty)
 
     \section plugins_usage How to use plugins
     A typical use case of the Plugin API may be as follows:
@@ -607,13 +653,11 @@ int main()
     -# Client creates a PluginManager.
     -# Client load plugins using the Plugin Manager.
     -# Client get a handle to a plugin.
-    -# Client get a handle to a specific parameter in the plugin.
-    -# Client set the value of the parameter.
+    -# Client get a handle to a specific property in the plugin.
+    -# Client set the value of the property.
     -# Client excutes the plugin.
-    -# Client retrieve the value of a plugins parameter, e.g. a "result" parameter.
+    -# Client retrieve the value of a plugins property, e.g. a "result" property.
     .
-
-    \todo Fill out this section
 
     \section plugins_writing How to write plugins
     The current plugin framework is a 'minimalistic' API. It is designed to give a plugin developer
@@ -667,7 +711,7 @@ int main()
  \defgroup plugins Plugin Functions
  \brief Functions operating on Plugin Handles.
 
- \defgroup plugin_parameters Plugin Properties
+ \defgroup plugin_properties Plugin Properties
  \brief Plugins Property related functions
 
 \defgroup utilities Utility Functions

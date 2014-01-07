@@ -22,6 +22,7 @@ class AddNoise : public CPPPlugin
         Property<int>               mNoiseType;
         Property<double>            mSigma;
         Property<RoadRunnerData>    mData;
+        Property<int>               mProgress;
         AddNoiseWorker              mAddNoiseWorker;
 
     public:
@@ -47,7 +48,7 @@ namespace rrp
 {
 
 template<>
-inline string getParaType(const addNoise::AddNoise::NoiseType& value)
+inline string getPropertyType(const addNoise::AddNoise::NoiseType& value)
 {
     return "NoiseType";
 }

@@ -1,3 +1,4 @@
+import ctypes
 import matplotlib.pyplot as plot
 import roadrunner
 from rrPlugins_CAPI import *
@@ -12,9 +13,10 @@ rr = roadrunner.RoadRunner()
 def pluginStarted():
     print 'The plugin was started'
 
-def pluginIsProgressing(progress):
-    nr = progress
-    print '\nPlugin progress:' + `nr` +' %'
+def pluginIsProgressing(val):
+    pluginHandle = cast(val, ctypes.py_object).value    
+    prop = getPluginProperty(pluginHandle, "Progress")
+    print '\nPlugin progress:' + `getPropertyValue(prop)` +' %'
 
 def pluginIsFinished():
     print 'The plugin did finish'
@@ -44,8 +46,9 @@ setPluginProperty(noisePlugin,"Sigma", 1e-2)
 cb_func1 =  NotifyEvent(pluginStarted)
 assignOnStartedEvent(noisePlugin,  cb_func1)
 
-cb_func2 =  NotifyIntEvent(pluginIsProgressing)
-assignOnProgressEvent(noisePlugin, cb_func2)
+cb_func2 =  NotifyEventEx(pluginIsProgressing)
+theId = id(noisePlugin)
+assignOnProgressEvent(noisePlugin, cb_func2, theId)
 
 cb_func3 =  NotifyEvent(pluginIsFinished)
 assignOnFinishedEvent(noisePlugin, cb_func3)

@@ -2,20 +2,20 @@ import ctypes
 from rrPlugins_CAPI import *
 import rrPlugins as rrp
 
-try:
-    
+try:   
     #Get a lmfit plugin object
     lm = rrp.Plugin("rrp_lm")
-    
+    print lm.listOfProperties()     
     #========== EVENT FUNCTION SETUP ===========================
-    def pluginIsProgressing(lmP, dummy):
+    def pluginIsProgressing(lmP):
         # The plugin don't know what a python object is.
         # We need to cast it here, to a proper python object
         lmObject = cast(lmP, ctypes.py_object).value
         print 'Iterations = ' + `lmObject.getProperty("NrOfIter")` \
             + '\tNorm = ' + `lmObject.getProperty("Norm")`
     
-    progressEvent =  NotifyPluginEvent(pluginIsProgressing)
+    
+    progressEvent =  NotifyEventEx(pluginIsProgressing)
     
     #The ID of the plugin is passed as the last argument in the assignOnProgressEvent. 
     #The plugin ID is later on retrieved in the plugin Event handler, see above

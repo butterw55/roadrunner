@@ -173,7 +173,7 @@ class RRP_DECLSPEC PluginManager
             Retrieves the shared library names of all loaded plugins as a list of strings.
             \return StringList A Stringlist containing the file name of each loaded Plugin.
         */
-        rr::StringList                      getPluginLibraryNames();
+        rr::StringList                  getPluginLibraryNames();
     private:
         string                          mPluginFolder;
         string                          mPluginExtension;    //Different on different OS's
@@ -197,23 +197,24 @@ class RRP_DECLSPEC PluginManager
  \par
  This document describes libRoadRunners Plugins API. 
  \par
- The Plugins API is centered around the \a PluginManager, \a Plugin, and \a Parameter classes. Where the Plugin manager is 
+ The Plugins API is centered around the \a PluginManager, \a Plugin, and the \a Property classes. The Plugin manager is 
  responsible for validating, loading and unloading plugins at runtime.
 
  \par
  The Plugins themselves are self contained shared libraries that may be designed to extend the functionality of the main libRoadRunners core API.
  
  \par
- The capabilities of a Plugin is communicated to a client by use of \a Parameters. A Parameter in this context,
- is a specialized object able to communicate various types of data between the Plugin and the client. 
+ The capabilities of a Plugin is communicated to a client by the use of \a PluginProperties. A Plugin property is an object 
+ able to communicate various types of data betwen the Plugin and the client, such as an int, double or a string. In addition to its value, plugin 
+ properties have a name, hint and description field, assisting in communicating the purpose of the property.
 
  \par
- A client typically loads and configure a plugin, throught the use of Parameters, and then \a executes the plugin using a plugins
- execute function. Finally, the client may retrieve some kind of result from the Plugin, again, using a Parameter.
+ A client typically loads and configure a plugin, through the use of Properties, and then subsequently \a executes the plugin using the plugins
+ execute function. Finally, the client may retrieve some kind of result from the Plugin, again, using a Property.
 
  \par
- Since a Plugins function will be determined by the actual Plugin author, documentation on a Plugins purpose and on how
- to use the plugin, is ideally bundled with the plugin and retrieved by various Plugin functions, getInfo(), getExtendedInfo() and getManualAsPDF().
+ Since a Plugins function will be determined by the actual Plugin author, documentation of a Plugins purpose and on how
+ to use the plugin, is ideally bundled with the plugin and retrieved by various Plugin functions, e.g. getPluginInfo() and getPluginManualAsPDF().
  \par
 
  \author Totte Karlsson (totte@dunescientific.com)

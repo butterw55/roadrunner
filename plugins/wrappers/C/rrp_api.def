@@ -47,6 +47,10 @@ getLastPluginError                              = _getLastPluginError
 
 ;Functions taking a parameter handle
 createProperty                                 = _createProperty
+freeProperty                                   = _freeProperty
+createPropertyList                             = _createPropertyList
+freeProperties                                 = _freeProperties
+
 getPropertyName                                = _getPropertyName
 getPropertyHint                                = _getPropertyHint
 getPropertyValueAsString                       = _getPropertyValueAsString

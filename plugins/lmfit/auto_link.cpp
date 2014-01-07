@@ -10,7 +10,7 @@
     #pragma comment(lib, "blas.lib")
     #pragma comment(lib, "lapack.lib")
     #pragma comment(lib, "libf2c.lib")
-    #pragma comment(lib, "lmfit-static.lib")
+    #pragma comment(lib, "lmfit.lib")
     #pragma comment(lib, "libxml2_xe.lib")
 
 #else
@@ -18,7 +18,7 @@
     #pragma comment(lib, "rrplugins_api.lib")
     #pragma comment(lib, "rrc_api.lib")
     #pragma comment(lib, "rrplugins_c_api.lib")
-    #pragma comment(lib, "lmfit-static.lib")
+    #pragma comment(lib, "lmfit.lib")
 #endif
 
 #pragma comment(lib, "poco_foundation-static.lib")

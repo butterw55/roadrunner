@@ -44,7 +44,7 @@ setPluginProperty(lmPlugin, "SBML", sbml)
 
 #See documentation for available Propertys
 experimentalData    = getPluginProperty(lmPlugin, "ExperimentalData");
-paraList            = getPluginProperty(lmPlugin, "InputPropertyList");
+paraList            = getPluginProperty(lmPlugin, "InputParameterList");
 
 #Add Propertys to fit
 para1 = createProperty("k1", "double", "", 0.2)

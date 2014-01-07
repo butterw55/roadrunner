@@ -11,11 +11,13 @@ bool cc destroyPlugin(RRPluginHandle plugin)
 {
     //Free any data that the plugin generated..
     freeText(text);
+    freeProperty(gDemoProperty);
+    freeProperties(gProperties);
 }
 
 const char* cc getName()
 {
-    return "Plugin Demo";
+    return "C Plugin Demo";
 }
 
 const char* cc getCategory()
@@ -23,13 +25,31 @@ const char* cc getCategory()
     return "Demos";
 }
 
+const char* cc getListOfCPluginPropertyNames(RRPluginHandle plugin)
+{
+    return getListOfPluginPropertyNames(gProperties);
+}
+
+void*  cc getCPluginProperty(RRPropertyHandle property, char* name)
+{
+    return getPlugin
+}
+
 bool cc setupCPlugin(RRPluginHandle aPlugin)
 {
     gPlugin = aPlugin;
+    gDemoProperty = createProperty("Demo Property", "string", "Demo Hint", 0);
+    setPropertyByString(gDemoProperty, "Demo Property Value");
+
+    //Add the property to the property container
+    gProperties = createPropertyList();
+
+    addPropertyToList(gProperties, gDemoProperty);
+
     return true;
 }
 
-bool cc execute(void* userData)
+bool cc execute()
 {
     char* text2;
     text = createTextMemory(textLen);
@@ -47,7 +67,7 @@ bool cc execute(void* userData)
         return false;
     }
 
-    *((char**) userData) = text;
+//    *((char**) userData) = text;
     return true;
 }
 

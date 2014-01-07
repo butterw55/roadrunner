@@ -2,17 +2,12 @@ import rrPlugins as rrp
 import ctypes as ct
 import pprint
 
-def pluginIsProgressing(msg, lm):
+def pluginIsProgressing(lm):
     lmObject = ct.cast(lm, ct.py_object).value
     print 'Norm = ' + `lmObject.getProperty("Norm")` #Retrieve plugin parameters
     print 'Nr of Iterations = ' + `lmObject.getProperty("NrOfIter")`
 
-
 lm = rrp.Plugin ("rrp_lm")
-
-
-lm.printflags = 1
-
 experimentalData = lm.loadDataSeries ("testData.dat")
 
 lm.ExperimentalData = experimentalData;

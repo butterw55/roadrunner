@@ -1,31 +1,34 @@
 #ifndef c_plugin_demoH
 #define c_plugin_demoH
 #include "rrpExporter.h"
-//#include "rrCPluginFramework.h"
+#include "rrp_types.h"
 //-----------------------------------------------------------
 #define cc __cdecl
 
-//Plugin Data
-RRHandle        gRR;
-RRPluginHandle  gPlugin;
+//Global Plugin Data
+RRHandle            gRR;
+RRPluginHandle      gPlugin;
+RRPropertyHandle    gDemoProperty;
+RRPropertiesHandle  gProperties;
+char*               text;
+const int           textLen = 2048;
 
-char*           text;
-const int       textLen = 2048;
-//Plugin functions
-
+//Each of these functions need to be present in order to load a plugin written in C
 const char*     RR_PLUGIN_DECLSPEC cc getImplementationLanguage(void);
 const char*     RR_PLUGIN_DECLSPEC cc getName(void);
 const char*     RR_PLUGIN_DECLSPEC cc getCategory(void);
 bool            RR_PLUGIN_DECLSPEC cc setupCPlugin(RRPluginHandle aPlugin);
 bool            RR_PLUGIN_DECLSPEC cc execute(void* userData);
 bool            RR_PLUGIN_DECLSPEC cc destroyPlugin(RRPluginHandle plugin);
+const char*     RR_PLUGIN_DECLSPEC cc getListOfCPluginPropertyNames(RRPluginHandle plugin);
+void*           RR_PLUGIN_DECLSPEC cc getCPluginProperty(RRPropertyHandle property, char* name);
 
 #endif
 
 
 #if defined(CG_IDE)
-#pragma comment(lib, "rrc_api-static.lib")
-#pragma comment(lib, "rrplugins_api-static.lib")
-#pragma comment(lib, "rrplugins_c_api-static.lib")
-#pragma comment(lib, "roadrunner-static.lib")
+#pragma comment(lib, "rrc_api.lib")
+#pragma comment(lib, "rrplugins_api.lib")
+#pragma comment(lib, "rrplugins_c_api.lib")
+#pragma comment(lib, "roadrunner.lib")
 #endif

@@ -110,45 +110,7 @@ except:
 ##@endcode
 ## \ingroup plugins
 NotifyEvent  = CFUNCTYPE(None)
-
-## \brief Plugin function event type definition
-## This is a helper object that a client can use as an argument to a roadrunner plugin.
-## The exact number of plugins event functions required arguments, and their type is plugin dependent. A client of the
-## the plugin need to get this information from plugin specific documentation. An example of
-## using this particular function, NotifyIntEvent is shown below. As indicated, this python function takes two arguments.
-## The first argument is an integer, indicating progress (possibly a percentage), the second argument is not used in this particular case, but still required.
-##@code
-##def pluginIsProgressing(progress, dummy):
-##    nr = progress[0]
-##    print '\nPlugin progress:' + `nr` +' %'
-## #The user can assign this function as a plugin event to monitor the start of the plugin as follows.
-## #Note, make sure you assign the event to a variable (c_event) so that the Python garbage
-## #collector doesn't delete it
-## c_event = NotifyEvent(myPluginFunction)
-## c_event = NotifyIntIntEvent(pluginIsProgressing)
-## assignOnStartedEvent(plugin, c_event)
-##@endcode
-## \ingroup plugins
-NotifyIntEvent  = CFUNCTYPE(None, c_int)
-
-## \brief Plugin function event type definition
-## This is a helper object that a client can use as an argument to a roadrunner plugin.
-## The exact number of plugins event functions required arguments, and their type is plugin dependent. A client of the
-## the plugin need to get this information from plugin specific documentation. An example of
-## using this particular function, NotifyStringEvent is shown below. As indicated, this function takes two arguments.
-## The first argument is a string, passes as a C char* (c_char_p), carrying a progress message for example.
-##@code
-##def pluginIsProgressing(progress):
-##    print '\nPlugin progress:' + progress
-## #The user can assign this function as a plugin event to monitor the progress of the plugin as follows.
-## #Note, make sure you assign the event to a variable (c_event) so that the Python garbage
-## #collector doesn't delete it
-## c_event = NotifyEvent(myPluginFunction)
-## c_event = NotifyStringEvent(pluginIsProgressing)
-## assignOnProgressEvent(plugin, c_event)
-##@endcode
-## \ingroup plugins
-NotifyStringEvent  = CFUNCTYPE(None, c_char_p)
+NotifyEventEx  = CFUNCTYPE(None, c_void_p)
 
 ## \brief Create a new instance of a plugin manager.
 ## \brief A PluginManager manages a collection of plugins, loaded and unloaded by
@@ -162,9 +124,6 @@ NotifyStringEvent  = CFUNCTYPE(None, c_char_p)
 ## \htmlonly  <br/>
 ## \endhtmlonly
 ## \ingroup plugin_manager
-
-NotifyPluginEvent = CFUNCTYPE(None, c_void_p, c_void_p)
-
 
 rrpLib.createPluginManager.restype = c_void_p
 def createPluginManager(pluginDir = None):

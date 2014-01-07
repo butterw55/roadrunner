@@ -94,7 +94,7 @@ RRPropertyHandle rrp_cc createProperty(const char* label, const char* type, cons
         //    return para;
         //}
 
-        if(string(type) == string("std::string"))
+        if(string(type) == string("std::string") || string(type) == string("string"))
         {
             string iniVal  = "";
             if(value != NULL)
@@ -146,6 +146,30 @@ bool rrp_cc freeProperty(RRPropertyHandle paraHandle)
         delete para;
         return true;
     catch_bool_macro
+}
+
+RRPropertiesHandle rrp_cc createPropertyList()
+{
+    start_try
+        Properties* props   = new Properties();
+        if(!props)
+        {
+            throw("Failed to create a list of Properties");
+        }
+        else
+        {
+            return props;
+        }
+    catch_ptr_macro
+}
+
+bool rrp_cc freeProperties(RRPropertiesHandle propsHandle)
+{
+    start_try
+        Properties* props   = castToProperties(propsHandle);
+        delete props;
+        return true;
+    catch_ptr_macro
 }
 
 bool rrp_cc addPropertyToList(RRPropertiesHandle handle, RRPropertyHandle para)
