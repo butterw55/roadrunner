@@ -14,7 +14,6 @@
 #include "rrc_macros.h"
 #include "rrc_cpp_support.h"
 #include "rrp_cpp_support.h"
-#include "rrp_parameter_api.h"
 
 namespace rrp
 {

@@ -12,7 +12,7 @@ ${THIRD_PARTY_INSTALL_FOLDER}/include
 add_library(${target} SHARED
 rrp_api
 rrp_cpp_support
-rrp_parameter_api
+rrp_properties_api
 )
 
 #if(${MSVC})

@@ -58,6 +58,7 @@ namespace rrp
 {
 
     using rr::RoadRunnerData;
+    using rr::gNoneString;
     using std::string;
 /**
     Template function that returns the name of a particular type, e.g. a value of type int, returns a string "int".
