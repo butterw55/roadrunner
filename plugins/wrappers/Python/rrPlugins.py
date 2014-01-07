@@ -3,7 +3,7 @@
 import rrPlugins_CAPI as rrp
 import matplotlib.pyplot as plt
 
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 
 class DataSeries(object):
 
