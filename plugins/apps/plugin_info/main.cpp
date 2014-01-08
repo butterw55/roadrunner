@@ -13,14 +13,16 @@ int main()
     {
         string fldr("../plugins");
         PluginManager pm(fldr);
+
         cout<<"==== Loading Plugins =====\n";
-        if(pm.load() == 0)
+        int nrOfLoadedPlugins = pm.load();
+        if(nrOfLoadedPlugins == 0)
         {
             cout<<"No plugins were loaded";
         }
         else
         {
-            cout<<"Loaded "<<pm.getNumberOfPlugins()<<" plugins\n";
+            cout<<"Loaded "<<nrOfLoadedPlugins<<" plugins\n";
         }
         cout<<"\n==== End of Loading Plugins =====\n\n";
 

@@ -26,9 +26,4 @@ void*           RR_PLUGIN_DECLSPEC cc getCPluginProperty(const char* name);
 #endif
 
 
-#if defined(CG_IDE)
-#pragma comment(lib, "rrc_api.lib")
-#pragma comment(lib, "rrplugins_api.lib")
-#pragma comment(lib, "rrplugins_c_api.lib")
-#pragma comment(lib, "roadrunner.lib")
-#endif
+

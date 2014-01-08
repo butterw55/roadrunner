@@ -7,14 +7,10 @@
     #pragma comment(lib, "rrplugins_api-static.lib")
     #pragma comment(lib, "rrplugins_c_api-static.lib")
 #else
-    #pragma comment(lib, "roadrunner.lib")
-    #pragma comment(lib, "rrc_api.lib")
-    #pragma comment(lib, "rrplugins_api.lib")
     #pragma comment(lib, "rrplugins_c_api.lib")
-
+    #pragma comment(lib, "rrc_api.lib")
 #endif
 
 
-#pragma comment(lib, "poco_foundation-static.lib")
-
+//#pragma comment(lib, "poco_foundation-static.lib")
 
