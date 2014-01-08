@@ -6,12 +6,9 @@
 #define cc __cdecl
 
 //Global Plugin Data
-RRHandle            gRR;
 RRPluginHandle      gPlugin;
 RRPropertyHandle    gDemoProperty;
 RRPropertiesHandle  gProperties;
-char*               text;
-const int           textLen = 2048;
 
 //Each of these functions need to be present in order to load a plugin written in C
 const char*     RR_PLUGIN_DECLSPEC cc getImplementationLanguage(void);
