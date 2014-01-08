@@ -1,6 +1,7 @@
 #include <iostream>
 #include "rrException.h"
 #include "rrPluginManager.h"
+#include "rrPlugin.h"
 #pragma hdrstop
 
 using namespace std;
@@ -22,13 +23,13 @@ int main()
             cout<<"Loaded "<<pm.getNumberOfPlugins()<<" plugins\n";
         }
         cout<<"\n==== End of Loading Plugins =====\n\n";
-        cout<<"Plugin Info ============\n"<<pm;
 
+        cout<<"\n\n Plugin Loading Info ============\n\n"<<pm;
 
         //Get info about each plugin
+        cout<<"\n\nIndividual Plugin Info ============\n\n";
         for(int i =0; i < pm.getNumberOfPlugins(); i++)
         {
-        
             Plugin* aPlugin = pm[i];
             if(aPlugin)
             {

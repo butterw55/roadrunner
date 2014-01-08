@@ -190,6 +190,10 @@ class RRP_DECLSPEC PluginManager
         RRP_DECLSPEC
         friend ostream&                 operator<<(ostream& os, PluginManager& pm);
 
+        /**
+            Access a plugin using the [] operator.
+        */
+        Plugin*                         operator[](const int& i);
     private:
         string                          mPluginFolder;
         string                          mPluginExtension;   //Different on different OS's
@@ -202,7 +206,6 @@ class RRP_DECLSPEC PluginManager
         const char*                     getImplementationLanguage(SharedLibrary* plugin);
         Plugin*                         createCPlugin(SharedLibrary *libHandle);
         Plugin*                         getPlugin(const int& i);
-        Plugin*                         operator[](const int& i);
         bool                            unloadAll();
 };
 
