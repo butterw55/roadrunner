@@ -1,5 +1,5 @@
 /**
- * @file rrp_types.h
+ * @file rrplugin_types.h
  * @brief Plugins API Types Header
  * @author Totte Karlsson & Herbert M Sauro
  *
@@ -39,10 +39,10 @@
  * redistribute any piece of this software without proper attribution;
 */
 
-#ifndef rrp_typesH
-#define rrp_typesH
+#ifndef rrplugins_typesH
+#define rrplugins_typesH
 #include "rrc_types.h"
-#include "rrp_settings.h"
+#include "rrplugins_settings.h"
 #if defined(__cplusplus)
 namespace rrp { extern "C"  { using namespace rrc;
 #endif

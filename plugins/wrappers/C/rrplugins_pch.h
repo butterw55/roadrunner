@@ -1,5 +1,5 @@
-#ifndef rrp_pchH
-#define rrp_pchH
+#ifndef rrplugins_pchH
+#define rrplugins_pchH
 //#include <windows.h>
 //
 //

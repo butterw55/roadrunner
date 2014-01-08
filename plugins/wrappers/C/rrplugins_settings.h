@@ -1,5 +1,5 @@
-#ifndef rrpSettingsH
-#define rrpSettingsH
+#ifndef rrplugins_settingsH
+#define rrplugins_settingsH
 
 //C function calling convention
 #if defined(_MSC_VER) || defined(__CODEGEARC__)

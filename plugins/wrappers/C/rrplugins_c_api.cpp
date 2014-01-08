@@ -1,5 +1,5 @@
 #pragma hdrstop
-#include "rrp_api.h"
+#include "rrplugins_c_api.h"
 #include <sstream>
 #include "rrProperty.h"
 #include "rrRoadRunner.h"
@@ -13,7 +13,7 @@
 #include "rrc_utilities.h"
 #include "rrc_macros.h"
 #include "rrc_cpp_support.h"
-#include "rrp_cpp_support.h"
+#include "rrplugins_cpp_support.h"
 
 namespace rrp
 {

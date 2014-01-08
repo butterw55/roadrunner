@@ -41,8 +41,8 @@
 
 #ifndef rrp_parameter_apiH
 #define rrp_parameter_apiH
-#include "rrp_exporter.h"
-#include "rrp_types.h"
+#include "rrplugins_exporter.h"
+#include "rrplugins_types.h"
 //---------------------------------------------------------------------------
 
 #if defined(__cplusplus)

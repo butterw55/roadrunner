@@ -2,13 +2,13 @@
 #include <string>
 #include "rrRoadRunner.h"
 #include "rrException.h"
-#include "rrp_properties_api.h"
+#include "rrplugins_properties_api.h"
 #include "rrLogger.h"
 #include "rrc_api.h"
 #include "rrc_utilities.h"              //Support functions, not exposed as api functions and or data
 #include "rrc_cpp_support.h"            //Support functions, not exposed as api functions and or data
-#include "rrp_api.h"
-#include "rrp_cpp_support.h"
+#include "rrplugins_c_api.h"
+#include "rrplugins_cpp_support.h"
 #include "rrProperty.h"
 #include "rrPropertyBase.h"
 //---------------------------------------------------------------------------

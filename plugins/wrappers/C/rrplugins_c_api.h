@@ -1,5 +1,5 @@
 /**
- * @file rrp_api.h
+ * @file rrplugins_c_api.h
  * @brief Plugins Core C-API Header
  * @author Totte Karlsson & Herbert M Sauro
  *
@@ -38,11 +38,11 @@
  *
  * redistribute any piece of this software without proper attribution;
 */
-#ifndef rrp_apiH
-#define rrp_apiH
-#include "rrp_exporter.h"
-#include "rrp_types.h"
-#include "rrp_properties_api.h"
+#ifndef rrplugins_c_apiH
+#define rrplugins_c_apiH
+#include "rrplugins_exporter.h"
+#include "rrplugins_types.h"
+#include "rrplugins_properties_api.h"
 //---------------------------------------------------------------------------
 
 #if defined(__cplusplus)
@@ -51,7 +51,7 @@ namespace rrp { extern "C" {
 
 /*!
  \brief Create a new instance of a plugin manager.
- \brief A PluginManager manages a collection of plugins, loaded and unloaded by 
+ \brief A PluginManager manages a collection of plugins, loaded and unloaded by
   the load and unload API functions respectively.
  \param pluginDir Full path to folder containing plugins. If NULL, uses default folder.
  \return On success, a handle to a Plugin manager, on failure, NULL.
@@ -602,7 +602,7 @@ RRP_C_DS bool rrp_cc freeText(char* text);
 \code
 #include <iostream>
 #include "rrc_api.h"
-#include "rrp_api.h"
+#include "rrplugins_c_api.h"
 
 using namespace std;
 using namespace rrc;

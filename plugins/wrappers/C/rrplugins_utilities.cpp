@@ -1,7 +1,7 @@
 #pragma hdrstop
 #include "rrc_types.h"
 #include "rrc_exporter.h"
-#include "rrp_utilities.h"         // Need to include this before the support header..
+#include "rrplugins_utilities.h"         // Need to include this before the support header..
 #include "rrc_macros.h"
 #include "rrp_cpp_support.h"
 #include <string>

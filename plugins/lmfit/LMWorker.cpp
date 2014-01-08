@@ -7,7 +7,7 @@
 #include "rrStringUtils.h"
 #include "rrUtils.h"
 #include "rrProperty.h"
-#include "../wrappers/C/rrp_api.h"
+#include "../wrappers/C/rrplugins_c_api.h"
 #include "../../wrappers/C/rrc_api.h"
 #include "../../wrappers/C/rrc_utilities.h"
 #include "../../wrappers/C/rrc_cpp_support.h"

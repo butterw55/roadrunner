@@ -1,7 +1,7 @@
 #ifndef c_plugin_demoH
 #define c_plugin_demoH
 #include "rrpExporter.h"
-#include "rrp_types.h"
+#include "rrplugins_types.h"
 //-----------------------------------------------------------
 #define cc __cdecl
 

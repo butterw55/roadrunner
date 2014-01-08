@@ -41,10 +41,10 @@
  * 
 */
 
-#ifndef rrp_cpp_supportH
-#define rrp_cpp_supportH
+#ifndef rrplugins_cpp_supportH
+#define rrplugins_cpp_supportH
 #include <string>
-#include "rrp_api.h"
+#include "rrplugins_c_api.h"
 #include "rrRoadRunnerData.h"
 namespace rrp
 {

@@ -10,9 +10,9 @@ ${THIRD_PARTY_INSTALL_FOLDER}/include
 
 #The C-api is built as a shared library..
 add_library(${target} SHARED
-rrp_api
-rrp_cpp_support
-rrp_properties_api
+rrplugins_c_api
+rrplugins_cpp_support
+rrplugins_properties_api
 )
 
 #if(${MSVC})

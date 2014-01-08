@@ -39,10 +39,10 @@
  * redistribute any piece of this software without proper attribution;
 */
 
-#ifndef rrp_utilitiesH
-#define rrp_utilitiesH
+#ifndef rrplugins_utilitiesH
+#define rrplugins_utilitiesH
 #include "rrp_exporter.h"
-#include "rrp_types.h"
+#include "rrplugins_types.h"
 #include "rrc_macros.h"
 //---------------------------------------------------------------------------
 
