@@ -1,5 +1,5 @@
 /**
- * @file rrp_cpp_support.h
+ * @file rrplugins_cpp_support.h
  * @brief Plugins API CPP Support Functions.
  * @author Totte Karlsson & Herbert M Sauro
  *

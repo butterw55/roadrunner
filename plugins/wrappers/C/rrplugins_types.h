@@ -1,5 +1,5 @@
 /**
- * @file rrplugin_types.h
+ * @file rrplugins_types.h
  * @brief Plugins API Types Header
  * @author Totte Karlsson & Herbert M Sauro
  *

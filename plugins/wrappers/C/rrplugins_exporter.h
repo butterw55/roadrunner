@@ -1,5 +1,5 @@
 /**
- * @file rrp_exporter.h
+ * @file rrplugins_exporter.h
  * @brief libRoadRunner Plugins C API 2012-2013
  * @author Totte Karlsson & Herbert M Sauro
  *

@@ -1,5 +1,5 @@
 /**
- * @file rrp_parameter_api.h
+ * @file rrplugins_properties_api.h
  * @brief Plugins API Properties Header
  * @author Totte Karlsson & Herbert M Sauro
  *
@@ -71,25 +71,25 @@ RRP_C_DS RRPropertiesHandle rrp_cc createPropertyList();
 
 /*!
  \brief Free a list of properties
- \param paraHandle A handle a list of properties
+ \param propertiesH A handle a list of properties
  \return Returns true if sucessful, false otherwise
 */
-RRP_C_DS bool rrp_cc freeProperties(RRPropertiesHandle props);
+RRP_C_DS bool rrp_cc freeProperties(RRPropertiesHandle propertiesH);
 
 /*!
  \brief Free the memory created by a property
- \param paraHandle A handle to the property
+ \param property A handle to the property
  \return Returns true if sucessful, false otherwise
 */
-RRP_C_DS bool rrp_cc freeProperty(RRPropertyHandle para);
+RRP_C_DS bool rrp_cc freeProperty(RRPropertyHandle property);
 
 /*!
  \brief Add a property to a properties container, from a property pointer.
  \param handle Handle to a RoadRunner instance
- \param para Handle to a roadrunner property
+ \param property Handle to a roadrunner property
  \return Returns a booelan indicating success
 */
-RRP_C_DS bool rrp_cc addPropertyToList(RRPropertiesHandle handle, RRPropertyHandle para);
+RRP_C_DS bool rrp_cc addPropertyToList(RRPropertiesHandle handle, RRPropertyHandle property);
 
 /*!
  \brief Set a property value by a string
@@ -169,7 +169,7 @@ RRP_C_DS bool rrp_cc getStringProperty(RRPropertyHandle handle, const char* (*va
  \param value to assign to the property.
  \return Returns true if sucessful, false otherwise
 */
-RRP_C_DS bool rrp_cc setListProperty(RRPropertyHandle handle, void* (value));
+RRP_C_DS bool rrp_cc setListProperty(RRPropertyHandle handle, void* value);
 
 /*!
  \brief Get the value of a listOfProperties (Properties) property
@@ -177,7 +177,7 @@ RRP_C_DS bool rrp_cc setListProperty(RRPropertyHandle handle, void* (value));
  \param value to assign to the property.
  \return Returns true if sucessful, false otherwise
 */
-RRP_C_DS bool rrp_cc getListProperty(RRPropertyHandle handle, void* (value));
+RRP_C_DS bool rrp_cc getListProperty(RRPropertyHandle handle, void* value);
 
 /*!
  \brief Set a roadRunnerDataProperty property
@@ -309,6 +309,7 @@ RRP_C_DS char* rrp_cc getNamesFromPropertyList(RRPropertiesHandle handle);
 /*!
  \brief Get a handle to a particular property
  \param handle Handle to a property list object
+ \param name Name of the property.
  \return Returns a handle to a property if successfull, NULL otherwise
  \ingroup plugins
 */

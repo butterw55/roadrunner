@@ -1,5 +1,5 @@
 /**
- * @file rrp_utilities.h
+ * @file rrplugins_utilities.h
  * @brief Plugins API Utilities header
  * @author Totte Karlsson & Herbert M Sauro
  *

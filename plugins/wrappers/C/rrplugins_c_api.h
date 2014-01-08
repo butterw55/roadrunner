@@ -484,14 +484,14 @@ RRP_C_DS bool rrp_cc getRRCDataElementF(RRCDataPtr rrcData, int r, int c, double
 
  Example: \code status = getRoadRunnerDataElement (rrDataHandle, 2, 4, *value); \endcode
 
- \param rrcData A Handle o a RoadRunner data type variable
- \param r -The row index to the rrData data
- \param c - The column index to the rrData data
+ \param rrData A Handle o a RoadRunner data type variable
+ \param r The row index to the rrData data
+ \param c The column index to the rrData data
  \param[out] value - The retrieved value from the rrData data
  \return Returns true if succesful
  \ingroup utilities
 */
-RRP_C_DS bool           rrp_cc getRoadRunnerDataElement(RRDataHandle rrData, int r, int c, double *value);
+RRP_C_DS bool rrp_cc getRoadRunnerDataElement(RRDataHandle rrData, int r, int c, double *value);
 
 /*!
  \brief Retrieves a RoadRunner data column header. The column header is a string 
@@ -501,7 +501,7 @@ RRP_C_DS bool           rrp_cc getRoadRunnerDataElement(RRDataHandle rrData, int
  \return Returns a string containing the header as a string, NULL if unsuccesful
  \ingroup utilities
 */
-RRP_C_DS char*          rrp_cc getRoadRunnerDataColumnHeader(RRDataHandle data);
+RRP_C_DS char* rrp_cc getRoadRunnerDataColumnHeader(RRDataHandle data);
 
 
 /*!
@@ -511,7 +511,7 @@ RRP_C_DS char*          rrp_cc getRoadRunnerDataColumnHeader(RRDataHandle data);
  \return Returns the number of rows in the underlying data object.
  \ingroup utilities
 */
-RRP_C_DS int            rrp_cc getRoadRunnerDataNumRows(RRDataHandle rrData);
+RRP_C_DS int            rrp_cc getRoadRunnerDataNumRows(RRDataHandle data);
 
 /*!
  \brief Retrieves the number of cols in a RoadRunner data object.
@@ -520,14 +520,14 @@ RRP_C_DS int            rrp_cc getRoadRunnerDataNumRows(RRDataHandle rrData);
  \return Returns the number of cols in the underlying data object.
  \ingroup utilities
 */
-RRP_C_DS int            rrp_cc getRoadRunnerDataNumCols(RRDataHandle rrData);
+RRP_C_DS int            rrp_cc getRoadRunnerDataNumCols(RRDataHandle data);
 
 /*!
  \brief Creates a RoadRunner data object, and returns a handle to it.
 
- \param rows. Number of rows to create.
- \param cols. Number of cols to create.
- \param colNames. Column header as a string, e.g. "time, S1, S2". 
+ \param rows Number of rows to create.
+ \param cols Number of cols to create.
+ \param colNames Column header as a string, e.g. "time, S1, S2". 
  \return Returns a handle to a RoadRunner data object, NULL if unsuccessfull.
  \ingroup utilities
 */
@@ -535,12 +535,12 @@ RRP_C_DS RRDataHandle   rrp_cc createRoadRunnerData(int rows, int cols, char* co
 
 /*!
  \brief Free the memory allocated by a RoadRunner data object.
- \param handle. A RRDataHandle handle to an underlying RoadRunnerData object.
+ \param handle A RRDataHandle handle to an underlying RoadRunnerData object.
 
  \return Returns a boolean indicating success.
  \ingroup utilities
 */
-RRP_C_DS bool           rrp_cc freeRoadRunnerData(RRDataHandle handle);
+RRP_C_DS bool rrp_cc freeRoadRunnerData(RRDataHandle handle);
 
 /*!
  \brief Returns a string list in string form.
@@ -552,8 +552,8 @@ RRP_C_DS char* rrp_cc stringArrayToStringFWD(const RRStringArrayPtr list);
 
 /*!
  \brief Write roadrunner data to file a RoadRunner data object.
- \param rrData. A handle to RoadRunner data.
- \param fName. Output file name as a string.
+ \param rrData A handle to RoadRunner data.
+ \param fName Output file name as a string.
  \return Returns a boolean indicating success.
  \ingroup utilities
 */
@@ -561,8 +561,8 @@ RRP_C_DS bool rrp_cc writeRoadRunnerDataToFile(RRDataHandle rrData, char* fName)
 
 /*!
  \brief Read roadrunner data from a file, into a RoadRunner data object.
- \param rrData. A handle to RoadRunner data.
- \param fName. File name to read data from.
+ \param rrData A handle to RoadRunner data.
+ \param fName File name to read data from.
  \return Returns a boolean indicating success.
  \ingroup utilities
 */RRP_C_DS bool rrp_cc readRoadRunnerDataFromFile(RRDataHandle rrData, char* fName);
