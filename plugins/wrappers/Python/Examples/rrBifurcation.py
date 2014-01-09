@@ -1,4 +1,3 @@
-import ctypes
 from rrPlugins_CAPI import *
 from rrPlugins import *
 
