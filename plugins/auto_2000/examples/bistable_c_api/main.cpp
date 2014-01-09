@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include "rrc_api.h"
-#include "rrp_api.h"
+#include "rrplugins_c_api.h"
 
 using namespace std;
 using namespace rrc;

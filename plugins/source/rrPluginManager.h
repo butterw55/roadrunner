@@ -42,6 +42,7 @@
 #define rrPluginManagerH
 #include <vector>
 #include <string>
+#include <ostream>
 #include "rrpExporter.h"
 #include "rrConstants.h"
 #include "rrStringList.h"
@@ -55,7 +56,9 @@ namespace rrp
 using std::string;
 using std::vector;
 using std::pair;
+using std::ostream;
 using rr::gEmptyString;
+
 //using rr::StringList;
 using Poco::SharedLibrary;
 
@@ -79,18 +82,24 @@ typedef pair< Poco::SharedLibrary*, Plugin* > rrPlugin;
 class RRP_DECLSPEC PluginManager
 {
     public:
-    /**
-     * The constructor of a Plugin manager creates a Plugin manager instance.
-     *
-     * @param pluginFolder Folder where the plugin manager is looking for plugins. If argument
-        is not supplied, the manager will use the default folder, which is "plugins" located in RoadRunners install folder.
-     */
+        /**
+         * The constructor of a Plugin manager creates a Plugin manager instance.
+         *
+         * @param pluginFolder Folder where the plugin manager is looking for plugins. If argument
+            is not supplied, the manager will use the default folder, which is "plugins" located in RoadRunners install folder.
+         */
                                         PluginManager(const string& pluginFolder = gEmptyString);
-    /**
-     * The destructor of a Plugin manager will free any memory allocated and also unload any plugins that it loaded.
-     */
-
+        /**
+         * The destructor of a Plugin manager will free any memory allocated and also unload any plugins that it loaded.
+         */
         virtual                        ~PluginManager();
+
+        /**
+            Get information about the current plugin manager object,
+            such as number of plugins loaded, their names and where they are loaded from
+            @return string String holding plugin manager information
+        */
+        string                          getInfo();
 
         /**
             Change the directory where the Manager loads plugins
@@ -107,9 +116,9 @@ class RRP_DECLSPEC PluginManager
 
         /**
             Load a specific plugin, or, if no argument supplied, loads ALL plugins in the current plugin folder.
-            @return Boolean indicating success
+            @return integer Returning number of succesfully loaded plugins
         */
-        bool                            load(const string& pluginName = gEmptyString);
+        int                             load(const string& pluginName = gEmptyString);
 
         /**
             Unload a specific plugin, or, if no argument supplied, unloads ALL plugins.
@@ -167,16 +176,28 @@ class RRP_DECLSPEC PluginManager
             Retrieves the names of all loaded plugins as a list of strings.
             \return StringList A Stringlist containing the name of each loaded Plugin.
         */
-        rr::StringList                      getPluginNames();
+        rr::StringList                  getPluginNames();
 
         /**
             Retrieves the shared library names of all loaded plugins as a list of strings.
             \return StringList A Stringlist containing the file name of each loaded Plugin.
         */
-        rr::StringList                      getPluginLibraryNames();
+        rr::StringList                  getPluginLibraryNames();
+
+        /**
+            Output plugin information to a std ostream
+        */
+        RRP_DECLSPEC
+        friend ostream&                 operator<<(ostream& os, PluginManager& pm);
+
+        /**
+            Access a plugin using the [] operator.
+        */
+        Plugin*                         operator[](const int& i);
     private:
         string                          mPluginFolder;
-        string                          mPluginExtension;    //Different on different OS's
+        string                          mPluginExtension;   //Different on different OS's
+        string                          mPluginPrefix;      //Different on different OS's
         vector< rrPlugin >              mPlugins;
         vector< rrPlugin >::iterator    mPluginsIter;
 
@@ -185,7 +206,6 @@ class RRP_DECLSPEC PluginManager
         const char*                     getImplementationLanguage(SharedLibrary* plugin);
         Plugin*                         createCPlugin(SharedLibrary *libHandle);
         Plugin*                         getPlugin(const int& i);
-        Plugin*                         operator[](const int& i);
         bool                            unloadAll();
 };
 
@@ -197,23 +217,24 @@ class RRP_DECLSPEC PluginManager
  \par
  This document describes libRoadRunners Plugins API. 
  \par
- The Plugins API is centered around the \a PluginManager, \a Plugin, and \a Parameter classes. Where the Plugin manager is 
+ The Plugins API is centered around the \a PluginManager, \a Plugin, and the \a Property classes. The Plugin manager is 
  responsible for validating, loading and unloading plugins at runtime.
 
  \par
  The Plugins themselves are self contained shared libraries that may be designed to extend the functionality of the main libRoadRunners core API.
  
  \par
- The capabilities of a Plugin is communicated to a client by use of \a Parameters. A Parameter in this context,
- is a specialized object able to communicate various types of data between the Plugin and the client. 
+ The capabilities of a Plugin is communicated to a client by the use of \a PluginProperties. A Plugin property is an object 
+ able to communicate various types of data betwen the Plugin and the client, such as an int, double or a string. In addition to its value, plugin 
+ properties have a name, hint and description field, assisting in communicating the purpose of the property.
 
  \par
- A client typically loads and configure a plugin, throught the use of Parameters, and then \a executes the plugin using a plugins
- execute function. Finally, the client may retrieve some kind of result from the Plugin, again, using a Parameter.
+ A client typically loads and configure a plugin, through the use of Properties, and then subsequently \a executes the plugin using the plugins
+ execute function. Finally, the client may retrieve some kind of result from the Plugin, again, using a Property.
 
  \par
- Since a Plugins function will be determined by the actual Plugin author, documentation on a Plugins purpose and on how
- to use the plugin, is ideally bundled with the plugin and retrieved by various Plugin functions, getInfo(), getExtendedInfo() and getManualAsPDF().
+ Since a Plugins function will be determined by the actual Plugin author, documentation of a Plugins purpose and on how
+ to use the plugin, is ideally bundled with the plugin and retrieved by various Plugin functions, e.g. getPluginInfo() and getPluginManualAsPDF().
  \par
 
  \author Totte Karlsson (totte@dunescientific.com)

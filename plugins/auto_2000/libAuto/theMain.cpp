@@ -91,7 +91,7 @@ static void scheme_not_supported_error(char *scheme) {
     //exit(0);
 }
 
-int AUTO_main(int argc,char *argv[])
+int AUTO_main(int argc, char *argv[])
 //int main(int argc,char *argv[])
 {
 #if defined(_WIN32) || defined(__WIN32__)
@@ -119,7 +119,7 @@ int AUTO_main(int argc,char *argv[])
 #endif
 
 #ifdef MPI
-    MPI_Init(&argc,&argv);
+    MPI_Init(&argc, &argv);
 #endif
 
     // check if we should set fort_names or not
@@ -369,7 +369,7 @@ OPEN_FP3:
         if(list.type==AUTOAE)
             autoae(&iap, &rap, par, icp, list.aelist.funi, list.aelist.stpnt, list.aelist.pvli, thl, thu, iuz, vuz);
         if(list.type==AUTOBV)
-            autobv(&iap, &rap, par, icp, list.bvlist.funi, list.bvlist.bcni, 
+            autobv(&iap, &rap, par, icp, list.bvlist.funi, list.bvlist.bcni,
             list.bvlist.icni, list.bvlist.stpnt, list.bvlist.pvli, thl, thu, iuz, vuz);
 
 #ifdef USAGE
@@ -383,8 +383,6 @@ OPEN_FP3:
 #ifdef AUTO_CONSTRUCT_DESTRUCT
         user_destruct();
 #endif
-
-
     }
 #ifdef MPI
     {
@@ -407,33 +405,8 @@ OPEN_FP3:
     if (vuz) free(vuz);
 
     // close files
-
     CloseAllFiles();
-
-//  fclose(fp2); fp2 = NULL;
-//  fclose(fp3); fp3 = NULL;
-////#ifdef LIBRARY_ONLY
-////    if(fp6 != stdout)
-//      fclose(fp6);fp6 = NULL;
-////    fp6 = NULL;
-////#else
-////    fp6 = stdout;
-////#endif
-//  fclose(fp7); fp7 = NULL;
-//  fclose(fp8); fp8 = NULL;
-//  fclose(fp9); fp9 = NULL;
-
     return 0;
-} 
-
 }
 
-//#ifndef LIBRARY_ONLY /* @@edc: compiling in main will be an option now */
-////int main(int argc,char *argv[])
-//{
-//#ifdef __cplusplus
-//using autolib::AUTO_main;
-//#endif
-//  return AUTO_main(argc, argv);
-//}
-//#endif
+}

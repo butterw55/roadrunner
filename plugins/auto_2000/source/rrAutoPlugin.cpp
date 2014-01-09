@@ -14,10 +14,11 @@ namespace autoplugin
 using namespace rrc;
 using namespace std;
 
-AutoPlugin::AutoPlugin(rr::RoadRunner* aRR)
+AutoPlugin::AutoPlugin()
 :
-CPPPlugin("Auto-2000", "Bifurcation", aRR, NULL),
-mTempFolder(                        "<none>",               "TempFolder",                                       "Tempfolder used by auto"),
+CPPPlugin("Auto-2000", "Bifurcation", NULL, NULL),
+mTempFolder(                        ".",                    "TempFolder",                                       "Tempfolder used by auto and roadrunner"),
+mKeepTempFiles(                     false,                  "KeepTempFiles",                                    "Keep temporary files."),
 mSBML(                              "<none>",               "SBML",                                             "SBML, i.e. the model to be used to analyze"),
 mScanDirection(                     "Negative",             "ScanDirection",                                    "Direction of parameter scan"),
 mPrincipalContinuationParameter(    "<none>",               "PrincipalContinuationParameter",                   "Principal Continuation Property"),
@@ -25,11 +26,13 @@ mPCPLowerBound(                     0,                      "PCPLowerBound",    
 mPCPUpperBound(                     0,                      "PCPUpperBound",                                    "Principal Continuation Parameter Upper Bound"),
 mBiFurcationDiagram(                "<none>",               "BiFurcationDiagram",                               "BifurcationDiagram"),
 mAutoData(                          AutoData(),             "AutoData",                                         "Data structure holding auto data"),
-mRRAuto(aRR, mAutoData.getValueReference()),
+mRRAuto(NULL, mAutoData.getValueReference()),
 mAutoWorker(*this)
 {
+    mVersion = "0.8";
     //Setup the plugins capabilities
     mProperties.add(&mTempFolder);
+    mProperties.add(&mKeepTempFiles);
     mProperties.add(&mSBML);
     mProperties.add(&mAutoData);
     mProperties.add(&mScanDirection);
@@ -38,10 +41,20 @@ mAutoWorker(*this)
     mProperties.add(&mPCPUpperBound);
     mProperties.add(&mBiFurcationDiagram);
 
+    //Create a roadrunner to use
+    mRR = new RoadRunner;
+    mRRAuto.assignRoadRunner(mRR);
+
+    mHint ="BiFurcation Analyis using AUTO2000";
+    mDescription="The auto2000 plugin is a wrapper around the AUTO 2000 BiFurcation analysis library. This plugin was inspired and are using many of Frank Bergmann's \
+ideas on how to create a usable interface to the AUTO 2000 library.";
+
 }
 
 AutoPlugin::~AutoPlugin()
-{}
+{
+    delete mRR;
+}
 
 RRAuto& AutoPlugin::getRRAuto()
 {
@@ -138,9 +151,10 @@ string AutoPlugin::getSBML()
 string AutoPlugin::getResult()
 {
     stringstream msg;
-    AutoData& data = getAutoData();
+//    AutoData& data = getAutoData();
+    msg<<"AUTO 2000 DATA\n";
 
-    msg<<data;
+    msg<<mBiFurcationDiagram.getValue();
     return msg.str();
 }
 
@@ -162,7 +176,7 @@ bool AutoPlugin::execute(bool inThread)
 AutoPlugin* auto_cc createPlugin(rr::RoadRunner* aRR)
 {
     //allocate a new object and return it
-    return new AutoPlugin(aRR);
+    return new AutoPlugin();
 }
 
 const char* auto_cc getImplementationLanguage()

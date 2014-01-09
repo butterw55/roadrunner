@@ -52,8 +52,12 @@ target_link_libraries (${target}
     nleq-static
     rr-libstruct-static
     poco_foundation-static
-    iphlpapi
     )
+
+if(${MSVC})
+    target_link_libraries (${target}
+        iphlpapi)
+endif()
 
 if(UNIX)
     target_link_libraries (${target}

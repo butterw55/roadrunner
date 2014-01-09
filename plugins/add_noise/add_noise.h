@@ -22,6 +22,7 @@ class AddNoise : public CPPPlugin
         Property<int>               mNoiseType;
         Property<double>            mSigma;
         Property<RoadRunnerData>    mData;
+        Property<int>               mProgress;
         AddNoiseWorker              mAddNoiseWorker;
 
     public:
@@ -37,7 +38,7 @@ class AddNoise : public CPPPlugin
 
 extern "C"
 {
-RR_PLUGIN_DECLSPEC Plugin*      plugins_cc createPlugin(rr::RoadRunner* aRR);
+RR_PLUGIN_DECLSPEC Plugin*      plugins_cc createPlugin();
 RR_PLUGIN_DECLSPEC const char*  plugins_cc getImplementationLanguage();
 }
 
@@ -47,7 +48,7 @@ namespace rrp
 {
 
 template<>
-inline string getParaType(const addNoise::AddNoise::NoiseType& value)
+inline string getPropertyType(const addNoise::AddNoise::NoiseType& value)
 {
     return "NoiseType";
 }

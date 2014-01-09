@@ -4,6 +4,7 @@ project(rr_plugins)
 if(${BUILD_PLUGINS} STREQUAL ON)
 
 include_directories(
+	../source
 	../wrappers/C
 )
 
@@ -31,8 +32,9 @@ if(${RRP_BUILD_EXAMPLES} STREQUAL ON)
 add_subdirectory(examples)
 endif()
 
-endif()
+endif() #BUILD_PLUGINS
 
+add_subdirectory(apps)
 add_subdirectory(wrappers)
 
 install(

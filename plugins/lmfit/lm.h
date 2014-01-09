@@ -52,7 +52,7 @@ class LM : public CPPPlugin
 
         lm_status_struct                        mLMStatus;      //Check afterwards.
     public:
-                                                LM(RoadRunner* aRR = NULL);
+                                                LM();
                                                ~LM();
 
         bool                                    execute(bool inThread = false);
@@ -64,13 +64,13 @@ class LM : public CPPPlugin
 
         unsigned char*                          getManualAsPDF() const;
         unsigned int                            getPDFManualByteSize();
-        rr::StringList                              getExperimentalDataSelectionList();
+        rr::StringList                          getExperimentalDataSelectionList();
         void                                    assignPropertyDescriptions();
 };
 
 extern "C"
 {
-RR_PLUGIN_DECLSPEC LM*         plugins_cc       createPlugin(rr::RoadRunner* aRR);
+RR_PLUGIN_DECLSPEC LM*         plugins_cc       createPlugin();
 RR_PLUGIN_DECLSPEC const char* plugins_cc       getImplementationLanguage();
 }
 }

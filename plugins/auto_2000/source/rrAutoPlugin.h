@@ -13,8 +13,8 @@
 
 namespace autoplugin
 {
-#if defined(__CODEGEAR__)
-#define auto_cc __stdcall
+#if defined(__BORLANDC__)
+#define auto_cc __cdecl
 #else
 #define auto_cc
 #endif
@@ -26,7 +26,7 @@ class AutoPlugin : public CPPPlugin
 {
     friend AutoWorker;
     public:
-                                                AutoPlugin(rr::RoadRunner* aRR = NULL);
+                                                AutoPlugin();
                                                ~AutoPlugin();
         bool                                    assignRoadRunnerInstance(RoadRunner* rr);
         //Data input
@@ -35,27 +35,21 @@ class AutoPlugin : public CPPPlugin
         void                                    setPCPLowerBound(double lb);
         void                                    setPCPUpperBound(double ub);
         void                                    setSBML(const string& sbml);
-
         bool                                    execute(bool inThread = false);
-        
         string                                  getResult();
         string                                  getConstants();
         bool                                    resetPlugin();
         bool                                    setInputData(void* data);
-
-
         string                                  getStatus();
         bool                                    isWorking();
         RRAuto&                                 getRRAuto();
 
-
-
     protected:
         //Capability                              mAuto;
         Property<string>                        mTempFolder;
+        Property<bool>                          mKeepTempFiles;
         Property<string>                        mSBML;                  //This is the model
         Property<string>                        mScanDirection;         //How auto sweeps the parameter
-
         Property<string>                        mPrincipalContinuationParameter;
         Property<double>                        mPCPLowerBound;
         Property<double>                        mPCPUpperBound;

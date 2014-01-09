@@ -9,7 +9,6 @@
 
 namespace addNoise
 {
-
 using namespace rr;
 AddNoiseWorker::AddNoiseWorker(AddNoise& host)
 :
@@ -26,6 +25,7 @@ bool AddNoiseWorker::start(bool runInThread)
             return false;
         }
 
+        //Run the worker in a thread
         mThread.start(*this);
     }
     else
@@ -44,7 +44,7 @@ void AddNoiseWorker::run()
 {
     if(mTheHost.mWorkStartedEvent)
     {
-        mTheHost.mWorkStartedEvent(NULL, mTheHost.mWorkStartedData2);
+        mTheHost.mWorkStartedEvent(mTheHost.mWorkStartedData1, mTheHost.mWorkStartedData2);
     }
 
     RoadRunnerData& data = (mTheHost.mData.getValueReference());
@@ -61,16 +61,17 @@ void AddNoiseWorker::run()
 
         if(mTheHost.mWorkProgressEvent)
         {
-            int progress = (int) (row * 100.0) /(data.rSize() -1.0) ;
-            
+            int progress = (int) (row * 100.0) /(data.rSize() -1.0);
+            mTheHost.mProgress.setValue( progress );
+
             //The progress is communicated to the client as an INTEGER
-            mTheHost.mWorkProgressEvent((void*) progress,  mTheHost.mWorkProgressData2);
+            mTheHost.mWorkProgressEvent(mTheHost.mWorkProgressData1,  mTheHost.mWorkProgressData2);
         }
     }
 
     if(mTheHost.mWorkFinishedEvent)
     {
-        mTheHost.mWorkFinishedEvent(NULL, mTheHost.mWorkFinishedData2);
+        mTheHost.mWorkFinishedEvent( mTheHost.mWorkFinishedData1, mTheHost.mWorkFinishedData2);
     }
 }
 

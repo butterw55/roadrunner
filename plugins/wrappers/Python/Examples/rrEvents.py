@@ -2,6 +2,7 @@ import os
 import roadrunner
 import matplotlib.pyplot as plot
 import numpy
+import ctypes
 from rrPlugins_CAPI import *
 
 #Create a roadrunner instance
@@ -13,9 +14,10 @@ pm = createPluginManager()
 def pluginStarted():
     print 'The plugin was started'
 
-def pluginIsProgressing(progress):
-    nr = progress
-    print '\nPlugin progress:' + `nr` +' %'
+def pluginIsProgressing(val):
+    pluginHandle = cast(val, ctypes.py_object).value    
+    prop = getPluginProperty(pluginHandle, "Progress")
+    print '\nPlugin progress:' + `getPropertyValue(prop)` +' %'
 
 def pluginIsFinished():
     print 'The plugin did finish'
@@ -35,12 +37,12 @@ numPoints = 500
 rr.simulate(timeStart, timeEnd, numPoints)
 
 #Load the 'noise' plugin in order to add some noise to the data
-plugin = loadPlugin(pm, "rrp_add_noise")
+pluginHandle = loadPlugin(pm, "rrp_add_noise")
 
-print getPluginInfo(plugin)
+print getPluginInfo(pluginHandle)
 
 #get parameter for noise 'size'
-sigmaHandle = getPluginProperty(plugin, "Sigma")
+sigmaHandle = getPluginProperty(pluginHandle, "Sigma")
 
 aSigma = getPropertyValueAsString(sigmaHandle)
 print 'Current sigma is ' + aSigma
@@ -49,20 +51,24 @@ print 'Current sigma is ' + aSigma
 setProperty(sigmaHandle, 0.02)
 
 cb_func1 =  NotifyEvent(pluginStarted)
-assignOnStartedEvent(plugin,  cb_func1)
+assignOnStartedEvent(pluginHandle,  cb_func1)
 
-cb_func2 =  NotifyIntEvent(pluginIsProgressing)
-assignOnProgressEvent(plugin, cb_func2)
+progressEvent =  NotifyEventEx(pluginIsProgressing)
 
+#The ID of the plugin is passed as the last argument in the assignOnProgressEvent. 
+#The plugin ID is later on retrieved in the plugin Event handler, see above
+theId = id(pluginHandle)
+assignOnProgressEvent(pluginHandle, progressEvent, theId)
+   
 cb_func3 =  NotifyEvent(pluginIsFinished)
-assignOnFinishedEvent(plugin, cb_func3)
+assignOnFinishedEvent(pluginHandle, cb_func3)
 
 #Assign data to the plugin
-pluginData = getPluginProperty(plugin,"InputData")
+pluginData = getPluginProperty(pluginHandle,"InputData")
 setProperty(pluginData, getRoadRunnerDataHandle(rr))
 
 #Execute the noise plugin which will add some noise to the (internal) data
-executePluginEx(plugin)
+executePluginEx(pluginHandle)
 
 #Retrieve data from plugin
 
