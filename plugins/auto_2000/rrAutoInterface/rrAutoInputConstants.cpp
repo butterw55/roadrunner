@@ -138,8 +138,8 @@ string InputConstants::ToInputString()
     builder << (line10 + WhiteSpaces(line10, maxLength) + " NUZR,((I,PAR(I)),I=1,NUZR)") << endl;
 //    WriteUZR(builder);
 
-    builder << "\n";//AppendLine();
-    builder << "\n";//AppendLine();
+    builder << "\n";
+    builder << "\n";
 
     string aStr = builder.ToString();
     return aStr;
@@ -191,7 +191,4 @@ string WhiteSpaces(string& line, int maxLength)
 //
 //            return builder.ToString();
 //        }
-
-
-
 }

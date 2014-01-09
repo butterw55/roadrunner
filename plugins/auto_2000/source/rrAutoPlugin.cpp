@@ -25,8 +25,9 @@ mPrincipalContinuationParameter(    "<none>",               "PrincipalContinuati
 mPCPLowerBound(                     0,                      "PCPLowerBound",                                    "Principal Continuation Parameter Lower Bound"),
 mPCPUpperBound(                     0,                      "PCPUpperBound",                                    "Principal Continuation Parameter Upper Bound"),
 mBiFurcationDiagram(                "<none>",               "BiFurcationDiagram",                               "BifurcationDiagram"),
-mAutoData(                          AutoData(),             "AutoData",                                         "Data structure holding auto data"),
-mRRAuto(NULL, mAutoData.getValueReference()),
+//mAutoData(                          AutoData(),             "AutoData",                                         "Data structure holding auto data"),
+mAutoParameters(                    Properties(),           "AutoParameters",                                   "Auto parameter container"),
+mRRAuto(NULL, mAutoData),
 mAutoWorker(*this)
 {
     mVersion = "0.8";
@@ -34,12 +35,13 @@ mAutoWorker(*this)
     mProperties.add(&mTempFolder);
     mProperties.add(&mKeepTempFiles);
     mProperties.add(&mSBML);
-    mProperties.add(&mAutoData);
+    //mProperties.add(&mAutoData);
     mProperties.add(&mScanDirection);
     mProperties.add(&mPrincipalContinuationParameter);
     mProperties.add(&mPCPLowerBound);
     mProperties.add(&mPCPUpperBound);
     mProperties.add(&mBiFurcationDiagram);
+    mProperties.add(&mAutoParameters);
 
     //Create a roadrunner to use
     mRR = new RoadRunner;
@@ -49,6 +51,10 @@ mAutoWorker(*this)
     mDescription="The auto2000 plugin is a wrapper around the AUTO 2000 BiFurcation analysis library. This plugin was inspired and are using many of Frank Bergmann's \
 ideas on how to create a usable interface to the AUTO 2000 library.";
 
+    //Populate auto parameters
+    InputConstants ic;
+    Properties &paras = *(Properties*) mAutoParameters.getValueHandle();
+    paras.add(&(ic.RL0));
 }
 
 AutoPlugin::~AutoPlugin()
@@ -59,13 +65,6 @@ AutoPlugin::~AutoPlugin()
 RRAuto& AutoPlugin::getRRAuto()
 {
     return mRRAuto;
-}
-
-bool AutoPlugin::assignRoadRunnerInstance(RoadRunner* rr)
-{
-    mRRAuto.assignRoadRunner(rr);
-    mRR = rr;
-    return mRR ? true : false;
 }
 
 void AutoPlugin::setScanDirection(ScanDirection dir)
@@ -115,9 +114,6 @@ string AutoPlugin::getStatus()
     stringstream msg;
     msg<<Plugin::getStatus();
     msg<<"TempFolder: "<<mTempFolder<<"\n";
-    msg<<"SBML: "<<mSBML<<"\n";
-    AutoData* autoData = (AutoData*) (mAutoData.getValuePointer());
-    msg<<"MinData"<<(*autoData)<<"\n";
     return msg.str();
 }
 
@@ -135,7 +131,7 @@ bool AutoPlugin::resetPlugin()
 
 AutoData& AutoPlugin::getAutoData()
 {
-    return *(mAutoData.getValuePointer());
+    return mAutoData;//*(mAutoData.getValuePointer());
 }
 
 string AutoPlugin::getTempFolder()
@@ -172,8 +168,7 @@ bool AutoPlugin::execute(bool inThread)
 }
 
 //Functions allowing the plugin to be loaded by plugin manager
-// Plugin factory function
-AutoPlugin* auto_cc createPlugin(rr::RoadRunner* aRR)
+AutoPlugin* auto_cc createPlugin()
 {
     //allocate a new object and return it
     return new AutoPlugin();

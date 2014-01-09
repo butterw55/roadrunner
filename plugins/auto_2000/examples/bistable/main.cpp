@@ -1,17 +1,16 @@
 #pragma hdrstop
 #include <iostream>
-
-//#include "rrRoadRunner.h"
 #include "rrPluginManager.h"
 #include "rrException.h"
 #include "rrLogger.h"
 #include "rrPlugin.h"
 #include "rrUtils.h"
+#include "rrProperty.h"
 #include "../../source/rrAutoPlugin.h"
 #include "../../rrAutoInterface/rrRRAuto.h"
 
 using namespace rr;
-using namespace rrp; //Plugin stuff
+using namespace rrp;
 using namespace autoplugin;
 using namespace std;
 
@@ -19,7 +18,6 @@ int main()
 {
     string tempFolder(".");
     string sbmlFile("../models/bistable.xml");
-
 	gLog.setLevel(lInfo);
     gLog.enableConsoleLogging();
     gLog.enableFileLogging(joinPath(tempFolder, "bistable.log"));
@@ -34,7 +32,7 @@ int main()
         //Load auto plugin
         if(!pm.load(pluginName))
         {
-            Log(lError)<<"Failed to load auto plugin";
+            Log(lError)<<"Failed to load plugin: "<<pluginName;
             return 0;
         }
 
@@ -49,25 +47,29 @@ int main()
         //A serious client would check if these calls are succesfull or not
 
         string sbml = getFileContent(sbmlFile);
+
+        //Various plugin constants
         autoPlugin->setProperty("SBML", sbml.c_str());
         autoPlugin->setProperty("TempFolder", tempFolder.c_str());
         autoPlugin->setProperty("KeepTempFiles", "false");
-        autoPlugin->setProperty("ScanDirection", "Negative");
+
+        //Specific auto parameters
+        PropertyBase* para = autoPlugin->getProperty("AutoParameters");
+
+        Properties* autoParas = (Properties*) (para->getValueHandle());
+
+        PropertyBase* RL0 = autoParas->getProperty("RL0");
+        RL0->setValueFromString("1.12");
+
+        autoPlugin->setProperty("ScanDirection", "Positive");
         autoPlugin->setProperty("PrincipalContinuationParameter", "k3");
-        autoPlugin->setProperty("PCPLowerBound", "0.2");
-        autoPlugin->setProperty("PCPUpperBound", "1.2");
+        autoPlugin->setProperty("PCPLowerBound", "1.1");
+        autoPlugin->setProperty("PCPUpperBound", "1.4");
 
         if(!autoPlugin->execute())
         {
             Log(lError)<<"Problem executing the Auto plugin";
             return 0;
-        }
-
-        //Wait for plugin thread to finish
-        while(autoPlugin->isWorking())
-        {
-            Log(lInfo)<<"Auto plugin is working..";
-            Sleep(50);
         }
 
         Log(lInfo)<<"Auto plugin is done.";
@@ -91,6 +93,6 @@ int main()
         Log(lError)<<"Bad problem...!";
     }
 
-    //pause(true);
+    pause(true);
     return 0;
 }

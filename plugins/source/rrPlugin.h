@@ -405,16 +405,7 @@ class RRP_DECLSPEC Plugin
          * Properties container. Descendant add properties to this container, as they wish.
          * Property data values can be exchanged to/from the plugin by accessing individual properties.
          */
-
          Properties                     mProperties;
-
-//        /*
-//         * Opaque data pointer. Plugin designer may use this to communicat data of any type out/in to the plugin
-//         * using the assignPluginInput() function.
-//         *
-//         */
-//        void                           *mClientData;
-
 };
 
 }

@@ -1,9 +1,7 @@
 #ifndef rrAutoPluginH
 #define rrAutoPluginH
-#include <vector>
 #include "rrProperty.h"
 #include "rrCPPPlugin.h"
-#include "rrRoadRunner.h"
 #include "rrPluginManager.h"
 #include "../rrAutoInterface/rrAutoData.h"
 #include "../rrAutoInterface/rrRRAuto.h"
@@ -14,21 +12,19 @@
 namespace autoplugin
 {
 #if defined(__BORLANDC__)
-#define auto_cc __cdecl
+    #define auto_cc __cdecl
 #else
-#define auto_cc
+    #define auto_cc
 #endif
 
 using namespace rrauto;
 
-//If plugin is loaded by a program that is binary compatible witht he plugin, we could use class functions directly.
 class AutoPlugin : public CPPPlugin
 {
     friend AutoWorker;
     public:
                                                 AutoPlugin();
                                                ~AutoPlugin();
-        bool                                    assignRoadRunnerInstance(RoadRunner* rr);
         //Data input
         void                                    setScanDirection(ScanDirection dir);
         void                                    setPrincipalContinuationParameter(const string& para);
@@ -45,7 +41,7 @@ class AutoPlugin : public CPPPlugin
         RRAuto&                                 getRRAuto();
 
     protected:
-        //Capability                              mAuto;
+
         Property<string>                        mTempFolder;
         Property<bool>                          mKeepTempFiles;
         Property<string>                        mSBML;                  //This is the model
@@ -54,13 +50,15 @@ class AutoPlugin : public CPPPlugin
         Property<double>                        mPCPLowerBound;
         Property<double>                        mPCPUpperBound;
         Property<string>                        mBiFurcationDiagram;    //This is generated data
-        Property<AutoData>                      mAutoData;              //This plugin generates a lot of data
+        AutoData                                mAutoData;              //This plugin generates a lot of data
+
+        //This property is a container for parameters inside auto
+        Property<Properties>                    mAutoParameters;
 
         RRAuto                                  mRRAuto;                //The interface to auto. Takes mAutoData as reference
-        //Utility functions for the thread
+
         string                                  getTempFolder();
         string                                  getSBML();
-
         AutoData&                               getAutoData();
 
         //The worker
@@ -73,7 +71,7 @@ class AutoPlugin : public CPPPlugin
 
 extern "C"
 {
-RR_PLUGIN_DECLSPEC AutoPlugin* auto_cc       createPlugin(rr::RoadRunner* aRR);
+RR_PLUGIN_DECLSPEC AutoPlugin* auto_cc       createPlugin();
 RR_PLUGIN_DECLSPEC const char* auto_cc       getImplementationLanguage();
 }
 

@@ -2,6 +2,7 @@
 #define rrAutoInputConstantsH
 #include <vector>
 #include <string>
+#include "rrProperty.h"
 #include "rrRRAutoExporter.h"
 //---------------------------------------------------------------------------
 
@@ -16,142 +17,141 @@ class RRA_DECLSPEC InputConstants
 {
     friend SetupControl;
     friend RRAuto;
-    protected:
+    public:
         // NDIM: dimension of the system of equations, as specified in the user-supplied subroutine 'func'
-        int NDIM;
+        int             NDIM;
 
         /// IPS: Constant defining the problem type (-2 -> 14) : 1 : stationary states 2 : periodic solutions 4 : BVP
-        int IPS;
+        int             IPS;
 
         /// Restart label
-        int IRS;
+        int             IRS;
 
         /// Locate limit points (folds)
-        int ILP;
+        int             ILP;
 
         /// the number of free parameters
-        int NICP;
+        int             NICP;
 
         /// the free parameters
-        vector<int> ICP;
+        vector<int>     ICP;
 
         /// the number of mesh intervals
-        int NTST;
+        int             NTST;
 
         /// the number of collocation points per mesh interval
-        int NCOL;
+        int             NCOL;
 
         /// Mesh adaption:
         ///     0 :fixedmesh
         ///   > 0 : adapt mesh every IAD continuation steps
-        int IAD;
+        int             IAD;
 
         /// Detection of branch points:
         ///   0 : don’t detect
         ///   1 : detect for algebraic problems
         ///   2 : detect for all problems
-        int ISP;
+        int             ISP;
 
         /// At a restart solution:
         ///   1 : just follow the branch
         ///  -1 : switch branches (for BPs in BVPs)
         ///   2 : two-parameter continuation (LPs, HBs, PDs, TRs)
-        int ISW;
+        int             ISW;
 
         /// The ”principal solution measure”
         /// (the second real column in the bifurcation diagram file):
         ///      0 : the L2 norm
         ///   != 0 : other measures (see manual)
-        int IPLT;
+        int             IPLT;
 
         /// the number of boundary conditions (for BVP)
-        int NBC;
+        int             NBC;
 
         /// the number of integral constraints (for BVP)
-        int NINT;
+        int             NINT;
 
         /// maximum number of continuation step along any branch
-        int NMX;
+        int             NMX;
 
         /// bifurcation diagram lower limit for the “first” parameter
-        double RL0;
+        rrp::Property<double>    RL0;
 
         /// bifurcation diagram upper limit for the “first” parameter
-        double RL1;
+        rrp::Property<double>    RL1;
 
         /// bifurcation diagram lower limit for the “principal solution measure”
-        double A0;
+        double          A0;
 
         /// bifurcation diagram upper limit for the “principal solution measure”
-        double A1;
+        double          A1;
 
         /// Save the solution in the solution file every NPR continuation steps
-        int NPR;
+        int             NPR;
 
         /// For algebraic problems: Maximum number of branch switches (if negative only one “leg” will be computed)
-        int MXBF;
+        int             MXBF;
 
         /// Controls the diagnostic file output (normal value is 2; see manual)
-        int IID;
+        int             IID;
 
         /// maximum number of iterations for detecting “special” solutions
-        int ITMX;
+        int             ITMX;
 
         /// maximum number of Newton+Chord iterations
-        int ITNW;
+        int             ITNW;
 
         /// maximum number of Newton iterations
-        int NWTN;
+        int             NWTN;
 
         /// Jacobian supplied ?
-        int JAC;
+        int             JAC;
 
         /// Newton/Chord convergence tolerance for free parameters
-        double EPSL;
+        double          EPSL;
 
         /// Newton/Chord convergence tolerance for solutions
-        double EPSU;
+        double          EPSU;
 
         /// Continuation step size tolerance when locating special solutions
-        double EPSS;
+        double          EPSS;
 
         /// Nominal continuation step size
-        double DS;
+        double          DS;
 
         /// Minimum continuation step size
-        double DSMIN;
+        double          DSMIN;
 
         /// Maximum continuation step size
-        double DSMAX;
+        double          DSMAX;
 
         /// Adapt the continuation step size every IADS steps
-        int IADS;
+        int             IADS;
 
         /// the number of modified parameter “weights” (for BVP)
-        int NTHL;
+        int             NTHL;
 
         /// <summary>
         /// parameter index, parameter weight (e.g., ICP(11)=0 means PAR(11) is excluded from the step size)
         /// </summary>
-        vector<int> THL;
+        vector<int>     THL;
 
         /// the number of modified solution component “weights” (for BVP)
-        int NTHU;
+        int             NTHU;
 
         /// component index, component weight
-        vector<int> THU;
+        vector<int>     THU;
 
         /// the number of “user output points” specified
-        int NUZR;
+        int             NUZR;
 
         /// parameter index, parameter value (if I is negative the continuation stops at the parameter value)
-        vector<int> UZR;
+        vector<int>     UZR;
 
         string          GetICP();
 
     public:
                         InputConstants();
-
         string          getConstantsAsString();
         string          ToInputString();
 };

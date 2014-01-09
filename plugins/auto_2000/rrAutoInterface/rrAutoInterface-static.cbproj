@@ -81,6 +81,7 @@
         <ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\debug\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <DynamicRTL>true</DynamicRTL>
         <Defines>POCO_STATIC;PCRE_STATIC;STATIC_RR_AUTO;$(Defines)</Defines>
         <FinalOutputDir>$(RR_INSTALL)\lib</FinalOutputDir>
         <IncludePath>$(RR_ROOT)\source;$(RR_INSTALL)\include;$(RR_ROOT)\plugins\source;$(IncludePath)</IncludePath>
