@@ -1,8 +1,8 @@
 from rrPlugins_CAPI import *
 
 try:
-    
-    rrDataHandle = createRoadRunnerDataFromFile("tefstData.dat")
+
+    rrDataHandle = createRoadRunnerDataFromFile("testData.dat")
     hdr = getRoadRunnerDataColumnHeader(rrDataHandle)
     npData = getNumpyData(rrDataHandle)
     print `hdr` + `npData`
@@ -12,4 +12,4 @@ try:
 
     print "done"
 except Exception as e:
-    print 'Exception: ' + `e`    
+    print 'Exception: ' + `e`
