@@ -2,8 +2,9 @@
 
 import rrPlugins_CAPI as rrp
 import matplotlib.pyplot as plt
+import os.path
 
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 
 class DataSeries(object):
 
@@ -25,6 +26,14 @@ class DataSeries(object):
 
     def __AsNumpy (self):
         return rrp.getNumpyData (self._data)
+
+    def readDataSeries(self, fileName):
+        if not os.path.isfile (fileName):
+            raise Exception ("File not found: " + fileName)
+        self._data = rrp.createRoadRunnerDataFromFile (fileName)
+
+    def writeDataSeries(self, fileName):
+        rrp.writeRoadRunnerData(self._data, fileName)
 
     data = property (__getHandle)
     AsNumpy = property (__AsNumpy)
@@ -71,7 +80,7 @@ class Plugin (object):
         self.plugin = rrp.loadPlugin (_pluginManager, pluginName)
         if not self.plugin:
             return
-        else:     
+        else:
             lp = self.listOfProperties()
             for element in lp:
                 self._propertyNames.append (element[0])
@@ -165,10 +174,10 @@ class Plugin (object):
         # Make sure garbage collector doens't remove the event pointer
         global _onProgressEvent
 
-        _onProgressEvent =  rrp.NotifyPluginEvent (f)
+        _onProgressEvent =  rrp.NotifyEventEx (f)
         # Pass the address of the self object
         theId = id (self)
-        rrp.assignOnProgressEvent(self.plugin, _onProgressEvent, None, theId)
+        rrp.assignOnProgressEvent(self.plugin, _onProgressEvent, theId, None)
 
     def execute (self):
         return rrp.executePlugin (self.plugin)
@@ -234,6 +243,9 @@ def plot (data, myColor="red", myLinestyle="None", myMarker="None", myLabel=""):
 def show():
     plt.show()
 
+def getRoadRunnerData (rr):
+    rrDataHandle = rrp.getRoadRunnerDataHandle(rr)
+    return DataSeries (rrDataHandle)
 
 if __name__=='__main__':
 

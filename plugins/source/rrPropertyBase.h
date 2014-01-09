@@ -53,14 +53,14 @@ using std::ostream;
 
 /**
  * The PluginProperty class is an interface for derived Properties, that can be of any type.
- * A parameter has a name, description and a hint, encapsulating the the purpose of the actual parameter.
+ * A property has a name, description and a hint, encapsulating the the purpose of the actual property.
  */
 class RRP_DECLSPEC PropertyBase
 {
     public:
     //Friends first
         /**
-         * Ouput the parameter to an output stream.
+         * Ouput the property to an output stream.
          */
         RRP_DECLSPEC
         friend ostream&                     operator<<(ostream& stream, const PropertyBase& outMe);
@@ -75,25 +75,33 @@ class RRP_DECLSPEC PropertyBase
          */
         virtual                            ~PropertyBase();
 
+        /**
+            Copy constructor. 
+        */            
                                             PropertyBase(const PropertyBase& pp);
-        PropertyBase&                    operator=(const PropertyBase& rhs);
+                                            
+        /**
+            Assignment operator. This creates a deep copy of the object on the right side of the equal sign.
+        */            
+        PropertyBase&                       operator=(const PropertyBase& rhs);
+
         /**
          * Return the parameters name
          */
         string                              getName() const;
 
         /**
-         * Return description of the parameter
+         * Return description of the property
          */
         string                              getDescription() const;
 
         /**
-         * Set the description of a parameter
+         * Set the description of a property
          */
         void                                setDescription(const string& descr);
 
         /**
-         * Set the hint of a parameter
+         * Set the hint of a property
          */
         void                                setHint(const string& hint);
 
@@ -103,53 +111,50 @@ class RRP_DECLSPEC PropertyBase
         string                              getHint() const;
 
         /**
-         * Return the parameter in a string representation
+         * Return the property in a string representation
          */
         string                              asString() const;
 
         /**
-         * Get the type of the parameter.
+         * Get the type of the property.
          */
         string                              getType() const;
 
         //Virtuals
         /**
-         *  Get the value of the parameter, as a string. This function need to be implemented in a derived class needing
-            its value to be expressed as a string.
-         \note In the case of a complex type, such as RoadRunnerData for example, expect the returned string to be
-         of considerate size.
+         *  Get the value of the property, as a string. 
          */
         virtual string                      getValueAsString() const;
 
         /**
-         * Get an opaque pointer to the value of the parameter. This function need to be implemented in any derived class.
+         * Get an opaque pointer to the value of the property. 
          */
         virtual void*                       getValueHandle();
 
         /**
-         * Set the value of the parameter, using string representation. This function need to be implemented in any derived class.
+         * Set the value of the property, using string representation. 
          */
         virtual void                        setValueFromString(const string& value) = 0;
 
 
     protected:
         /**
-         * The name of the parameter.
+         * The name of the property.
          */
         string                              mName;
 
         /**
-         * The description of a parameter.
+         * The description of a property.
          */
         string                              mDescription;
 
         /**
-         * The hint of the parameter.
+         * The hint of the property.
          */
         string                              mHint;
 
         /**
-         * The type of the parameter.
+         * The type of the property.
          */
         string                              mType;
 };

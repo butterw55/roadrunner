@@ -11,7 +11,7 @@ if not plugin:
 
 #Get some general info about the plugin
 print getPluginInfo(plugin)
-
+print getPluginInfo(plugin)
 
 #Get parameters associated with a capability
 print getListOfPluginPropertyNames(plugin)

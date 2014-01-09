@@ -1,4 +1,6 @@
 #pragma hdrstop
+#include "Poco/Path.h"
+#include "Poco/File.h"
 #include "rrRoadRunnerData.h"
 #include "rrLogger.h"
 #include "rrAutoWorker.h"
@@ -86,7 +88,42 @@ void AutoWorker::run()
         Log(lError)<<"There was a problem running auto";
     }
 
-    mTheHost.mBiFurcationDiagram.setValue(mAutoData.getBifurcationDiagram());
+
+    //Parse output;
+    string tempFolder;
+    if(mTheHost.mTempFolder.getValue() == ".")
+    {
+        tempFolder = getCWD();
+    }
+    else
+    {
+        tempFolder = mTheHost.mTempFolder.getValue();
+    }
+
+    //The bifurcation diagram is in fort.7
+    string fName = joinPath(tempFolder, "fort.7");
+    if(!fileExists(fName))
+    {
+        throw(Exception("No Auto output data exists!"));
+    }
+
+    string f7(getFileContent(fName));
+
+    //Pass the data to
+    mTheHost.mBiFurcationDiagram.setValue(f7);
+
+    //Cleanup after auto..
+
+    if(mTheHost.mKeepTempFiles.getValue() == false)
+    {
+        StringList tempFiles("fort.2, fort.3, fort.8, fort.7, fort.9, stdout");
+        for(int i =0; i < tempFiles.Count(); i++)
+        {
+            Poco::File tempFile(joinPath(tempFolder, tempFiles[i]));
+            tempFile.remove();
+        }
+    }
+
     if(mTheHost.hasFinishedEvent())
     {
         pair<void*, void*> passTroughData = mTheHost.getWorkFinishedData();
@@ -96,7 +133,20 @@ void AutoWorker::run()
 
 bool AutoWorker::setup()
 {
-    //return false if roadrunner have not loaded a model
+    //Tempfolder setup
+    string tFolder;
+    if(mTheHost.mTempFolder.getValue() == ".")
+    {
+        tFolder = getCWD();
+    }
+    else
+    {
+        tFolder = mTheHost.mTempFolder.getValue();
+    }
+
+    mTheHost.mRR->setTempFileFolder(tFolder);
+    mTheHost.mRRAuto.setTempFolder(tFolder);
+
     if(mTheHost.mRR->isModelLoaded())
     {
         Log(lInfo)<<"Model loaded by roadrunner outside of auto..";
@@ -106,7 +156,6 @@ bool AutoWorker::setup()
     {
         return mTheHost.mRR->load(mTheHost.getSBML());
     }
-
 }
 
 }

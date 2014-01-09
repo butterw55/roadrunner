@@ -24,9 +24,9 @@ using namespace rr;
 using namespace rrc;
 using rr::StringList;
 
-LM::LM(rr::RoadRunner* aRR)
+LM::LM()
 :
-CPPPlugin(                      "Levenberg-Marquardt", "Fitting",       aRR, NULL),
+CPPPlugin(                      "Levenberg-Marquardt", "Fitting",       NULL, NULL),
 mSBML(                          "<none>",               "SBML",                                 "SBML document as a string. Model to be used in the fitting"),
 mExperimentalData(              RoadRunnerData(),       "ExperimentalData",                     "Data object holding Experimental data: Provided by client"),
 mModelData(                     RoadRunnerData(),       "FittedData",                           "Data object holding model data: Handed to client"),
@@ -50,7 +50,7 @@ stepbound(                      100.,                    "stepbound"  ,         
 patience(                       100,                     "patience"    ,                        "Maximum number of iterations as patience*(nr_of_parameters +1). ")
 //scale_diag(                 1,                       "scale_diag" ,              " UNDOCUMENTED, TESTWISE automatical diag rescaling? ")
 {
-    mVersion = "1.0";
+    mVersion = "0.8";
     //Add plugin properties to property container
     mProperties.add(&mSBML);
     mProperties.add(&mExperimentalData);
@@ -196,10 +196,10 @@ bool LM::execute(bool inThread)
 }
 
 // Plugin factory function
-LM* plugins_cc createPlugin(rr::RoadRunner* aRR)
+LM* plugins_cc createPlugin()
 {
     //allocate a new object and return it
-    return new LM(aRR);
+    return new LM();
 }
 
 const char* plugins_cc getImplementationLanguage()

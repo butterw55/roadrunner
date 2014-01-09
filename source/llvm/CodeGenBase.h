@@ -145,7 +145,7 @@ protected:
 
     llvm::Function *verifyFunction()
     {
-        poco_information(getLogger(),
+        poco_debug(getLogger(),
             string("function: ") + to_string(function));
 
         /// verifyFunction - Check a function for errors, printing messages on stderr.

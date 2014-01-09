@@ -25,6 +25,7 @@ class RRA_DECLSPEC RRAuto
                                    ~RRAuto();
         AutoData&                   getAutoData();
         string                      getTempFolder();
+        bool                        setTempFolder(const string& fldr);
         void                        setFort2File(const string& text);
         bool                        setupUsingCurrentModel();
         string                      getConstantsAsString();
@@ -38,6 +39,7 @@ class RRA_DECLSPEC RRAuto
 
     private:
         static string               mSelectedParameter;
+        string                      mTempFolder;
         AutoData&                   mAutoData;
 
         static RoadRunner*          mRR;         //Static so we can access this in autos callback
@@ -52,7 +54,7 @@ class RRA_DECLSPEC RRAuto
 namespace rrp
 {
 template<>
-inline string getParaType<rrauto::ScanDirection>(const rrauto::ScanDirection& a)
+inline string getPropertyType<rrauto::ScanDirection>(const rrauto::ScanDirection& a)
 {
     return "ScanDirection";
 }

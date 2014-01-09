@@ -95,7 +95,7 @@
         <ILINK_LibraryPath>$(RR_INSTALL)\lib;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <IncludePath>$(RR_SOURCE);$(RR_INSTALL)\include;$(RR_ROOT)\plugins\source;$(IncludePath)</IncludePath>
         <FinalOutputDir>$(RR_INSTALL)\bin</FinalOutputDir>
-        <Defines>EXPORT_RR_AUTO;CG_IDE;POCO_STATIC;PCRE_STATIC;$(Defines)</Defines>
+        <Defines>EXPORT_RR_AUTO;POCO_STATIC;PCRE_STATIC;$(Defines)</Defines>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">

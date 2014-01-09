@@ -176,14 +176,14 @@ class RRP_DECLSPEC Plugin
         virtual unsigned int            getPDFManualByteSize();
 
         /**
-            Retieves the parameters
+            Retieves the propertys
         */
-        Properties*                     getProperties(); //Each capability has a set of parameters
+        virtual Properties*             getProperties(); //Each capability has a set of propertys
 
         /**
-            Retieves the names of the parameters
+            Retieves the names of the propertys
         */
-        rr::StringList                  getPropertyNames(); //Each capability has a set of parameters
+        virtual rr::StringList          getPropertyNames();
 
         /**
             Retieves a plugin properties, as XML
@@ -193,7 +193,7 @@ class RRP_DECLSPEC Plugin
         /**
             Retieves a specific property
         */
-        PropertyBase*                   getProperty(const string& param);
+        virtual PropertyBase*           getProperty(const string& param);
 
         /**
             Sets the value of specified Property with value as specified
@@ -403,7 +403,7 @@ class RRP_DECLSPEC Plugin
 
         /**
          * Properties container. Descendant add properties to this container, as they wish.
-         * Property data values can be exchanged to/from the plugin by.
+         * Property data values can be exchanged to/from the plugin by accessing individual properties.
          */
 
          Properties                     mProperties;

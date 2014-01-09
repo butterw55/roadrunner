@@ -1,11 +1,15 @@
 from rrPlugins_CAPI import *
 
-rrDataHandle = createRoadRunnerDataFromFile("testData.dat")
-hdr = getRoadRunnerDataColumnHeader(rrDataHandle)
-npData = getNumpyData(rrDataHandle)
-print `hdr` + `npData`
+try:
+
+    rrDataHandle = createRoadRunnerDataFromFile("testData.dat")
+    hdr = getRoadRunnerDataColumnHeader(rrDataHandle)
+    npData = getNumpyData(rrDataHandle)
+    print `hdr` + `npData`
 
 
-plotRoadRunnerData(npData, hdr)
+    plotRoadRunnerData(npData, hdr)
 
-print "done"
+    print "done"
+except Exception as e:
+    print 'Exception: ' + `e`

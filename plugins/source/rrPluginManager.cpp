@@ -1,6 +1,7 @@
 #pragma hdrstop
 #include <sstream>
 #include <string>
+#include <iomanip>
 #include "Poco/Glob.h"
 #include "Poco/SharedLibrary.h"
 #include "rrPluginManager.h"
@@ -16,7 +17,14 @@
 namespace rrp
 {
 static bool  hasFileExtension(const string& fName);
-static char* getPluginExtension();
+static const char* getPluginExtension();
+static const char* getPluginPrefix();
+
+#if defined(__BORLANDC__)
+    #define exp_fnc_prefix "_"
+#else
+    #define exp_fnc_prefix ""
+#endif
 
 using namespace std;
 using namespace rr;
@@ -24,7 +32,7 @@ using Poco::SharedLibrary;
 using Poco::Glob;
 
 //Convenient function pointers
-typedef Plugin*     (*createRRPluginFunc)(RoadRunner*, PluginManager*);
+typedef Plugin*     (*createRRPluginFunc)(PluginManager*);
 typedef char*       (*charStarFnc)();
 typedef bool        (*setupCPluginFnc)(Plugin*);
 typedef bool        (*destroyRRPluginFunc)(Plugin* );
@@ -34,7 +42,8 @@ bool destroyRRPlugin(Plugin *plugin);
 PluginManager::PluginManager(const std::string& folder)
 :
 mPluginFolder(folder),
-mPluginExtension(getPluginExtension())
+mPluginExtension(getPluginExtension()),
+mPluginPrefix(getPluginPrefix())
 {}
 
 PluginManager::~PluginManager()
@@ -52,6 +61,37 @@ bool PluginManager::setPluginDir(const string& dir)
 string PluginManager::getPluginDir()
 {
     return mPluginFolder;
+}
+
+string PluginManager::getInfo()
+{
+    stringstream info;
+    info<<setw(30)<<left<<"Plugin Folder: "            <<mPluginFolder<<"\n";
+    info<<setw(30)<<left<<"Plugin Extensions: "        <<mPluginExtension<<"\n";
+    info<<setw(30)<<left<<"Plugin Prefix: "            <<mPluginPrefix<<"\n";
+    info<<setw(30)<<left<<"Number of loaded plugins:"  <<getNumberOfPlugins()<<"\n";
+
+    if(getNumberOfPlugins())
+    {
+        info<<setw(15)<<left<<"Plugin Names"<<setw(15)<<"Plugin Library Names"<<"\n";
+        Plugin* p = getFirstPlugin();
+
+        do
+        {
+            if(p)
+            {
+                info<<"  "<<setw(15)<<left<<p->getName()<<setw(15)<<left<<p->getLibraryName()<<"\n";
+            }
+
+        } while(p = getNextPlugin());
+    }
+    return info.str();
+}
+
+ostream& operator << (ostream& st, PluginManager& pm)
+{
+    st<<pm.getInfo();
+    return st;
 }
 
 Plugin* PluginManager::getFirstPlugin()
@@ -75,20 +115,26 @@ Plugin* PluginManager::getCurrentPlugin()
 
 Plugin* PluginManager::getNextPlugin()
 {
-    mPluginsIter++;
     if(mPluginsIter != mPlugins.end())
     {
-        return (*mPluginsIter).second;
+        mPluginsIter++;
+        if(mPluginsIter != mPlugins.end())
+        {
+            return (*mPluginsIter).second;
+        }
     }
     return NULL;
 }
 
 Plugin* PluginManager::getPreviousPlugin()
 {
-    mPluginsIter--;
     if(mPluginsIter != mPlugins.end())
     {
-        return (*mPluginsIter).second;
+        mPluginsIter--;
+        if(mPluginsIter != mPlugins.end())
+        {
+            return (*mPluginsIter).second;
+        }
     }
     return NULL;
 }
@@ -111,16 +157,14 @@ Plugin* PluginManager::operator[](const int& i)
     }
 }
 
-bool PluginManager::load(const string& pluginName)
+int PluginManager::load(const string& pluginName)
 {
     Log(lInfo) << "load: " << pluginName;
-
-    bool result = true;
+    int nrOfLoadedPlugins = 0;
 
     //Throw if plugin folder don't exist
     if(!folderExists(mPluginFolder))
     {
-
         Log(lError)<<"Plugin folder: "<<mPluginFolder<<" do not exist..";
         throw(Exception("Plugin folder don't exist"));
     }
@@ -147,22 +191,19 @@ bool PluginManager::load(const string& pluginName)
         Log(lInfo)<<"Loading plugin: "<<plugin;
         try
         {
-
             bool res = loadPlugin(plugin);
             if(!res)
             {
                 Log(lError)<<"There was a problem loading plugin: "<<plugin;
-                result = false;
             }
+            nrOfLoadedPlugins++;
         }
         catch(...)
         {
             Log(lError)<<"There was a serious problem loading plugin: "<<plugin;
-            result = false;
         }
-        //catch(poco exception....
     }
-    return result;
+    return nrOfLoadedPlugins;
 }
 
 bool PluginManager::loadPlugin(const string& _libName)
@@ -170,8 +211,9 @@ bool PluginManager::loadPlugin(const string& _libName)
     stringstream msg;
     try
     {
-        //Make sure the plugin is prefixxed with rrp, if not ignore
-        string prefix("rrp_");
+        //Make sure the plugin is prefixed with rrp, if not ignore
+        //On linux, the plugin is in turn prefixed with "lib"
+        string prefix(mPluginPrefix + "rrp_");
         if(_libName.substr(0, prefix.size()) != prefix)
         {
             Log(lWarning)<<"The Plugin: "<<_libName<<" lack the rrp_ prefix. Can't be loaded";
@@ -228,12 +270,12 @@ bool PluginManager::loadPlugin(const string& _libName)
             mPlugins.push_back( storeMe );
             return true;
         }
-        else if(libHandle->hasSymbol("createPlugin"))
+        else if(libHandle->hasSymbol(string(exp_fnc_prefix) +"createPlugin"))
         {
-            createRRPluginFunc create = (createRRPluginFunc) libHandle->getSymbol("createPlugin");
+            createRRPluginFunc create = (createRRPluginFunc) libHandle->getSymbol(string(exp_fnc_prefix) + "createPlugin");
 
             //This plugin
-            Plugin* aPlugin = create(NULL, this);
+            Plugin* aPlugin = create(this);
             if(aPlugin)
             {
                 aPlugin->setLibraryName(getFileNameNoExtension(libName));
@@ -358,7 +400,7 @@ bool PluginManager::checkImplementationLanguage(Poco::SharedLibrary* plugin)
     //Check that the plugin has a getImplementationLanguage function
     try
     {
-        plugin->getSymbol("getImplementationLanguage");
+        plugin->getSymbol(string(exp_fnc_prefix) + "getImplementationLanguage");
         return true;
     }
     catch(const Poco::Exception& ex)
@@ -375,7 +417,7 @@ const char* PluginManager::getImplementationLanguage(Poco::SharedLibrary* plugin
     //Check that the plugin has a getImplementationLanguage function
     try
     {
-        charStarFnc func =     (charStarFnc) plugin->getSymbol("getImplementationLanguage");
+        charStarFnc func =     (charStarFnc) plugin->getSymbol(string(exp_fnc_prefix) + "getImplementationLanguage");
         return func();
     }
     catch(const Poco::Exception& ex)
@@ -461,20 +503,22 @@ Plugin* PluginManager::createCPlugin(SharedLibrary *libHandle)
     try
     {
         //Minimum bare bone plugin need these
-        charStarFnc         getName             = (charStarFnc)        libHandle->getSymbol("getName");
-        charStarFnc         getCategory         = (charStarFnc)        libHandle->getSymbol("getCategory");
+        charStarFnc         getName                 = (charStarFnc) libHandle->getSymbol(string(exp_fnc_prefix) + "getName");
+        charStarFnc         getCategory             = (charStarFnc) libHandle->getSymbol(string(exp_fnc_prefix) + "getCategory");
 
+        //All 'data' that we need to create the plugin
         char* name  = getName();
         char* cat   = getCategory();
         CPlugin* aPlugin = new CPlugin(name, cat);
 
-        aPlugin->executeFunction = (executeF)         libHandle->getSymbol("executePlugin");
-        aPlugin->destroyFunction = (destroyF)         libHandle->getSymbol("destroyPlugin");
-
-        setupCPluginFnc     setupCPlugin        = (setupCPluginFnc)    libHandle->getSymbol("setupCPlugin");
+        aPlugin->executeFunction = (executeF)         libHandle->getSymbol(string(exp_fnc_prefix) + "execute");
+        aPlugin->destroyFunction = (destroyF)         libHandle->getSymbol(string(exp_fnc_prefix) + "destroyPlugin");
+        setupCPluginFnc     setupCPlugin        = (setupCPluginFnc)    libHandle->getSymbol(string(exp_fnc_prefix) + "setupCPlugin");
 
         //This give the C plugin an opaque Handle to the CPlugin object
         setupCPlugin(aPlugin);
+        aPlugin->getCPropertyNames  =    (charStarFnc)      libHandle->getSymbol(string(exp_fnc_prefix) + "getListOfCPluginPropertyNames");
+        aPlugin->getCProperty       =    (getAPropertyF)    libHandle->getSymbol(string(exp_fnc_prefix) + "getCPluginProperty");
         return aPlugin;
     }
     catch(const Poco::NotFoundException& ex)
@@ -504,16 +548,28 @@ bool destroyRRPlugin(Plugin *plugin)
 }
 
 
-char* getPluginExtension()
+const char* getPluginExtension()
 {
 
-#if defined(_WIN32) || defined(__WIN32__)
+#if defined(_WIN32)
     return "dll";
-#elif defined(UNIX)
-    return "a";
+#elif defined(__linux__)
+    return "so";
 #else
     // OSX
     return "dylib";
+#endif
+}
+
+const char* getPluginPrefix()
+{
+
+#if defined(_WIN32)
+    return "";
+#elif defined(__linux__)
+    return "lib";
+#else
+    return "DEFINE_PLATFORM";
 #endif
 }
 

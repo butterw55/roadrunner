@@ -41,6 +41,7 @@
 #ifndef rrCPluginH
 #define rrCPluginH
 #include "rrPlugin.h"
+#include "rrStringList.h"
 //---------------------------------------------------------------------------
 
 namespace rrp
@@ -52,10 +53,11 @@ Typedef for the plugins execute function
 typedef bool  (*executeF)(bool);
 
 /**
-Typedef for the plugins destroy (cleanup) function
+Typedefs for various required plugin functions
 */
 typedef bool  (*destroyF)();
-
+typedef char* (*getACharStarF)();
+typedef void* (*getAPropertyF)(const char*);
 /**
  * The CPlugin class is containing the framework to load plugins that are written in pure C.
  * The shared library need to export an execute and destroy function.
@@ -72,6 +74,8 @@ class RRP_DECLSPEC CPlugin : public Plugin
         virtual                ~CPlugin();
         string                  getImplementationLanguage();
         virtual bool            execute(bool useThread = false);
+        rr::StringList          getPropertyNames();
+        PropertyBase*           getProperty(const string& param);
 
     protected:
 
@@ -87,6 +91,12 @@ class RRP_DECLSPEC CPlugin : public Plugin
          */
         destroyF                destroyFunction;
 
+        /**
+          Function pointer to retrieve the C plugins list ofproperties.
+         */
+        getACharStarF           getCPropertyNames;
+
+        getAPropertyF           getCProperty;
 };
 
 }

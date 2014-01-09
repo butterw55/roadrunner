@@ -1,7 +1,9 @@
 #ifndef vsAutoH
 #define vsAutoH
+#include <string>
 #include "libf2c/auto_f2c.h"
 #include "auto_exporter.h"
+using std::string;
 
 typedef  void (autoCallConv *FuncCallBack2)(const doublereal *u, const doublereal *par, doublereal *f);
 typedef  int  (autoCallConv *StpntCallBack)(integer ndim, doublereal t, doublereal *u, doublereal *par);
@@ -38,13 +40,13 @@ AUTO_DECLSPEC void    autoCallConv setCallbackIcnd(IcndCallBack cb);
 AUTO_DECLSPEC void    autoCallConv setCallbackFopt(FoptCallBack cb);
 AUTO_DECLSPEC void    autoCallConv setCallbackPvls(PvlsCallBack cb);
 AUTO_DECLSPEC void    autoCallConv ResetAutoLib();
-AUTO_DECLSPEC void    autoCallConv CallAuto();
+AUTO_DECLSPEC void    autoCallConv CallAuto(const string& tempFolder);
 AUTO_DECLSPEC void    autoCallConv SetAutoNumParameters(int n);
-AUTO_DECLSPEC void    autoCallConv setFort2File(const char* content, int length);
-AUTO_DECLSPEC void    autoCallConv setFort3File(const char* content, int length);
-AUTO_DECLSPEC char*   autoCallConv getFort7File(int length);
-AUTO_DECLSPEC char*   autoCallConv getFort8File(int length);
-AUTO_DECLSPEC char*   autoCallConv getFort9File(int length);
+AUTO_DECLSPEC void    autoCallConv createFort2File(const string& content, const string& fName);
+AUTO_DECLSPEC void    autoCallConv createFort3File(const string& content, const string& fName);
+AUTO_DECLSPEC char*   autoCallConv getFort7File(int length, const string& fldr);
+AUTO_DECLSPEC char*   autoCallConv getFort8File(int length, const string& fldr);
+AUTO_DECLSPEC char*   autoCallConv getFort9File(int length, const string& fldr);
 
 #if defined( __cplusplus)
 }//extern "C"
