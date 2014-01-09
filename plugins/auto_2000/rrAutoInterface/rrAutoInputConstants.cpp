@@ -5,14 +5,13 @@
 #include "rrAutoInputConstants.h"
 #include "rrPluginUtils.h"
 //---------------------------------------------------------------------------
-
 namespace rrauto
 {
     using namespace rrp;
     using namespace rr;
     using namespace std;
 
-string WhiteSpaces(string& line, int maxLength);
+string getWhiteSpaces(string& line, int maxLength);
 InputConstants::InputConstants()
 :
 A0(0),
@@ -49,12 +48,14 @@ NTHU(0),
 NTST(15),
 NUZR(0),
 NWTN(3),
-RL0(0.01),   //Parameter startValue
+RL0(0.01, "RL0", "Start value for primary continuation parameter"),   //Parameter startValue
 RL1(30),     //Parameter endValue
 THL(NTHL),
 THU(NTHU),
 UZR(NUZR)
-{}
+{
+    mInputConstants.add(&RL0);
+}
 
 string InputConstants::getConstantsAsString()
 {
@@ -99,7 +100,7 @@ string InputConstants::ToInputString()
     string line1  = formatN("{0} {1} {2} {3}", NDIM, IPS, IRS, ILP);
     string line2  = GetICP();
     string line3  = formatN("{0} {1} {2} {3} {4} {5} {6} {7}", NTST, NCOL, IAD, ISP, ISW, IPLT, NBC, NINT);
-    string line4  = formatN("{0} {1} {2} {3} {4}", NMX, RL0, RL1, A0, A1);
+    string line4  = formatN("{0} {1} {2} {3} {4}", NMX, RL0.getValue(), RL1.getValue(), A0, A1);
     string line5  = formatN("{0} {1} {2} {3} {4} {5} {6}", NPR, MXBF, IID, ITMX, ITNW, NWTN, JAC);
     string line6  = formatN("{0} {1} {2}", EPSL, EPSU, EPSS);
     string line7  = formatN("{0} {1} {2} {3}", DS, DSMIN, DSMAX, IADS);
@@ -121,21 +122,21 @@ string InputConstants::ToInputString()
 
     int maxLength = lines.getLongest().size();
     StringBuilder builder;
-    builder << (line1 + WhiteSpaces(line1, maxLength) + " NDIM, IPS, IRS, ILP") << endl;
-    builder << (line2 + WhiteSpaces(line2, maxLength) + " NICP,(ICP(I),I=1 NICP)")<< endl;
-    builder << line3 << WhiteSpaces(line3, maxLength);
+    builder << (line1 + getWhiteSpaces(line1, maxLength) + " NDIM, IPS, IRS, ILP") << endl;
+    builder << (line2 + getWhiteSpaces(line2, maxLength) + " NICP,(ICP(I),I=1 NICP)")<< endl;
+    builder << line3 << getWhiteSpaces(line3, maxLength);
     builder << " NTST,NCOL,IAD,ISP,ISW,IPLT,NBC,NINT"<< endl;
-    builder << (line4 + WhiteSpaces(line4, maxLength) + " NMX,RL0,RL1,A0,A1")<< endl;
-    builder << (line5 + WhiteSpaces(line5, maxLength) + " NPR,MXBF,IID,ITMX,ITNW,NWTN,JAC")<< endl;
-    builder << (line6 + WhiteSpaces(line6, maxLength) + " EPSL,EPSU,EPSS")<< endl;
-    builder << (line7 + WhiteSpaces(line7, maxLength) + " DS,DSMIN,DSMAX,IADS")<< endl;
-    builder << (line8 + WhiteSpaces(line8, maxLength) + " NTHL,((I,THL(I)),I=1,NTHL)")<< endl;
+    builder << (line4 + getWhiteSpaces(line4, maxLength) + " NMX,RL0,RL1,A0,A1")<< endl;
+    builder << (line5 + getWhiteSpaces(line5, maxLength) + " NPR,MXBF,IID,ITMX,ITNW,NWTN,JAC")<< endl;
+    builder << (line6 + getWhiteSpaces(line6, maxLength) + " EPSL,EPSU,EPSS")<< endl;
+    builder << (line7 + getWhiteSpaces(line7, maxLength) + " DS,DSMIN,DSMAX,IADS")<< endl;
+    builder << (line8 + getWhiteSpaces(line8, maxLength) + " NTHL,((I,THL(I)),I=1,NTHL)")<< endl;
 //    WriteTHL(builder);
 
-    builder << (line9 + WhiteSpaces(line9, maxLength) + " NTHU,((I,THU(I)),I=1,NTHU)") << endl;
+    builder << (line9 + getWhiteSpaces(line9, maxLength) + " NTHU,((I,THU(I)),I=1,NTHU)") << endl;
 //    WriteTHU(builder);
 
-    builder << (line10 + WhiteSpaces(line10, maxLength) + " NUZR,((I,PAR(I)),I=1,NUZR)") << endl;
+    builder << (line10 + getWhiteSpaces(line10, maxLength) + " NUZR,((I,PAR(I)),I=1,NUZR)") << endl;
 //    WriteUZR(builder);
 
     builder << "\n";
@@ -145,7 +146,7 @@ string InputConstants::ToInputString()
     return aStr;
 }
 
-string WhiteSpaces(string& line, int maxLength)
+string getWhiteSpaces(string& line, int maxLength)
 {
     int nrSpaces =  maxLength - line.size();
     return string(nrSpaces, ' ');

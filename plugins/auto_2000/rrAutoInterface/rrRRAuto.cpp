@@ -96,11 +96,14 @@ bool RRAuto::run()
     {
         return false;
     }
+
     reset();
+
     mAutoSetup.mRunContinuation = false;
+    double parValue = (mAutoSetup.mDirectionPositive == true)
+                    ? mAutoSetup.mInputConstants.RL0.getValue() : mAutoSetup.mInputConstants.RL1.getValue();
 
-    double parValue = (mAutoSetup.mDirectionPositive) ? mAutoSetup.mInputConstants.RL0 : mAutoSetup.mInputConstants.RL1;
-
+    //Set initial value of Primary cintinuation parameter
     mRR->setValue(mSelectedParameter, parValue);
 
 
@@ -113,10 +116,8 @@ bool RRAuto::run()
     {
         return false;
     }
-    string tempFolder = getTempFolder();
-    CallAuto(tempFolder);
 
-
+    CallAuto(getTempFolder());
     return true;
 }
 
@@ -129,14 +130,8 @@ bool RRAuto::setupUsingCurrentModel()
     setCallbackFunc2(ModelFunctionCallback);
 
     string temp = mAutoSetup.getConstantsAsString();
-    setFort2File(temp);
+    autolib::createFort2File(temp.c_str(), joinPath(getTempFolder(),"fort.2"));
     return true;
-}
-
-void RRAuto::setFort2File(const string& text)
-{
-    mFort2File = text;
-    autolib::createFort2File(mFort2File.c_str(), joinPath(getTempFolder(),"fort.2"));
 }
 
 string RRAuto::getConstantsAsString()

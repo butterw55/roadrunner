@@ -55,11 +55,11 @@ int main()
 
         //Specific auto parameters
         PropertyBase* para = autoPlugin->getProperty("AutoParameters");
-
         Properties* autoParas = (Properties*) (para->getValueHandle());
 
-        PropertyBase* RL0 = autoParas->getProperty("RL0");
-        RL0->setValueFromString("1.12");
+        cout<<autoParas->getNames();
+
+//        RL0->setValueFromString("1.12");
 
         autoPlugin->setProperty("ScanDirection", "Positive");
         autoPlugin->setProperty("PrincipalContinuationParameter", "k3");

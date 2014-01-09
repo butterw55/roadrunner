@@ -8,21 +8,23 @@ namespace rrauto
 {
 
 class RRAuto;
-//Corresponds to Frank Bergmann SetupControl.cs, UI class
 
 class RRA_DECLSPEC SetupControl
 {
     friend RRAuto;
 
     public:
-                        SetupControl();
-        string          getConstantsAsString();
+                                    SetupControl();
+                                    /** This functions basically creates the auto input file fort.2
+                                    */
+        string                      getConstantsAsString();
 
     protected:
-        InputConstants  mInputConstants;
-        bool            mCalculateSteadyState;
-        bool            mRunContinuation;
-        bool            mDirectionPositive;
+        InputConstants              mInputConstants;
+
+        bool                        mCalculateSteadyState;
+        bool                        mRunContinuation;
+        bool                        mDirectionPositive;
 };
 
 }

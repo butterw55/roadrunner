@@ -9,10 +9,11 @@ using namespace std;
 namespace rrp
 {
 
-PropertyBase::PropertyBase(const string& type, const string& name, const string& hint)
+PropertyBase::PropertyBase(const string& type, const string& name, const string& hint, const string& descr)
 :
 mName(name),
 mHint(hint),
+mDescription(descr),
 mType(type)
 {}
 

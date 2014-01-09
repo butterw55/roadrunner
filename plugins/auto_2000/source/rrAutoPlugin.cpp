@@ -25,7 +25,6 @@ mPrincipalContinuationParameter(    "<none>",               "PrincipalContinuati
 mPCPLowerBound(                     0,                      "PCPLowerBound",                                    "Principal Continuation Parameter Lower Bound"),
 mPCPUpperBound(                     0,                      "PCPUpperBound",                                    "Principal Continuation Parameter Upper Bound"),
 mBiFurcationDiagram(                "<none>",               "BiFurcationDiagram",                               "BifurcationDiagram"),
-//mAutoData(                          AutoData(),             "AutoData",                                         "Data structure holding auto data"),
 mAutoParameters(                    Properties(),           "AutoParameters",                                   "Auto parameter container"),
 mRRAuto(NULL, mAutoData),
 mAutoWorker(*this)
@@ -35,7 +34,6 @@ mAutoWorker(*this)
     mProperties.add(&mTempFolder);
     mProperties.add(&mKeepTempFiles);
     mProperties.add(&mSBML);
-    //mProperties.add(&mAutoData);
     mProperties.add(&mScanDirection);
     mProperties.add(&mPrincipalContinuationParameter);
     mProperties.add(&mPCPLowerBound);
@@ -52,7 +50,8 @@ mAutoWorker(*this)
 ideas on how to create a usable interface to the AUTO 2000 library.";
 
     //Populate auto parameters
-    InputConstants ic;
+    InputConstants& ic = mRRAuto.getInputConstants();
+
     Properties &paras = *(Properties*) mAutoParameters.getValueHandle();
     paras.add(&(ic.RL0));
 }

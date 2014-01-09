@@ -2,6 +2,7 @@
 #define rrAutoInputConstantsH
 #include <vector>
 #include <string>
+#include "rrProperties.h"
 #include "rrProperty.h"
 #include "rrRRAutoExporter.h"
 //---------------------------------------------------------------------------
@@ -153,7 +154,8 @@ class RRA_DECLSPEC InputConstants
     public:
                         InputConstants();
         string          getConstantsAsString();
-        string          ToInputString();
+        string              ToInputString();
+        rrp::Properties      mInputConstants;
 };
 }
 #endif

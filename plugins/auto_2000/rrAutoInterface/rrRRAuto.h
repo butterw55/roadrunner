@@ -26,7 +26,6 @@ class RRA_DECLSPEC RRAuto
         AutoData&                   getAutoData();
         string                      getTempFolder();
         bool                        setTempFolder(const string& fldr);
-        void                        setFort2File(const string& text);
         bool                        setupUsingCurrentModel();
         string                      getConstantsAsString();
         bool                        run();
@@ -45,7 +44,6 @@ class RRA_DECLSPEC RRAuto
         static RoadRunner*          mRR;         //Static so we can access this in autos callback
         static SetupControl         mAutoSetup;  //Auto constants, parameters
 
-        string                      mFort2File;
         static int  autoCallConv    ModelInitializationCallback(long ndim, double t, double* u, double* par);
         static void autoCallConv    ModelFunctionCallback(const double* oVariables, const double* par, double* oResult);
 };

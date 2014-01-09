@@ -89,7 +89,7 @@ class Property : public PropertyBase
                                         /**
                                             Property constructor. Creates a property, assigning a value, name and optionally a hint.
                                         */
-                                        Property(const T& value = T(), const string& name=gNoneString, const string& hint = gNoneString);
+                                        Property(const T& value = T(), const string& name=gNoneString, const string& hint = gNoneString, const string& descr = gNoneString);
 
                                         /**
                                             Property copy constructor. Creates a property, from another property.
@@ -135,7 +135,7 @@ class Property : public PropertyBase
                                             Get a pointer to a properties value.
                                         */
         T*                              getValuePointer();
-                                        
+
                                         /**
                                             Get a handle (void*) to a properties value.
                                         */
@@ -148,9 +148,9 @@ class Property : public PropertyBase
 };
 
 template<class T>
-Property<T>::Property(const T& value, const string& name, const string& hint)
+Property<T>::Property(const T& value, const string& name, const string& hint, const string& descr)
 :
-PropertyBase(getPropertyType(value), name, hint),
+PropertyBase(getPropertyType(value), name, hint, descr),
 mValue(value)
 {}
 

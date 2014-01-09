@@ -69,7 +69,7 @@ class RRP_DECLSPEC PropertyBase
         /**
          * The constructor populates the parameters name and hint.
          */
-                                            PropertyBase(const string& type, const string& name, const string& hint);
+                                            PropertyBase(const string& type, const string& name, const string& hint, const string& descr);
         /**
          * De-allocate any memory allocated.
          */

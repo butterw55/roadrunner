@@ -330,7 +330,7 @@ void autoCallConv CallAuto(const string& tempFolder)
     try
     {
         int argc = 1;
-        char cmd[512];// = (char*) malloc(sizeof(char)*7);
+        char cmd[512];
         strncpy(cmd, "vsAuto\0", 7);
         char *argv[] = { cmd }  ;
         chdir(tempFolder.c_str());
