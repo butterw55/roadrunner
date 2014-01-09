@@ -1,36 +1,38 @@
+#include <string.h>
 #include "rrc_api.h"
 #include "rrplugins_c_api.h"
 #include "c_plugin_demo.h"
 
-const char* cc getImplementationLanguage()
+const char* call_conv getImplementationLanguage()
 {
     return "C";
 }
 
-bool cc destroyPlugin(RRPluginHandle plugin)
+bool call_conv destroyPlugin(RRPluginHandle plugin)
 {
     //Free any data that the plugin generated..
     freeProperty(gDemoProperty);
     freeProperties(gProperties);
+    return true;
 }
 
-const char* cc getName()
+const char* call_conv getName()
 {
     return "C Plugin Demo";
 }
 
-const char* cc getCategory()
+const char* call_conv getCategory()
 {
     return "Demos";
 }
 
-const char* cc getListOfCPluginPropertyNames(RRPluginHandle plugin)
+char* call_conv getListOfCPluginPropertyNames(RRPluginHandle plugin)
 {
     char* names = getNamesFromPropertyList(gProperties);
     return names;
 }
 
-void*  cc getCPluginProperty(const char* name)
+void*  call_conv getCPluginProperty(const char* name)
 {
     if(gPlugin)
     {
@@ -42,7 +44,7 @@ void*  cc getCPluginProperty(const char* name)
     }
 }
 
-bool cc setupCPlugin(RRPluginHandle aPlugin)
+bool call_conv setupCPlugin(RRPluginHandle aPlugin)
 {
     gPlugin = aPlugin;
     gDemoProperty   = createProperty("Demo Property", "string", "Demo Hint", 0);
@@ -55,7 +57,7 @@ bool cc setupCPlugin(RRPluginHandle aPlugin)
     return true;
 }
 
-bool cc execute()
+bool call_conv execute()
 {
     char *text1, *text2;
     RRHandle rrHandle;
