@@ -206,47 +206,18 @@ void autoCallConv SetAutoNumParameters(int n)
     sysoff = n;
 }
 
-void autoCallConv setFort2File(const char* content, int length)
+void autoCallConv createFort2File(const string& content, const string& fName)
 {
-    //char *tempPath =  GetTempPath();
-    //stringstream fileName; fileName << tempPath <<    "/fort.2\0";
-    //free(tempPath); tempPath = strdup(fileName.str().c_str());
-
-    string fileName = getFullPath("fort.2");
-
-//    if (_sFort2 != NULL)
-//        free (_sFort2);
-//
-//    _sFort2 = strdup(content);
-//    _nFort2Length = length;
-
-
-//    FILE* fp = fopen(fileName, "wb");
-//    fwrite(content, 1, length, fp);
-//    fclose(fp);
-    ofstream f(fileName.c_str());
+    ofstream f(fName.c_str());
     f<<content;
     f.close();
-    //free(tempPath);
 }
 
-void autoCallConv setFort3File(const char* content, int length)
+void autoCallConv createFort3File(const string& content, const string& fName)
 {
-    string fileName = getFullPath("fort.3");
-
-//    if (_sFort3 != NULL)
-//        free (_sFort3);
-//
-//    _sFort3 = strdup(content);
-//    _nFort3Length = length;
-
-    ofstream f(fileName.c_str());
+    ofstream f(fName.c_str());
     f<<content;
     f.close();
-
-//    FILE* fp = fopen(fileName, "wb");
-//    fwrite(content, 1, length, fp);
-//    fclose(fp);
 }
 
 char *_sFort7 = NULL;
@@ -290,10 +261,6 @@ void autoCallConv setFort7File(char* content, int length)
     ofstream f(fileName.c_str());
     f<<content;
     f.close();
-
-//    FILE* fp = fopen(fileName, "wb");
-//    fwrite(content, 1, length, fp);
-//    fclose(fp);
 }
 
 char* autoCallConv getFort8File(int length)
@@ -357,16 +324,16 @@ char* autoCallConv getFort9File(int length)
     return _sFort9;
 }
 
-void autoCallConv CallAuto()
+void autoCallConv CallAuto(const string& tempFolder)
 {
-    char *oldDir = getcwd(NULL, 256);
+    char *oldDir = getcwd(NULL, 2048);
     try
     {
         int argc = 1;
         char cmd[512];// = (char*) malloc(sizeof(char)*7);
         strncpy(cmd, "vsAuto\0", 7);
         char *argv[] = { cmd }  ;
-        chdir(GetTempPath().c_str());
+        chdir(tempFolder.c_str());
         autolib::AUTO_main(argc, argv);                
     }
     catch(exception& e)

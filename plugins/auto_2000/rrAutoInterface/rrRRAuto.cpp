@@ -72,9 +72,22 @@ bool RRAuto::setScanDirection(ScanDirection val)
     return false;
 }
 
+bool RRAuto::setTempFolder(const string& fldr)
+{
+    if(folderExists(fldr))
+    {
+        mTempFolder = fldr;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 string RRAuto::getTempFolder()
 {
-    return (mRR) ? mRR->getTempFolder() : string("");
+    return mTempFolder;
 }
 
 bool RRAuto::run()
@@ -100,12 +113,9 @@ bool RRAuto::run()
     {
         return false;
     }
+    string tempFolder = getTempFolder();
+    CallAuto(tempFolder);
 
-    CallAuto();
-    //Parse output;
-    string fName = joinPath(getTempFolder(), "fort.7");
-    string f7(getFileContent(fName));
-    mAutoData.setBifurcationDiagram(f7);
 
     return true;
 }
@@ -126,7 +136,7 @@ bool RRAuto::setupUsingCurrentModel()
 void RRAuto::setFort2File(const string& text)
 {
     mFort2File = text;
-    autolib::setFort2File(mFort2File.c_str(), mFort2File.size());
+    autolib::createFort2File(mFort2File.c_str(), joinPath(getTempFolder(),"fort.2"));
 }
 
 string RRAuto::getConstantsAsString()

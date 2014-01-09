@@ -35,27 +35,21 @@ class AutoPlugin : public CPPPlugin
         void                                    setPCPLowerBound(double lb);
         void                                    setPCPUpperBound(double ub);
         void                                    setSBML(const string& sbml);
-
         bool                                    execute(bool inThread = false);
-        
         string                                  getResult();
         string                                  getConstants();
         bool                                    resetPlugin();
         bool                                    setInputData(void* data);
-
-
         string                                  getStatus();
         bool                                    isWorking();
         RRAuto&                                 getRRAuto();
 
-
-
     protected:
         //Capability                              mAuto;
         Property<string>                        mTempFolder;
+        Property<bool>                          mKeepTempFiles;
         Property<string>                        mSBML;                  //This is the model
         Property<string>                        mScanDirection;         //How auto sweeps the parameter
-
         Property<string>                        mPrincipalContinuationParameter;
         Property<double>                        mPCPLowerBound;
         Property<double>                        mPCPUpperBound;

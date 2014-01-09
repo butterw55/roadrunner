@@ -2318,8 +2318,14 @@ bool CModelGenerator::compileCurrentModel()
 }
 
 
-bool CModelGenerator::setTemporaryDirectory(const string& path)
+bool CModelGenerator::setTemporaryDirectory(const string& _path)
 {
+    string path = _path;
+    if(!_path.size())
+    {
+        path = getCWD();
+    }
+
     if(folderExists(path))
     {
         Log(lDebug2)<<"Setting model generators temp file folder to "<< path;

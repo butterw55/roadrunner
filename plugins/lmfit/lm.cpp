@@ -50,7 +50,7 @@ stepbound(                      100.,                    "stepbound"  ,         
 patience(                       100,                     "patience"    ,                        "Maximum number of iterations as patience*(nr_of_parameters +1). ")
 //scale_diag(                 1,                       "scale_diag" ,              " UNDOCUMENTED, TESTWISE automatical diag rescaling? ")
 {
-    mVersion = "1.0";
+    mVersion = "0.8";
     //Add plugin properties to property container
     mProperties.add(&mSBML);
     mProperties.add(&mExperimentalData);
