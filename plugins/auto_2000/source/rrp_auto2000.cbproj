@@ -139,9 +139,6 @@
         <CppCompile Include="rrAutoWorker.cpp">
             <BuildOrder>4</BuildOrder>
         </CppCompile>
-        <DefFile Include="rrp_auto2000.def">
-            <BuildOrder>4</BuildOrder>
-        </DefFile>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -1,13 +1,15 @@
 #ifndef rrplugins_settingsH
 #define rrplugins_settingsH
 
-//C function calling convention
-#if defined(_MSC_VER) || defined(__CODEGEARC__)
+//C function calling conventions
+#if defined(_MSC_VER)
+    #define rrp_cc    __cdecl
+    #define event_cc  __cdecl
+#elif defined(__BORLANDC__)
     #define rrp_cc      __cdecl
-    #define event_cc __cdecl      //For plugin event functions
+    #define event_cc    __cdecl
 #else
     #define rrp_cc
-    #define event_cc
 #endif
 
 #if !defined(__cplusplus)

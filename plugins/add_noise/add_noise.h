@@ -38,7 +38,7 @@ class AddNoise : public CPPPlugin
 
 extern "C"
 {
-RR_PLUGIN_DECLSPEC Plugin*      plugins_cc createPlugin(rr::RoadRunner* aRR);
+RR_PLUGIN_DECLSPEC Plugin*      plugins_cc createPlugin();
 RR_PLUGIN_DECLSPEC const char*  plugins_cc getImplementationLanguage();
 }
 

@@ -67,7 +67,7 @@ RRP_C_DS RRPropertyHandle rrp_cc createProperty(const char* label, const char* t
  \brief Create a PropertyList, i.e. an object of type Properties
  \return Returns a handle to a new PropertyList, if succesful, NULL otherwise
 */
-RRP_C_DS RRPropertiesHandle rrp_cc createPropertyList();
+RRP_C_DS RRPropertiesHandle rrp_cc createPropertyList(void);
 
 /*!
  \brief Free a list of properties

@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6.3 FATAL_ERROR)
+PROJECT(rrplugins_c-api)
 set(target rrplugins_c_api)
 
 include_directories(${RR_GENERATED_HEADER_PATH}) #we have to do this to get the generated header
@@ -15,9 +17,9 @@ rrplugins_cpp_support
 rrplugins_properties_api
 )
 
-#if(${MSVC})
-#    set (CMAKE_SHARED_LINKER_FLAGS     "${CMAKE_SHARED_LINKER_FLAGS} \"/DEF:${CMAKE_CURRENT_SOURCE_DIR}/rrp_api.def\"")
-#endif()
+if(${BORLAND})
+    set (CMAKE_SHARED_LINKER_FLAGS     "${CMAKE_SHARED_LINKER_FLAGS} \"/DEF:${CMAKE_CURRENT_SOURCE_DIR}/rrplugins_c_api.def\"")
+endif()
 
 #Link C_api dll statically to roadrunner and libsbml
 if(WIN32)
@@ -38,10 +40,7 @@ if(WIN32)
         rrplugins_api-static
         )
 
-else() #Unix
-    # OSX flags:
-    #"${CMAKE_SHARED_LINKER_FLAGS} -Wl,-no_implicit_dylibs -undefined error")
-    # OSX seems to link fine without this flag
+else() 
     if(APPLE)
         set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-no_implicit_dylibs -undefined error")
     else()
@@ -71,14 +70,14 @@ else() #Unix
 endif()
 
 #add_subdirectory(Apps)
-#if(INSTALL_EXAMPLES)
-#    add_subdirectory(Examples)
-#endif()
-#
-#if(BUILD_TESTS)
-#    add_subdirectory(Testing)
-#endif()
-#
+if(RRP_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+if(RRP_BUILD_TESTS)
+    add_subdirectory(Testing)
+endif()
+
 #=============== INSTALL =====================
 #=== HEADERS
 set(folders

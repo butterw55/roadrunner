@@ -14,9 +14,9 @@ namespace autoplugin
 using namespace rrc;
 using namespace std;
 
-AutoPlugin::AutoPlugin(rr::RoadRunner* aRR)
+AutoPlugin::AutoPlugin()
 :
-CPPPlugin("Auto-2000", "Bifurcation", aRR, NULL),
+CPPPlugin("Auto-2000", "Bifurcation", NULL, NULL),
 mTempFolder(                        "<none>",               "TempFolder",                                       "Tempfolder used by auto"),
 mSBML(                              "<none>",               "SBML",                                             "SBML, i.e. the model to be used to analyze"),
 mScanDirection(                     "Negative",             "ScanDirection",                                    "Direction of parameter scan"),
@@ -25,7 +25,7 @@ mPCPLowerBound(                     0,                      "PCPLowerBound",    
 mPCPUpperBound(                     0,                      "PCPUpperBound",                                    "Principal Continuation Parameter Upper Bound"),
 mBiFurcationDiagram(                "<none>",               "BiFurcationDiagram",                               "BifurcationDiagram"),
 mAutoData(                          AutoData(),             "AutoData",                                         "Data structure holding auto data"),
-mRRAuto(aRR, mAutoData.getValueReference()),
+mRRAuto(NULL, mAutoData.getValueReference()),
 mAutoWorker(*this)
 {
     //Setup the plugins capabilities
@@ -37,7 +37,6 @@ mAutoWorker(*this)
     mProperties.add(&mPCPLowerBound);
     mProperties.add(&mPCPUpperBound);
     mProperties.add(&mBiFurcationDiagram);
-
 }
 
 AutoPlugin::~AutoPlugin()
@@ -162,7 +161,7 @@ bool AutoPlugin::execute(bool inThread)
 AutoPlugin* auto_cc createPlugin(rr::RoadRunner* aRR)
 {
     //allocate a new object and return it
-    return new AutoPlugin(aRR);
+    return new AutoPlugin();
 }
 
 const char* auto_cc getImplementationLanguage()

@@ -34,9 +34,6 @@ try:
     #Execute the plugin
     auto.execute()
     
-    temp = getPluginProperty(auto.plugin, "BiFurcationDiagram")
-    print `getPropertyValue(temp)`
-    print temp
     biFurcationDiagram = auto.BiFurcationDiagram
     if biFurcationDiagram:
         print biFurcationDiagram

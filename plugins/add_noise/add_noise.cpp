@@ -63,10 +63,10 @@ bool AddNoise::execute(bool inThread)
 }
 
 // Plugin factory function
-Plugin* plugins_cc createPlugin(rr::RoadRunner* aRR)
+Plugin* plugins_cc createPlugin()
 {
     //allocate a new object and return it
-    return new AddNoise(aRR);
+    return new AddNoise;
 }
 
 const char* plugins_cc getImplementationLanguage()

@@ -13,8 +13,8 @@
 
 namespace autoplugin
 {
-#if defined(__CODEGEAR__)
-#define auto_cc __stdcall
+#if defined(__BORLANDC__)
+#define auto_cc __cdecl
 #else
 #define auto_cc
 #endif
@@ -26,7 +26,7 @@ class AutoPlugin : public CPPPlugin
 {
     friend AutoWorker;
     public:
-                                                AutoPlugin(rr::RoadRunner* aRR = NULL);
+                                                AutoPlugin();
                                                ~AutoPlugin();
         bool                                    assignRoadRunnerInstance(RoadRunner* rr);
         //Data input

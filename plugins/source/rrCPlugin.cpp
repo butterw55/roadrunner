@@ -38,7 +38,8 @@ bool CPlugin::execute(bool useThread)
 rr::StringList CPlugin::getPropertyNames()
 {
     char* propNames = getCPropertyNames();
-    rr::StringList names(propNames, ",");
+    string _names(propNames);
+    rr::StringList names(_names, ",");
     rr::freeText(propNames);
     return names;
 }

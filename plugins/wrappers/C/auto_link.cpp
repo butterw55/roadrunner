@@ -7,8 +7,8 @@
     #pragma comment(lib, "rrplugins_api-static.lib")
 #else
     #pragma comment(lib, "roadrunner.lib")
-    #pragma comment(lib, "rrPlugins_api.lib")
     #pragma comment(lib, "rrc_api.lib")
+    #pragma comment(lib, "rrplugins_api.lib")
 #endif
 
 #pragma comment(lib, "sundials_cvode.lib")

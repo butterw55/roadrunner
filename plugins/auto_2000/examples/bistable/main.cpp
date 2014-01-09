@@ -1,4 +1,6 @@
 #pragma hdrstop
+#include <iostream>
+
 //#include "rrRoadRunner.h"
 #include "rrPluginManager.h"
 #include "rrException.h"
@@ -11,6 +13,7 @@
 using namespace rr;
 using namespace rrp; //Plugin stuff
 using namespace autoplugin;
+using namespace std;
 
 int main()
 {
@@ -25,13 +28,10 @@ int main()
     {
         string pluginName("rrp_auto2000");
 
-        //A roadrunner object
-        rri = new RoadRunner();
         rri->setTempFileFolder(tempFolder);
 
         //A Plugin manager, using a roadrunner instance
         PluginManager pm("../plugins");
-
 
         //Load auto plugin
         if(!pm.load(pluginName))
@@ -57,16 +57,12 @@ int main()
         autoPlugin->setProperty("PCPLowerBound", "0.2");
         autoPlugin->setProperty("PCPUpperBound", "1.2");
 
-        //We can set the sbml parameter here or load into the roadrunner instance first
-        //autoPlugin->setProperty("SBML", getFileContent(sbmlFile).c_str());
-
         //The load function does throw if file is not found.. is that what we want??
         if(!rri->load(sbmlFile))
         {
             throw(rr::Exception("Failed loading sbml model"));
         }
 
-        autoPlugin->assignRoadRunnerInstance(rri);
         if(!autoPlugin->execute())
         {
             Log(lError)<<"Problem executing the Auto plugin";
@@ -80,10 +76,10 @@ int main()
             Sleep(50);
         }
 
-//        Log(lInfo)<<"Auto plugin is done.";
+        Log(lInfo)<<"Auto plugin is done.";
         Property<string>* biD = (Property<string>*) autoPlugin->getProperty("BiFurcationDiagram");
         string res = autoPlugin->getResult();
-        Log(lInfo)<< res;
+        cout<< res;
 
         //Check plugin data..
         pm.unload(autoPlugin);
@@ -101,7 +97,6 @@ int main()
         Log(lError)<<"Bad problem...!";
     }
 
-    delete rri;
     //pause(true);
     return 0;
 }

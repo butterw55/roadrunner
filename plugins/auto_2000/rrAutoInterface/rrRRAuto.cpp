@@ -103,7 +103,8 @@ bool RRAuto::run()
 
     CallAuto();
     //Parse output;
-    string f7(getFileContent(joinPath(getTempFolder(), "fort.7")));
+    string fName = joinPath(getTempFolder(), "fort.7");
+    string f7(getFileContent(fName));
     mAutoData.setBifurcationDiagram(f7);
 
     return true;

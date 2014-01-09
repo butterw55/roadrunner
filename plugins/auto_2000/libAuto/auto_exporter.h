@@ -15,7 +15,7 @@
     #define AUTO_DECLSPEC
 #endif
 
-#if defined(_MSC_VER) || defined(__CODEGEARC__)
+#if defined(_MSC_VER) || defined(__BORLANDC__)
     #define autoCallConv __cdecl
 #else
     #define autoCallConv

@@ -20,13 +20,19 @@ static bool  hasFileExtension(const string& fName);
 static const char* getPluginExtension();
 static const char* getPluginPrefix();
 
+#if defined(__BORLANDC__)
+    #define exp_fnc_prefix "_"
+#else
+    #define exp_fnc_prefix ""
+#endif
+
 using namespace std;
 using namespace rr;
 using Poco::SharedLibrary;
 using Poco::Glob;
 
 //Convenient function pointers
-typedef Plugin*     (*createRRPluginFunc)(RoadRunner*, PluginManager*);
+typedef Plugin*     (*createRRPluginFunc)(PluginManager*);
 typedef char*       (*charStarFnc)();
 typedef bool        (*setupCPluginFnc)(Plugin*);
 typedef bool        (*destroyRRPluginFunc)(Plugin* );
@@ -264,12 +270,12 @@ bool PluginManager::loadPlugin(const string& _libName)
             mPlugins.push_back( storeMe );
             return true;
         }
-        else if(libHandle->hasSymbol("createPlugin"))
+        else if(libHandle->hasSymbol(string(exp_fnc_prefix) +"createPlugin"))
         {
-            createRRPluginFunc create = (createRRPluginFunc) libHandle->getSymbol("createPlugin");
+            createRRPluginFunc create = (createRRPluginFunc) libHandle->getSymbol(string(exp_fnc_prefix) + "createPlugin");
 
             //This plugin
-            Plugin* aPlugin = create(NULL, this);
+            Plugin* aPlugin = create(this);
             if(aPlugin)
             {
                 aPlugin->setLibraryName(getFileNameNoExtension(libName));
@@ -394,7 +400,7 @@ bool PluginManager::checkImplementationLanguage(Poco::SharedLibrary* plugin)
     //Check that the plugin has a getImplementationLanguage function
     try
     {
-        plugin->getSymbol("getImplementationLanguage");
+        plugin->getSymbol(string(exp_fnc_prefix) + "getImplementationLanguage");
         return true;
     }
     catch(const Poco::Exception& ex)
@@ -411,7 +417,7 @@ const char* PluginManager::getImplementationLanguage(Poco::SharedLibrary* plugin
     //Check that the plugin has a getImplementationLanguage function
     try
     {
-        charStarFnc func =     (charStarFnc) plugin->getSymbol("getImplementationLanguage");
+        charStarFnc func =     (charStarFnc) plugin->getSymbol(string(exp_fnc_prefix) + "getImplementationLanguage");
         return func();
     }
     catch(const Poco::Exception& ex)
@@ -497,22 +503,22 @@ Plugin* PluginManager::createCPlugin(SharedLibrary *libHandle)
     try
     {
         //Minimum bare bone plugin need these
-        charStarFnc         getName                 = (charStarFnc) libHandle->getSymbol("getName");
-        charStarFnc         getCategory             = (charStarFnc) libHandle->getSymbol("getCategory");
+        charStarFnc         getName                 = (charStarFnc) libHandle->getSymbol(string(exp_fnc_prefix) + "getName");
+        charStarFnc         getCategory             = (charStarFnc) libHandle->getSymbol(string(exp_fnc_prefix) + "getCategory");
 
         //All 'data' that we need to create the plugin
         char* name  = getName();
         char* cat   = getCategory();
         CPlugin* aPlugin = new CPlugin(name, cat);
 
-        aPlugin->executeFunction = (executeF)         libHandle->getSymbol("executePlugin");
-        aPlugin->destroyFunction = (destroyF)         libHandle->getSymbol("destroyPlugin");
-        setupCPluginFnc     setupCPlugin        = (setupCPluginFnc)    libHandle->getSymbol("setupCPlugin");
+        aPlugin->executeFunction = (executeF)         libHandle->getSymbol(string(exp_fnc_prefix) + "execute");
+        aPlugin->destroyFunction = (destroyF)         libHandle->getSymbol(string(exp_fnc_prefix) + "destroyPlugin");
+        setupCPluginFnc     setupCPlugin        = (setupCPluginFnc)    libHandle->getSymbol(string(exp_fnc_prefix) + "setupCPlugin");
 
         //This give the C plugin an opaque Handle to the CPlugin object
         setupCPlugin(aPlugin);
-        aPlugin->getCPropertyNames  =    (charStarFnc)      libHandle->getSymbol("getListOfCPluginPropertyNames");
-        aPlugin->getCProperty       =    (getAPropertyF)    libHandle->getSymbol("getCPluginProperty");
+        aPlugin->getCPropertyNames  =    (charStarFnc)      libHandle->getSymbol(string(exp_fnc_prefix) + "getListOfCPluginPropertyNames");
+        aPlugin->getCProperty       =    (getAPropertyF)    libHandle->getSymbol(string(exp_fnc_prefix) + "getCPluginProperty");
         return aPlugin;
     }
     catch(const Poco::NotFoundException& ex)

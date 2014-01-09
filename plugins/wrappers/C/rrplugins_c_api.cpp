@@ -104,7 +104,7 @@ RRPluginHandle rrp_cc loadPlugin(RRPluginManagerHandle handle, const char* plugi
     catch_ptr_macro
 }
 
-bool rrp_cc loadPlugins(RRPluginManagerHandle handle)
+int rrp_cc loadPlugins(RRPluginManagerHandle handle)
 {
     start_try
         PluginManager *pm = castToPluginManager(handle);
@@ -344,14 +344,6 @@ char* rrp_cc getPluginResult(RRPluginHandle handle)
         return rr::createText(aPlugin->getResult());
     catch_ptr_macro
 }
-
-//bool rrp_cc assignPluginInput(RRPluginHandle handle, void* data)
-//{
-//    start_try
-//        Plugin* aPlugin = castToPlugin(handle);
-//        return (aPlugin) ? aPlugin->assignInput(data) : false;
-//    catch_bool_macro
-//}
 
 bool rrp_cc resetPlugin(RRPluginHandle handle)
 {
