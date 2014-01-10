@@ -6,22 +6,19 @@
         <Projects Include="..\..\source\roadrunner.cbproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\..\wrappers\C\rrc_api.cbproj">
-            <Dependencies/>
-        </Projects>
         <Projects Include="..\source\rrplugins_api.cbproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\wrappers\C\rrplugins_c_api.cbproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\examples\c_plugin_demo\rrp_c_plugin_demo.cbproj">
             <Dependencies/>
         </Projects>
         <Projects Include="..\add_noise\rrp_add_noise.cbproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\lmfit\rrp_lm.cbproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="plugin_info\plugin_info.cbproj">
+            <Dependencies>..\source\rrplugins_api.cbproj</Dependencies>
+        </Projects>
+        <Projects Include="..\examples\property_meta_data\property_meta_data.cbproj">
             <Dependencies>..\source\rrplugins_api.cbproj</Dependencies>
         </Projects>
     </ItemGroup>
@@ -41,15 +38,6 @@
     <Target Name="roadrunner:Make">
         <MSBuild Projects="..\..\source\roadrunner.cbproj" Targets="Make"/>
     </Target>
-    <Target Name="rrc_api">
-        <MSBuild Projects="..\..\wrappers\C\rrc_api.cbproj"/>
-    </Target>
-    <Target Name="rrc_api:Clean">
-        <MSBuild Projects="..\..\wrappers\C\rrc_api.cbproj" Targets="Clean"/>
-    </Target>
-    <Target Name="rrc_api:Make">
-        <MSBuild Projects="..\..\wrappers\C\rrc_api.cbproj" Targets="Make"/>
-    </Target>
     <Target Name="rrplugins_api">
         <MSBuild Projects="..\source\rrplugins_api.cbproj"/>
     </Target>
@@ -58,24 +46,6 @@
     </Target>
     <Target Name="rrplugins_api:Make">
         <MSBuild Projects="..\source\rrplugins_api.cbproj" Targets="Make"/>
-    </Target>
-    <Target Name="rrplugins_c_api">
-        <MSBuild Projects="..\wrappers\C\rrplugins_c_api.cbproj"/>
-    </Target>
-    <Target Name="rrplugins_c_api:Clean">
-        <MSBuild Projects="..\wrappers\C\rrplugins_c_api.cbproj" Targets="Clean"/>
-    </Target>
-    <Target Name="rrplugins_c_api:Make">
-        <MSBuild Projects="..\wrappers\C\rrplugins_c_api.cbproj" Targets="Make"/>
-    </Target>
-    <Target Name="rrp_c_plugin_demo">
-        <MSBuild Projects="..\examples\c_plugin_demo\rrp_c_plugin_demo.cbproj"/>
-    </Target>
-    <Target Name="rrp_c_plugin_demo:Clean">
-        <MSBuild Projects="..\examples\c_plugin_demo\rrp_c_plugin_demo.cbproj" Targets="Clean"/>
-    </Target>
-    <Target Name="rrp_c_plugin_demo:Make">
-        <MSBuild Projects="..\examples\c_plugin_demo\rrp_c_plugin_demo.cbproj" Targets="Make"/>
     </Target>
     <Target Name="rrp_add_noise">
         <MSBuild Projects="..\add_noise\rrp_add_noise.cbproj"/>
@@ -86,6 +56,15 @@
     <Target Name="rrp_add_noise:Make">
         <MSBuild Projects="..\add_noise\rrp_add_noise.cbproj" Targets="Make"/>
     </Target>
+    <Target Name="rrp_lm">
+        <MSBuild Projects="..\lmfit\rrp_lm.cbproj"/>
+    </Target>
+    <Target Name="rrp_lm:Clean">
+        <MSBuild Projects="..\lmfit\rrp_lm.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="rrp_lm:Make">
+        <MSBuild Projects="..\lmfit\rrp_lm.cbproj" Targets="Make"/>
+    </Target>
     <Target Name="plugin_info" DependsOnTargets="rrplugins_api">
         <MSBuild Projects="plugin_info\plugin_info.cbproj"/>
     </Target>
@@ -95,14 +74,23 @@
     <Target Name="plugin_info:Make" DependsOnTargets="rrplugins_api:Make">
         <MSBuild Projects="plugin_info\plugin_info.cbproj" Targets="Make"/>
     </Target>
+    <Target Name="property_meta_data" DependsOnTargets="rrplugins_api">
+        <MSBuild Projects="..\examples\property_meta_data\property_meta_data.cbproj"/>
+    </Target>
+    <Target Name="property_meta_data:Clean" DependsOnTargets="rrplugins_api:Clean">
+        <MSBuild Projects="..\examples\property_meta_data\property_meta_data.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="property_meta_data:Make" DependsOnTargets="rrplugins_api:Make">
+        <MSBuild Projects="..\examples\property_meta_data\property_meta_data.cbproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="roadrunner;rrc_api;rrplugins_api;rrplugins_c_api;rrp_c_plugin_demo;rrp_add_noise;plugin_info"/>
+        <CallTarget Targets="roadrunner;rrplugins_api;rrp_add_noise;rrp_lm;plugin_info;property_meta_data"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="roadrunner:Clean;rrc_api:Clean;rrplugins_api:Clean;rrplugins_c_api:Clean;rrp_c_plugin_demo:Clean;rrp_add_noise:Clean;plugin_info:Clean"/>
+        <CallTarget Targets="roadrunner:Clean;rrplugins_api:Clean;rrp_add_noise:Clean;rrp_lm:Clean;plugin_info:Clean;property_meta_data:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="roadrunner:Make;rrc_api:Make;rrplugins_api:Make;rrplugins_c_api:Make;rrp_c_plugin_demo:Make;rrp_add_noise:Make;plugin_info:Make"/>
+        <CallTarget Targets="roadrunner:Make;rrplugins_api:Make;rrp_add_noise:Make;rrp_lm:Make;plugin_info:Make;property_meta_data:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

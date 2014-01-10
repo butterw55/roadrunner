@@ -40,6 +40,7 @@
 */
 #ifndef rrPluginPropertyH
 #define rrPluginPropertyH
+#include "rrConstants.h"
 #include "rrpExporter.h"
 #include <string>
 #include <ostream>
@@ -69,7 +70,9 @@ class RRP_DECLSPEC PropertyBase
         /**
          * The constructor populates the parameters name and hint.
          */
-                                            PropertyBase(const string& type, const string& name, const string& hint, const string& descr);
+                                            PropertyBase(   const string& type, const string& name,
+                                                            const string& hint, const string& descr,
+                                                            const string& alias = rr::gEmptyString, bool  readOnly = false);
         /**
          * De-allocate any memory allocated.
          */
@@ -89,6 +92,16 @@ class RRP_DECLSPEC PropertyBase
          * Return the parameters name
          */
         string                              getName() const;
+
+        /**
+         * Return the alias for the property, if any
+         */
+        string                              getAlias() const;
+
+        /**
+         * Set a properties alias
+         */
+        bool                                setName(const string& alias);
 
         /**
          * Return description of the property
@@ -122,19 +135,25 @@ class RRP_DECLSPEC PropertyBase
 
         //Virtuals
         /**
-         *  Get the value of the property, as a string. 
+         *  Get the value of the property, as a string.
          */
         virtual string                      getValueAsString() const;
 
         /**
-         * Get an opaque pointer to the value of the property. 
+         * Get an opaque pointer to the value of the property.
          */
         virtual void*                       getValueHandle();
 
         /**
-         * Set the value of the property, using string representation. 
+         * Set the value of the property, using string representation.
          */
         virtual void                        setValueFromString(const string& value) = 0;
+
+        /**
+         * Is the property intended to be read only? OBSERVE: The read only property is a hint to a client
+            that the intention of the property is to be read only. A client can STILL change the property value.
+         */
+        bool                                isReadOnly() const;
 
 
     protected:
@@ -142,6 +161,16 @@ class RRP_DECLSPEC PropertyBase
          * The name of the property.
          */
         string                              mName;
+
+        /**
+         * A property may have one alias
+         */
+        string                              mAlias;
+
+        /**
+         * A property may be read only
+         */
+        bool                                mReadOnly;
 
         /**
          * The description of a property.

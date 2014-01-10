@@ -82,6 +82,16 @@ PropertyBase* Properties::getProperty(const string& paraName)
             return mProperties[i].first;
         }
     }
+
+    //Second round looks for a property with an alias
+    for(int i = 0; i < count(); i++)
+    {
+        if(paraName == mProperties[i].first->getAlias())
+        {
+            return mProperties[i].first;
+        }
+    }
+
     return NULL;
 }
 

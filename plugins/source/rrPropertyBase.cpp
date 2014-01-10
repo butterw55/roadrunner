@@ -1,20 +1,23 @@
 #pragma hdrstop
-#include <sstream>
+#include <iostream>
+#include <iomanip>
 #include "rrStringUtils.h"
 #include "rrPropertyBase.h"
-//#include "rrProperty.h"
 //---------------------------------------------------------------------------
 
-using namespace std;
 namespace rrp
 {
+using namespace std;
+using namespace rr;
 
-PropertyBase::PropertyBase(const string& type, const string& name, const string& hint, const string& descr)
+PropertyBase::PropertyBase(const string& type, const string& name, const string& hint, const string& descr, const string& alias, bool readOnly)
 :
 mName(name),
 mHint(hint),
 mDescription(descr),
-mType(type)
+mType(type),
+mAlias(alias),
+mReadOnly(readOnly)
 {}
 
 PropertyBase::~PropertyBase()
@@ -22,10 +25,13 @@ PropertyBase::~PropertyBase()
 
 PropertyBase::PropertyBase(const PropertyBase& pp)
 {
-    //We could assert here, assigning incompatible types    
-    mName = pp.mName;
-    mType = pp.mType;
-    mHint = pp.mHint;
+    //We could assert here, assigning incompatible types
+    mName           = pp.mName;
+    mType           = pp.mType;
+    mHint           = pp.mHint;
+    mDescription    = pp.mDescription;
+    mReadOnly       = pp.mReadOnly;
+    mAlias          = pp.mAlias;
 }
 
 PropertyBase& PropertyBase::operator=(const PropertyBase& rhs)
@@ -51,9 +57,20 @@ string PropertyBase::getName() const
     return mName;
 }
 
+string PropertyBase::getAlias() const
+{
+    return mAlias;
+}
+
+
 string PropertyBase::getHint() const
 {
     return mHint;
+}
+
+bool PropertyBase::isReadOnly() const
+{
+    return mReadOnly;
 }
 
 string PropertyBase::getDescription() const
@@ -85,17 +102,21 @@ string PropertyBase::getValueAsString() const
 
 ostream& operator<<(ostream& stream, const PropertyBase& outMe)
 {
-    stream<<outMe.asString();   //virtual friend idiom
+    stream<<outMe.asString();
     return stream;
 }
 
 string PropertyBase::asString() const
 {
     stringstream val;
-    val<<"Name: "<<     mName<<endl;
-    val<<"Type: "<<     getType()<<endl;
-    val<<"Value: "<<    getValueAsString()<<endl;
-    val<<"Hint: "<<     mHint<<endl;
+    val<<setfill('.');
+    val<<setw(20)<<left<<"Name: "         << mName<<endl;
+    val<<setw(20)<<left<<"Type: "         << getType()<<endl;
+    val<<setw(20)<<left<<"Value: "        << getValueAsString()<<endl;
+    val<<setw(20)<<left<<"Hint: "         << mHint<<endl;
+    val<<setw(20)<<left<<"Description: "  << mDescription<<endl;
+    val<<setw(20)<<left<<"Alias: "        << mAlias<<endl;
+    val<<setw(20)<<left<<"ReadOnly: "     << toString(mReadOnly)<<endl;
     return val.str();
 }
 

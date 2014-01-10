@@ -89,7 +89,9 @@ class Property : public PropertyBase
                                         /**
                                             Property constructor. Creates a property, assigning a value, name and optionally a hint.
                                         */
-                                        Property(const T& value = T(), const string& name=gNoneString, const string& hint = gNoneString, const string& descr = gNoneString);
+                                        Property(   const T& value = T(),                const string& name = gNoneString,
+                                                    const string& hint = gNoneString,    const string& descr = gNoneString,
+                                                    const string& alias = gEmptyString,   bool readonly = false);
 
                                         /**
                                             Property copy constructor. Creates a property, from another property.
@@ -130,7 +132,7 @@ class Property : public PropertyBase
                                             Get a reference to a properties value.
                                         */
         T&                              getValueReference();
-                                        
+
                                         /**
                                             Get a pointer to a properties value.
                                         */
@@ -148,9 +150,13 @@ class Property : public PropertyBase
 };
 
 template<class T>
-Property<T>::Property(const T& value, const string& name, const string& hint, const string& descr)
+Property<T>::Property(
+    const T& value,         const string& name,
+    const string& hint,     const string& descr,
+    const string& alias,    bool readonly
+)
 :
-PropertyBase(getPropertyType(value), name, hint, descr),
+PropertyBase(getPropertyType(value), name, hint, descr, alias, readonly),
 mValue(value)
 {}
 
@@ -175,7 +181,7 @@ Property<T>& Property<T>::operator=(const Property<T>& rhs)
 }
 
 /**
-    Set a property value from another properties (as reference) value.
+    Set a property value
 */
 template<class T>
 void Property<T>::setValue(const T& val)
@@ -308,7 +314,7 @@ inline void Property<rr::RoadRunnerData>::setValueFromString(const string& val)
 }
 
 /**
-    Set a property value from another properties (as reference) value.
+    Set a property value
 */
 template<>
 inline void Property<rr::RoadRunnerData>::setValue(const rr::RoadRunnerData& val)
@@ -317,7 +323,7 @@ inline void Property<rr::RoadRunnerData>::setValue(const rr::RoadRunnerData& val
 }
 
 /**
-    Set a property value from another properties (as reference) value.
+    Set a property value
 */
 template<>
 inline void Property<rr::RoadRunnerData>::setValue(rr::RoadRunnerData* val)
@@ -364,7 +370,7 @@ inline string Property<Properties>::getValueAsString() const
 }
 
 /**
-    Set a property value from another properties (as reference) value.
+    Set a property value
 */
 template<>
 inline void Property<Properties>::setValue(Properties* val)
@@ -373,17 +379,7 @@ inline void Property<Properties>::setValue(Properties* val)
 }
 
 /**
-    Set the value of a Properties container value, from a string.
-    \note This is not implemented.    
-*/
-template<>
-inline void Property<Properties>::setValueFromString(const string& val)
-{
-    Log(rr::lError)<<"Trying to set Properties container by a string. This is not implemented!";
-}
-
-/**
-    Set a property value from another properties (as reference) value.
+    Set a property value
 */
 template<>
 inline void Property<Properties>::setValue(const Properties& val)
@@ -391,8 +387,19 @@ inline void Property<Properties>::setValue(const Properties& val)
     mValue = val;
 }
 
-/** 
-    \brief Returns the type as a string. 
+/**
+    Set the value of a Properties container value, from a string.
+    \note This is not implemented.
+*/
+template<>
+inline void Property<Properties>::setValueFromString(const string& val)
+{
+    Log(rr::lError)<<"Trying to set Properties container by a string. This is not implemented!";
+}
+
+//===================== Function templates used to retrieve a property's type ===================
+/**
+    \brief Returns the type as a string.
 */
 template<>
 inline string getPropertyType(const int& a)
@@ -400,8 +407,8 @@ inline string getPropertyType(const int& a)
     return "int";
 }
 
-/** 
-    \brief Returns the type as a string. 
+/**
+    \brief Returns the type as a string.
 */
 template<>
 inline string getPropertyType(const bool& a)
@@ -409,8 +416,8 @@ inline string getPropertyType(const bool& a)
     return "bool";
 }
 
-/** 
-    \brief Returns the type as a string. 
+/**
+    \brief Returns the type as a string.
 */
 template<>
 inline string getPropertyType(const double& a)
@@ -418,8 +425,8 @@ inline string getPropertyType(const double& a)
     return "double";
 }
 
-/** 
-    \brief Returns the type as a string. 
+/**
+    \brief Returns the type as a string.
 */
 template<>
 inline string getPropertyType<string>(const string& a)
@@ -427,8 +434,8 @@ inline string getPropertyType<string>(const string& a)
     return "std::string";
 }
 
-/** 
-    \brief Returns the type as a string. 
+/**
+    \brief Returns the type as a string.
 */
 template<>
 inline string getPropertyType< vector<string> >(const vector<string> &a)
@@ -436,8 +443,8 @@ inline string getPropertyType< vector<string> >(const vector<string> &a)
     return "vector<string>";
 }
 
-/** 
-    \brief Returns the type as a string. 
+/**
+    \brief Returns the type as a string.
 */
 template<>
 inline string getPropertyType<rr::StringList>(const rr::StringList& a)
@@ -445,8 +452,8 @@ inline string getPropertyType<rr::StringList>(const rr::StringList& a)
     return "StringList";
 }
 
-/** 
-    \brief Returns the type as a string. 
+/**
+    \brief Returns the type as a string.
 */
 template<>
 inline string getPropertyType<RoadRunnerData>(const RoadRunnerData& a)
@@ -454,8 +461,8 @@ inline string getPropertyType<RoadRunnerData>(const RoadRunnerData& a)
     return "roadRunnerData";
 }
 
-/** 
-    \brief Returns the type as a string. 
+/**
+    \brief Returns the type as a string.
 */
 template<>
 inline string getPropertyType(const Properties& value)
