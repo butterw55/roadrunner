@@ -89,7 +89,7 @@ The Plugin has numerous parameters for fine tuning the algorithm. See the embedd
 LM::~LM()
 {}
 
-bool LM::isWorking()
+bool LM::isWorking() const
 {
     return mLMWorker.isRunning();
 }

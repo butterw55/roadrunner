@@ -7,7 +7,8 @@
 #include "rrStringUtils.h"
 #include "rrUtils.h"
 #include "rrProperty.h"
-#include "../wrappers/C/rrplugins_c_api.h"
+
+//Todo: no reason using the roaddrunner C API here, convert an usse the CPP api directly
 #include "../../wrappers/C/rrc_api.h"
 #include "../../wrappers/C/rrc_utilities.h"
 #include "../../wrappers/C/rrc_cpp_support.h"
@@ -26,7 +27,7 @@ mRRI(NULL)
     memset(&mLMData, 0, sizeof(lmDataStructure));
 }
 
-bool LMWorker::isRunning()
+bool LMWorker::isRunning() const
 {
     return mThread.isRunning();
 }
@@ -265,7 +266,7 @@ void evaluate(const double *par,       //Property vector
 	const lmDataStructure* myData = &(thePlugin->mLMData);
 
     //Check if user have asked for termination..
-    if(isBeingTerminated(myData->mLMPlugin))
+    if(thePlugin->isBeingTerminated())
     {
         (*userBreak) = -1; //This signals lmfit algorithm to break
         return;

@@ -209,13 +209,13 @@ class RRP_DECLSPEC Plugin
         /**
             Check if the plugin worker is in the process of being terminated
         */
-        bool                            isBeingTerminated();
+        bool                            isBeingTerminated() const;
 
                                         //!check if the plugin was terminated
-        bool                            wasTerminated();
+        bool                            wasTerminated() const;
 
                                         //!check if the plugin is working
-        virtual bool                    isWorking();
+        virtual bool                    isWorking() const;
 
                                         //!Assign a roadrunner instance for the plugin to use
         virtual bool                    assignRoadRunnerInstance(RoadRunner* rr);
@@ -259,17 +259,17 @@ class RRP_DECLSPEC Plugin
         /**
             Check if the plugin as an assigned WorkerStartedEvent
         */
-        bool                            hasStartedEvent();
+        bool                            hasStartedEvent() const;
 
         /**
             Check if the plugin as an assigned WorkerProgressEvent
         */
-        bool                            hasProgressEvent();
+        bool                            hasProgressEvent() const;
 
         /**
             Check if the plugin as an assigned WorkerFinishedEvent
         */
-        bool                            hasFinishedEvent();
+        bool                            hasFinishedEvent() const;
 
         /**
          * Call WorkStarted event function

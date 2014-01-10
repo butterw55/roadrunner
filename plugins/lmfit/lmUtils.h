@@ -34,26 +34,6 @@ typedef struct
     double                  mNorm;
 } lmDataStructure;
 
-//void my_printout(   int n_par,
-//                    const double *par,
-//                    int m_dat,
-//                    const void *data,                       //data  : for soft control of printout behaviour, add control variables to the data struct
-//                    const double *fvec,
-//                    int printflags,
-//                    int iflag,                              //iflag : 0 (init) 1 (outer loop) 2(inner loop) -1(terminated)
-//                    int iter,                               //iter  : outer loop counter
-//                    int nfev);                              //nfev  : number of calls to *evaluate
-//
-//void ui_printout(   int n_par,
-//                    const double *par,
-//                    int m_dat,
-//                    const void *data,                       //data  : for soft control of printout behaviour, add control variables to the data struct
-//                    const double *fvec,
-//                    int printflags,
-//                    int iflag,                              //iflag : 0 (init) 1 (outer loop) 2(inner loop) -1(terminated)
-//                    int iter,                               //iter  : outer loop counter
-//                    int nfev);                              //nfev  : number of calls to *evaluate
-
 //Evaluate is the event function that lmfit call to evaulate residuals
 void evaluate(      const double   *par,                    //Parameter vector
                     int             m_dat,                  //Dimension of residue vector
@@ -61,7 +41,5 @@ void evaluate(      const double   *par,                    //Parameter vector
                     double         *fvec,                   //residue vector..
                     int            *userBreak               //Index into info message array
                  );
-
-
 }
 #endif

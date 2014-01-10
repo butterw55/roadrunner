@@ -47,12 +47,12 @@ void Plugin::terminate()
     mTerminate = true;
 }
 
-bool Plugin::isBeingTerminated()
+bool Plugin::isBeingTerminated() const
 {
     return mTerminate;
 }
 
-bool Plugin::wasTerminated()
+bool Plugin::wasTerminated() const
 {
     if(mTerminate)
     {
@@ -69,17 +69,17 @@ bool Plugin::wasTerminated()
     return false;
 }
 
-bool Plugin::hasStartedEvent()
+bool Plugin::hasStartedEvent() const
 {
     return (mWorkStartedEvent) ? true : false;
 }
 
-bool Plugin::hasProgressEvent()
+bool Plugin::hasProgressEvent() const
 {
     return (mWorkProgressEvent) ? true : false;
 }
 
-bool Plugin::hasFinishedEvent()
+bool Plugin::hasFinishedEvent() const
 {
     return (mWorkFinishedEvent) ? true : false;
 }
@@ -130,13 +130,6 @@ string Plugin::getPluginPropertiesAsXML()
     return mProperties.asXML();
 }
 
-//bool Plugin::assignInput(void* userData)
-//{
-//    //Do whats needed in descendants
-//    mClientData = userData;
-//    return true;
-//}
-
 pair<void*, void*> Plugin::getWorkStartedData()
 {
     return pair<void*, void*>(mWorkStartedData1, mWorkStartedData2);
@@ -176,7 +169,7 @@ bool Plugin::assignOnFinishedEvent(PluginEvent endFnc, void* userData1, void* us
     return true;
 }
 
-bool Plugin::isWorking()
+bool Plugin::isWorking() const
 {
     return false;
 }
@@ -196,25 +189,6 @@ bool Plugin::setProperty(const string& nameOf, const char* value)
     string val(value);
     return mProperties.setProperty(nameOf, val);
 }
-
-//bool Plugin::setProperty(const string& nameOf, const char* value)
-//{
-//        PropertyBase* aPar = mProperties.getProperty(nameOf);//const_cast<PropertyBase*>( &(capability[i]) );
-//
-//        if(aPar)
-//        {
-////            if(dynamic_cast< Property<int>* >(aProperty))
-////            {
-////                Property<int> *aIntPar = dynamic_cast< Property<int>* >(aProperty);
-////                int aVal = rr::ToInt(value);
-//                aPar->setValueFromString( value);
-////                return true;
-//            //}
-//        }
-//
-//    return false;
-//}
-
 
 string Plugin::getName()
 {

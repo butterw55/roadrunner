@@ -60,7 +60,7 @@ class LM : public CPPPlugin
         bool                                    resetPlugin();
         string                                  getImplementationLanguage();
         string                                  getStatus();
-        bool                                    isWorking();
+        bool                                    isWorking() const;
 
         unsigned char*                          getManualAsPDF() const;
         unsigned int                            getPDFManualByteSize();

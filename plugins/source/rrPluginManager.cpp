@@ -73,14 +73,14 @@ string PluginManager::getInfo()
 
     if(getNumberOfPlugins())
     {
-        info<<setw(15)<<left<<"Plugin Names"<<setw(15)<<"Plugin Library Names"<<"\n";
+        info<<setw(25)<<left<<"Plugin Names"<<setw(25)<<"Plugin Library Names"<<"\n";
         Plugin* p = getFirstPlugin();
 
         do
         {
             if(p)
             {
-                info<<"  "<<setw(15)<<left<<p->getName()<<setw(15)<<left<<p->getLibraryName()<<"\n";
+                info<<"  "<<setw(25)<<left<<p->getName()<<setw(25)<<left<<p->getLibraryName()<<"\n";
             }
 
         } while(p = getNextPlugin());

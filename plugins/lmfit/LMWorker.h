@@ -34,7 +34,7 @@ class LMWorker : public Poco::Runnable
                                     LMWorker(LM& host);
         void                        start(bool runInThread = true);
         void                        run();
-        bool                        isRunning();
+        bool                        isRunning() const;
 };
 
 }
