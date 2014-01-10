@@ -3,8 +3,8 @@ PROJECT(Apps)
 
 # rr Includes
 include_directories(
-"../source"
-"../../source"
+${RR_ROOT}/source
+${RR_ROOT}/libplugins/source
 ${THIRD_PARTY_INSTALL_FOLDER}/include
 ${THIRD_PARTY_INSTALL_FOLDER}/include/sbml
 ${THIRD_PARTY_INSTALL_FOLDER}/include/cvode

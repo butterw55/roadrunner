@@ -14,7 +14,7 @@ add_definitions(
 )
 
 target_link_libraries (${target} 
-rrplugins_api
+rrplugins
 )
 endif()
 
@@ -23,19 +23,11 @@ add_definitions(
 -DPOCO_STATIC
 )
 target_link_libraries (${target} 
-rrplugins_api
-#nleq-static.a
-#rr-libstruct-static
+rrplugins
 lapack
 blas
 f2c
-#sbml-static.a
-#xml2
-#sundials_nvecserial.a
-#sundials_cvode.a
-#pthread
 poco_foundation-static.a
-#dl
 )
 endif()
 

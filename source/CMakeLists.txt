@@ -279,11 +279,10 @@ if(${MSVC})
     target_link_libraries(${target}-static libxml2)
 endif()
 
-if(BUILD_LLVM)
-    add_subdirectory(llvm_testing)
-endif(BUILD_LLVM)
-
 if(BUILD_TEST_TOOLS)
+    if(BUILD_LLVM)
+        add_subdirectory(llvm_testing)
+    endif(BUILD_LLVM)
     add_subdirectory(testing)
 endif()
 

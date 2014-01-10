@@ -1,6 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+project(rrplugins)
 
-set(target rrplugins_api)
+set(target rrplugins)
 
 include_directories(${RR_GENERATED_HEADER_PATH}) #we have to do this to get the generated header
 

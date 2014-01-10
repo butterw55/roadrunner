@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 2.8)
 set(target rrp_add_noise)
 
 include_directories(
-../source
-../../source
-../../wrappers/C
-${THIRD_PARTY_INSTALL_FOLDER}/include
 )
 
 set(sources
@@ -19,16 +15,13 @@ add_library(${target} MODULE ${sources})
 
 add_definitions(
 -DEXPORT_RR_PLUGIN
-#-DSTATIC_RR
--DSTATIC_RR_PLUGIN
--DSTATIC_PLUGIN_API
 -DPOCO_STATIC
 )
 
 if(WIN32)
 target_link_libraries (${target}
 roadrunner
-rrplugins_api-static
+rrplugins
 )
 else() #UNIX
     # OSX flags:

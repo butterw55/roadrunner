@@ -6,7 +6,7 @@ include_directories(${RR_GENERATED_HEADER_PATH}) #we have to do this to get the 
 
 include_directories(
 ${RR_ROOT}/source
-${RR_ROOT}/plugins/source
+${RR_ROOT}/libplugins/source
 ${THIRD_PARTY_INSTALL_FOLDER}/include
 )
 
@@ -30,14 +30,12 @@ if(WIN32)
         LIBLAX_STATIC
         POCO_STATIC
         STATIC_LIBSTRUCT
-        STATIC_RR
-        STATIC_PLUGIN_API
         )
 
     target_link_libraries ( ${target}
         rrc_api
-        roadrunner-static
-        rrplugins_api-static
+        roadrunner
+        rrplugins
         )
 
 else() 

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(rr_plugins)
 
-if(${BUILD_PLUGINS} STREQUAL ON)
+if(${RRP_BUILD_PLUGINS_API} STREQUAL ON)
 
 include_directories(
 	../source
