@@ -1,14 +1,13 @@
+This directory contains source code for RoadRunners plugin API's, as well as examples and some utility applications.
 
-This directory contains to sample plugins:
+In order to build the plugin api, using CMake, check the RRP_BUILD_PLUGINS_API.
+To build the Plugins C API, check the RRP_BUILD_PLUGINS_C_API.
 
-1. rrp_lm.dll
+Actual plugins are built from the plugins folder. 
 
-This supports the Levenberg-Marquardt optimizer for fitting data to models.
-See libroadrunner.org for details.
+NOTE: Any CMake flag that is related to the Plugins API is prefixed with "RRP_". 
 
-2. rrp_add_noise.dll
 
-This plugin can be used to generate Gaussian noise, useful for generating synthetic data sets to test
-the rrp_lm.dll. See libroadrunner.org for details.
+BUILD_NOTE: The Plugins API require you to have built the RoadRunner core as a shared library.
 
 
