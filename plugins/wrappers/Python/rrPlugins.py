@@ -4,7 +4,7 @@ import rrPlugins_CAPI as rrp
 import matplotlib.pyplot as plt
 import os.path
 
-__version__ = "0.6.1"
+__version__ = "0.6.2"
 
 class DataSeries(object):
 
@@ -95,7 +95,7 @@ class Plugin (object):
             lp = self.listOfProperties()
             for element in lp:
                 self._propertyNames.append (element[0])
-
+      
     def setProperty(self, name, value):
         if (isinstance (value, DataSeries)):
            if not rrp.setPluginProperty (self.plugin, name, value.data):
@@ -239,6 +239,20 @@ class Plugin (object):
 
     def viewManual (self):
         rrp.displayPluginManual(self.plugin)
+
+    def name (self):
+        return rrp.getPluginName(self.plugin)
+
+    def description (self):
+        return rrp.getPluginDescription(self.plugin)
+
+    def hint (self):
+        return rrp.getPluginHint(self.plugin)
+
+    def info (self):
+        return rrp.rrpLib.getPluginInfo(self.plugin)
+
+# ----------------------------------------------------------------
 
 def extractColumn (data, index):
     return data[:,index]
