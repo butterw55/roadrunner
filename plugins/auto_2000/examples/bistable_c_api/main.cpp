@@ -122,12 +122,12 @@ int main()
 #if defined(STATIC_APP)
     #pragma comment(lib, "roadrunner-static.lib")
     #pragma comment(lib, "rrplugins-static.lib")
-    #pragma comment(lib, "rrc_api-static.lib")
+    #pragma comment(lib, "roadrunner_c_api-static.lib")
     #pragma comment(lib, "rrplugins_c_api-static.lib")
     #pragma comment(lib, "libsbml-static.lib")
     #pragma comment(lib, "libxml2_xe.lib")
 #else
-    #pragma comment(lib, "rrc_api.lib")
+    #pragma comment(lib, "roadrunner_c_api.lib")
     #pragma comment(lib, "rrplugins_c_api.lib")
 #endif
 

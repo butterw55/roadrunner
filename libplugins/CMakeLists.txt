@@ -21,5 +21,5 @@ add_subdirectory(wrappers)
 
 install(
     FILES README.txt
-    DESTINATION plugins
+    DESTINATION libplugins
 )

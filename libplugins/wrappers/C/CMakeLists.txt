@@ -33,7 +33,7 @@ if(WIN32)
         )
 
     target_link_libraries ( ${target}
-        rrc_api
+        roadrunner_c_api
         roadrunner
         rrplugins
         )
@@ -54,7 +54,7 @@ else()
         )
 
     target_link_libraries ( ${target}
-        rrc_api
+        roadrunner_c_api
         roadrunner-static
         rrplugins_api
         rr-libstruct-static
@@ -86,7 +86,7 @@ foreach(folder ${folders})
     FILE (GLOB headers ${folder}/*.h)
     install (   
         FILES ${headers}
-        DESTINATION include/pluginsLib/c
+        DESTINATION include/libplugins
         COMPONENT pluginsLib
         )
 endforeach(folder)

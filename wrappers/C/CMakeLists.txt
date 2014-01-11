@@ -1,4 +1,4 @@
-set(target rrc_api)
+set(target roadrunner_c_api)
 
 set(C_API_INCLUDE_ROOT "${RR_ROOT}/wrappers/C")
 
@@ -23,10 +23,6 @@ add_library(${target} SHARED
     rrc_cpp_support
 )
 
-#if(${MSVC})
-#    set (CMAKE_SHARED_LINKER_FLAGS     "${CMAKE_SHARED_LINKER_FLAGS} \"/DEF:${CMAKE_CURRENT_SOURCE_DIR}/rrc_api.def\"")
-#endif()
-
 #Link C_api dll statically to roadrunner and libsbml
 if(WIN32)
     set_property(TARGET ${target}
@@ -34,7 +30,6 @@ if(WIN32)
         EXPORT_RRC
         LIBSBML_STATIC
         LIBLAX_STATIC
-        STATIC_PUGI
         POCO_STATIC
         STATIC_LIBSTRUCT
         STATIC_RR
@@ -86,7 +81,7 @@ endif()
 #=============== INSTALL =====================
 install(
     FILES
-    ${target}.h
+    rrc_api.h
     rrc_utilities.h
     rrc_types.h
     rrc_exporter.h

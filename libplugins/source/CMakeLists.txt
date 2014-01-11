@@ -165,7 +165,7 @@ foreach(folder ${folders})
     FILE (GLOB headers ${folder}/*.h)
     install (   
         FILES ${headers}
-        DESTINATION include/pluginslib/cpp
+        DESTINATION include/libplugins
         COMPONENT pluginsLib
         )
 endforeach(folder)

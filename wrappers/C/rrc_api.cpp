@@ -185,7 +185,7 @@ char* rrcCallConv getRRCAPILocation()
 #if defined(_WIN32) || defined(WIN32)
     char path[MAX_PATH];
     HINSTANCE handle = NULL;
-    const char* dllName = "rrc_api";
+    const char* dllName = "roadrunner_c_api";
     handle = GetModuleHandle(dllName);
     int nrChars = GetModuleFileNameA(handle, path, sizeof(path));
     if(nrChars != 0)

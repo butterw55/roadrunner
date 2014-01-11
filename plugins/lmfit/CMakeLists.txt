@@ -37,7 +37,7 @@ roadrunner
 lmfit-static
 rrplugins
 rrplugins_c_api                 
-rrc_api                 
+roadrunner_c_api                 
 )
 
 else() 
@@ -58,7 +58,7 @@ else()
     target_link_libraries ( ${target}
         roadrunner-static
         lmfit-static
-        rrc_api
+        roadrunner_c_api
         rrplugins_api-static
         )
 endif()

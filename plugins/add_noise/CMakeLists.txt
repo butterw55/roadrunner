@@ -50,7 +50,7 @@ else() #UNIX
         blas
         f2c
         pthread
-        rrc_api
+        roadrunner_c_api
         rrplugins_api-static
         )
 endif()
