@@ -91,7 +91,7 @@
         <BCC_CPPCompileAlways>true</BCC_CPPCompileAlways>
         <IntermediateOutputDir>.\$(Platform)\$(Config)-static</IntermediateOutputDir>
         <BCC_PCHInject>bistable_pch.h</BCC_PCHInject>
-        <IncludePath>$(RR_ROOT)\source;$(RR_ROOT)\plugins\source;$(RR_INSTALL)\include;$(RR_ROOT)\wrappers\C;$(IncludePath)</IncludePath>
+        <IncludePath>$(RR_ROOT)\source;$(RR_ROOT)\libplugins\source;$(RR_INSTALL)\include;$(RR_ROOT)\wrappers\C;$(IncludePath)</IncludePath>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Manifest_File>None</Manifest_File>
         <ILINK_LibraryPath>$(RR_INSTALL)\lib;$(RR_INSTALL)\plugins;$(ILINK_LibraryPath)</ILINK_LibraryPath>

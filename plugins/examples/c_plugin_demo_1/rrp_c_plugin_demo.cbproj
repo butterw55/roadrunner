@@ -60,7 +60,7 @@
         <ILINK_GenerateImportLibrary>true</ILINK_GenerateImportLibrary>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <ILINK_LibraryPath>..\..\source\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-        <IncludePath>..\..\source\;$(RR_ROOT)\plugins\source;$(RR_ROOT)\plugins\wrappers\C;$(IncludePath)</IncludePath>
+        <IncludePath>$(RR_ROOT)\libplugins\source;$(RR_ROOT)\libplugins\wrappers\C;$(IncludePath)</IncludePath>
         <Multithreaded>true</Multithreaded>
         <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
         <IntermediateOutputDir>.\$(Platform)\$(Config)</IntermediateOutputDir>
@@ -126,10 +126,10 @@
     </PropertyGroup>
     <ItemGroup>
         <CppCompile Include="autolink.cpp">
-            <BuildOrder>3</BuildOrder>
+            <BuildOrder>0</BuildOrder>
         </CppCompile>
         <CppCompile Include="c_plugin_demo.c">
-            <BuildOrder>0</BuildOrder>
+            <BuildOrder>1</BuildOrder>
         </CppCompile>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

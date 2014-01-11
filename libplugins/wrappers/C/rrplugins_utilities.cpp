@@ -3,7 +3,7 @@
 #include "rrc_exporter.h"
 #include "rrplugins_utilities.h"         // Need to include this before the support header..
 #include "rrc_macros.h"
-#include "rrp_cpp_support.h"
+#include "rrplugins_cpp_support.h"
 #include <string>
 #include <iostream>
 #include <sstream>

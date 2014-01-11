@@ -45,11 +45,11 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <ILINK_LibraryPath>R:\rrl\plugins\apps\getPluginInfo\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <ILINK_LibraryPath>R:\rrl\libplugins\apps\getPluginInfo\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <Multithreaded>true</Multithreaded>
         <_TCHARMapping>char</_TCHARMapping>
         <ProjectType>CppConsoleApplication</ProjectType>
-        <IncludePath>R:\rrl\plugins\apps\getPluginInfo\;$(IncludePath)</IncludePath>
+        <IncludePath>R:\rrl\libplugins\apps\getPluginInfo\;$(IncludePath)</IncludePath>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
         <IntermediateOutputDir>.\$(Platform)\$(Config)</IntermediateOutputDir>
@@ -100,7 +100,7 @@
         <VerInfo_Locale>1033</VerInfo_Locale>
         <FinalOutputDir>$(RR_INSTALL)\bin</FinalOutputDir>
         <Manifest_File>None</Manifest_File>
-        <BCC_IncludePath>$(RR_ROOT)\plugins\source;$(RR_ROOT)\source;$(RR_INSTALL)\include;$(BCC_IncludePath)</BCC_IncludePath>
+        <BCC_IncludePath>$(RR_ROOT)\libplugins\source;$(RR_ROOT)\source;$(RR_INSTALL)\include;$(BCC_IncludePath)</BCC_IncludePath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <Defines>NDEBUG;$(Defines)</Defines>

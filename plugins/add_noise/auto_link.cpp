@@ -1,7 +1,7 @@
 
 #if defined(STATIC_PLUGIN)
     #pragma comment(lib, "roadrunner-static.lib")
-    #pragma comment(lib, "rrplugins_api-static.lib")
+    #pragma comment(lib, "rrplugins-static.lib")
     #pragma comment(lib, "libsbml-static")
     #if defined(CG_UI)
         #pragma comment(lib, "libxml2_xe.lib")
@@ -10,7 +10,7 @@
     #endif
 #else
     #pragma comment(lib, "roadrunner.lib")
-    #pragma comment(lib, "rrplugins_api.lib")
+    #pragma comment(lib, "rrplugins.lib")
 #endif
 
 #pragma comment(lib, "poco_foundation-static.lib")

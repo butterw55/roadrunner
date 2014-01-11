@@ -41,7 +41,7 @@
 
 #ifndef rrplugins_utilitiesH
 #define rrplugins_utilitiesH
-#include "rrp_exporter.h"
+#include "rrplugins_exporter.h"
 #include "rrplugins_types.h"
 #include "rrc_macros.h"
 //---------------------------------------------------------------------------

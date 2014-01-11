@@ -3,7 +3,7 @@
     #pragma comment(lib, "rrplugins-static.lib")
 #else
     #pragma comment(lib, "roadrunner.lib")
-    #pragma comment(lib, "rrplugins_api.lib")
+    #pragma comment(lib, "rrplugins.lib")
 #endif
 
 #if defined(_MSC_VER)

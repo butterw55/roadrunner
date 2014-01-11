@@ -50,10 +50,10 @@ mAutoWorker(*this)
 ideas on how to create a usable interface to the AUTO 2000 library.";
 
     //Populate auto parameters
-    InputConstants& ic = mRRAuto.getInputConstants();
+//    InputConstants& ic = mRRAuto.getInputConstants();
 
-    Properties &paras = *(Properties*) mAutoParameters.getValueHandle();
-    paras.add(&(ic.RL0));
+//    Properties &paras = *(Properties*) mAutoParameters.getValueHandle();
+//    paras.add(&(ic.RL0));
 }
 
 AutoPlugin::~AutoPlugin()
