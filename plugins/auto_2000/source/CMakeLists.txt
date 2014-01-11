@@ -22,15 +22,14 @@ rrAutoWorker
 
 
 add_definitions(
+-DEXPORT_RR_PLUGIN
 -DPOCO_STATIC
 -DLIBSBML_STATIC
--DSTATIC_PLUGIN_API
 -DSTATIC_AUTO
 -DSTATIC_RR_AUTO
 -DSTATIC_LIBSTRUCT
 -DLIBLAX_STATIC
 -DSTATIC_NLEQ
--DEXPORT_RR_PLUGIN
 )
 
 add_library(${target} MODULE ${sources})
@@ -44,9 +43,9 @@ endif()
 
 target_link_libraries (${target}
 roadrunner
+rrplugins
 rrAutoInterface-static
 libAuto-static
-rrplugins_api-static
 )
 endif()
 

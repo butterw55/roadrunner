@@ -15,7 +15,6 @@ main.cpp
 )
 
 add_definitions(
--DSTATIC_PLUGIN_API
 -DPOCO_STATIC
 -DLIBSBML_STATIC 
 -DSTATIC_LIBSTRUCT
@@ -25,7 +24,7 @@ add_definitions(
 
 target_link_libraries (${target} 
 roadrunner
-rrplugins_api-static
+rrplugins
 libsbml-static
 poco_foundation-static
 rr-libstruct-static
@@ -37,6 +36,12 @@ lapack
 libf2c
 )
 
+if(${MSVC})
+
+target_link_libraries (${target} 
+iphlpapi
+)
+endif()
 install(
 TARGETS ${target} 		
 DESTINATION bin 
