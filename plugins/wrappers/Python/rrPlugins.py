@@ -23,6 +23,15 @@ class DataSeries(object):
 
     def __getHandle (self):
         return self._data
+        
+    def __getNumberOfRows (self):
+        return rrp.rrpLib.getRoadRunnerDataNumRows(self._data)
+
+    def __getNumberOfColumns (self):
+        return rrp.rrpLib.getRoadRunnerDataNumCols(self._data)
+        
+    def getColumnHeaders (self):
+        return rrp.rrpLib.getRoadRunnerDataColumnHeader(self._data)
 
     def __AsNumpy (self):
         return rrp.getNumpyData (self._data)
@@ -37,6 +46,8 @@ class DataSeries(object):
 
     data = property (__getHandle)
     AsNumpy = property (__AsNumpy)
+    rows = property (__getNumberOfRows)
+    cols = property (__getNumberOfColumns)
 
 
 # ------------------------------------------------------------------------
