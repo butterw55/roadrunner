@@ -3,15 +3,22 @@
 import rrPlugins_CAPI as rrp
 import matplotlib.pyplot as plt
 import os.path
+import ctypes
 
-__version__ = "0.6.2"
+__version__ = "0.6.3"
 
 class DataSeries(object):
 
     _data = 0
 
-    def __init__ (self, handle):
-        self._data = handle
+    # Usage:
+    # d = DataSeries()
+    # d = DataSeries (rr)
+    def __init__ (self, handle=None):
+        if handle == None:
+           self._data = rrp.rrpLib.createRoadRunnerData(0,0,"")
+        else:   
+           self._data = handle
 
     def __del__ (self):
         if (self._data != 0):
@@ -24,17 +31,44 @@ class DataSeries(object):
     def __getHandle (self):
         return self._data
         
+    # Use x.rows to get the number of rows    
     def __getNumberOfRows (self):
         return rrp.rrpLib.getRoadRunnerDataNumRows(self._data)
 
+    # Use x.cols to get the number of columns    
     def __getNumberOfColumns (self):
         return rrp.rrpLib.getRoadRunnerDataNumCols(self._data)
         
     def getColumnHeaders (self):
-        return rrp.rrpLib.getRoadRunnerDataColumnHeader(self._data)
+        value = rrp.rrpLib.getRoadRunnerDataColumnHeader(self._data)
+        if value == None:
+           value = []
+        return value
 
+    # Use x.AsNumpy to get NumPy array
     def __AsNumpy (self):
         return rrp.getNumpyData (self._data)
+        
+    def getElement (self, row, col):
+        rowCount = rrp.rrpLib.getRoadRunnerDataNumRows(self._data)
+        colCount = rrp.rrpLib.getRoadRunnerDataNumCols(self._data)
+        if (row < 0) or (col < 0):
+            raise Exception("DataSeries indices must be postive")
+        if row >= rowCount:
+            raise Exception("Row index out of bounds in dataseries element access")
+        if col >= colCount:
+            raise Exception("Column index out of bounds in dataseries element access")
+
+        val = ctypes.c_double()
+        if rrp.rrpLib.getRoadRunnerDataElement(self._data, row, col, ctypes.byref(val)) == True:
+           return val.value
+        else:
+           # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                    
+           # Is there a getLastError for this?
+           raise Exception("Unable to retrieve element")
+
+    def setElement (self, row, col, value):
+        raise Exception ("setElement not yet implemented")
 
     def readDataSeries(self, fileName):
         if not os.path.isfile (fileName):
