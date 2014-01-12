@@ -20,19 +20,17 @@ rrPluginManager
 rrPluginUtils
 )
 
-
 #SHARED VERSION ----------------
-#Link with static libs
 add_library(${target} SHARED ${sources})
 
 set_property(TARGET ${target}
     PROPERTY  COMPILE_DEFINITIONS
 EXPORT_PLUGIN_API
-#LIBSBML_STATIC
-#LIBLAX_STATIC
-#STATIC_LIBSTRUCT
-#STATIC_NLEQ
-
+LIBSBML_USE_CPP_NAMESPACE
+LIBSBML_STATIC
+LIBLAX_STATIC
+STATIC_LIBSTRUCT
+STATIC_NLEQ
 POCO_STATIC
 POCO_NO_AUTOMATIC_LIBS
 )
@@ -70,15 +68,15 @@ if(UNIX)
 else()
     target_link_libraries (${target}
         libf2c
-        libsbml
+        libsbml-static
         )
 endif(UNIX)
 
 install(TARGETS ${target}
-        RUNTIME DESTINATION bin COMPONENT plugins_api
-        LIBRARY DESTINATION lib COMPONENT plugins_api
-        ARCHIVE DESTINATION lib COMPONENT plugins_api
-        )
+        RUNTIME DESTINATION bin COMPONENT pluginsLib
+        LIBRARY DESTINATION lib COMPONENT pluginsLib
+        ARCHIVE DESTINATION lib COMPONENT pluginsLib
+)
 
 #END OF SHARED VERSION ----------------
 
@@ -98,8 +96,6 @@ set_property(TARGET ${target}-static
     )
 
 #libraries to link with static lib
-#======== We need to split up this one to satisfy linking in both windows and posix.
-#=== windows need libsbml-static and libf2c and posix uses sbml-static and f2c
 target_link_libraries (${target}-static
     sundials_cvode
     sundials_nvecserial
@@ -117,7 +113,6 @@ if(WIN32)
         iphlpapi
         )
 endif(WIN32)
-
 
 if(UNIX)
     target_link_libraries (${target}-static
@@ -152,21 +147,15 @@ endif()
 
 #--- INSTALL STUFF
 install(TARGETS ${target}-static
-    LIBRARY DESTINATION lib COMPONENT rrplugins_api
-    ARCHIVE DESTINATION lib COMPONENT rrplugins_api
+    LIBRARY DESTINATION lib COMPONENT pluginsLib
+    ARCHIVE DESTINATION lib COMPONENT pluginsLib
     )
 
 #=== HEADERS
-set(folders
-    .
+FILE (GLOB headers rr*.h)
+install (   
+    FILES ${headers}
+    DESTINATION include/libplugins
+    COMPONENT pluginsLib
     )
-
-foreach(folder ${folders})
-    FILE (GLOB headers ${folder}/*.h)
-    install (   
-        FILES ${headers}
-        DESTINATION include/libplugins
-        COMPONENT pluginsLib
-        )
-endforeach(folder)
 

@@ -78,13 +78,12 @@ if(BUILD_TEST_TOOLS)
 endif()
 
 #=============== INSTALL =====================
+#Glob all header files
+FILE (GLOB headers rrc*.h)
+
 install(
     FILES
-    rrc_api.h
-    rrc_utilities.h
-    rrc_types.h
-    rrc_exporter.h
-
+    ${headers}
     DESTINATION include/rr/C COMPONENT c_api
     )
 

@@ -67,7 +67,6 @@ else()
         )
 endif()
 
-#add_subdirectory(Apps)
 if(RRP_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
@@ -78,23 +77,17 @@ endif()
 
 #=============== INSTALL =====================
 #=== HEADERS
-set(folders
-    .
+FILE (GLOB headers rrp*.h)
+install (   
+    FILES ${headers}
+    DESTINATION include/libplugins
+    COMPONENT pluginsLib
     )
-
-foreach(folder ${folders})
-    FILE (GLOB headers ${folder}/*.h)
-    install (   
-        FILES ${headers}
-        DESTINATION include/libplugins
-        COMPONENT pluginsLib
-        )
-endforeach(folder)
 
 install(
     TARGETS ${target}
-    RUNTIME DESTINATION bin COMPONENT plugins_api
-    ARCHIVE DESTINATION lib COMPONENT plugins_api
-    LIBRARY DESTINATION lib COMPONENT plugins_api
-    )
+    RUNTIME DESTINATION bin COMPONENT pluginsLib
+    ARCHIVE DESTINATION lib COMPONENT pluginsLib
+    LIBRARY DESTINATION lib COMPONENT pluginsLib
+)
 

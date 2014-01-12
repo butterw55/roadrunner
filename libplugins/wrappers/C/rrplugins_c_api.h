@@ -511,7 +511,7 @@ RRP_C_DS char* rrp_cc getRoadRunnerDataColumnHeader(RRDataHandle data);
  \return Returns the number of rows in the underlying data object.
  \ingroup utilities
 */
-RRP_C_DS int            rrp_cc getRoadRunnerDataNumRows(RRDataHandle data);
+RRP_C_DS int rrp_cc getRoadRunnerDataNumRows(RRDataHandle data);
 
 /*!
  \brief Retrieves the number of cols in a RoadRunner data object.
@@ -520,7 +520,7 @@ RRP_C_DS int            rrp_cc getRoadRunnerDataNumRows(RRDataHandle data);
  \return Returns the number of cols in the underlying data object.
  \ingroup utilities
 */
-RRP_C_DS int            rrp_cc getRoadRunnerDataNumCols(RRDataHandle data);
+RRP_C_DS int rrp_cc getRoadRunnerDataNumCols(RRDataHandle data);
 
 /*!
  \brief Creates a RoadRunner data object, and returns a handle to it.
@@ -531,7 +531,7 @@ RRP_C_DS int            rrp_cc getRoadRunnerDataNumCols(RRDataHandle data);
  \return Returns a handle to a RoadRunner data object, NULL if unsuccessfull.
  \ingroup utilities
 */
-RRP_C_DS RRDataHandle   rrp_cc createRoadRunnerData(int rows, int cols, char* colNames);
+RRP_C_DS RRDataHandle rrp_cc createRoadRunnerData(int rows, int cols, char* colNames);
 
 /*!
  \brief Free the memory allocated by a RoadRunner data object.
