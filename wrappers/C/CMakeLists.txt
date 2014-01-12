@@ -53,7 +53,6 @@ else() #Unix
         PROPERTY  COMPILE_DEFINITIONS
         LIBSBML_STATIC
         LIBLAX_STATIC
-        STATIC_PUGI
         STATIC_LIBSTRUCT
         )
 
@@ -86,7 +85,7 @@ install(
     rrc_types.h
     rrc_exporter.h
 
-    DESTINATION include/c_api COMPONENT c_api
+    DESTINATION include/rr/C COMPONENT c_api
     )
 
 install(
