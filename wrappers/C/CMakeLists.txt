@@ -12,9 +12,9 @@ ${THIRD_PARTY_INSTALL_FOLDER}/include
 
 #The C-api is built as a shared library..
 add_library(${target} SHARED
-    rrNewArrayList
-    rrNewArrayListItem
-    rrNewArrayListItemObject
+    rrArrayList
+    rrArrayListItem
+    rrArrayListItemBase
     rrc_api
     rrc_logging_api
     rrc_nom_api

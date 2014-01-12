@@ -937,7 +937,7 @@ void CModelGenerator::writeEvalEvents(CodeBuilder& ignore, const int& numEvents,
 
     for (int i = 0; i < numEvents; i++)
     {
-        ArrayList ev = mNOM->getNthEvent(i);
+        StringListContainer ev = mNOM->getNthEvent(i);
         StringList tempList = ev[0];
         string eventString = tempList[0];
 
@@ -1161,7 +1161,7 @@ void CModelGenerator::writeEventAssignments(CodeBuilder& ignore, const int& numR
         mSource<<append("// Event assignments" + NL());
         for (int i = 0; i < numEvents; i++)
         {
-            ArrayList ev = mNOM->getNthEvent(i);
+            StringListContainer ev = mNOM->getNthEvent(i);
             eventType.push_back(mNOM->getNthUseValuesFromTriggerTime(i));
             eventPersistentType.push_back(mNOM->getModel()->getEvent(i)->getTrigger()->getPersistent());
 
