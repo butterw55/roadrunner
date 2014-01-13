@@ -436,8 +436,8 @@ if __name__=='__main__':
     print "Test Finished"
 
 ##\mainpage Python support code for working with RoadRUnner Plugins
-##\section Introduction
-#Wrapper around the Python Plugin C API to help avoid the use of handles.
+#\section Introduction
+## Wrapper around the Python Plugin C API to help avoid the use of handles.
 #The code fragment below shows briefly how to create a plugin object and access the plugin properties.
 #
 #@code
@@ -481,7 +481,7 @@ if __name__=='__main__':
 ##print "done"
 #@endcode
 #
-##\section Plugins
+#    \section Plugins
 # Plugin objects are instanciated using Plugin class. For example to instanciate a plugin called myplugin, we would
 # use the code:
 #@code
