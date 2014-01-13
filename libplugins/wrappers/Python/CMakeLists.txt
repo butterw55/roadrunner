@@ -14,8 +14,9 @@ install(
         rrPlugins.py 
         rrPluginUtils.py 
         rrPlugins_CAPI.py 
+        rrFindSharedLib.py
         README.txt 
-        DESTINATION plugins/python  	
+        DESTINATION site_packages/rrplugins  	
         COMPONENT plugins_api
        )
 
