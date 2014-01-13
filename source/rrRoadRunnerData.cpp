@@ -314,9 +314,15 @@ bool RoadRunnerData::writeTo(const string& fileName) const
         Log(Logger::LOG_ERROR)<<"Failed opening file: "<<fileName;
         return false;
     }
+ 
+    if(!check())
+    {
+        Log(Logger::LOG_ERROR)<<"Can't write data.. the dimension of the header don't agree with nr of cols of data";
+        return false;
+    }
+
     aFile<<(*this);
     aFile.close();
-
     return true;
 }
 
