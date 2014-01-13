@@ -15,7 +15,6 @@ include_directories(
 OPTION (RRP_BUILD_ADD_NOISE_PLUGIN		        "Build Add Noise Plugin"	                ON)
 OPTION (RRP_BUILD_LEVENBERG_MARQUARDT_PLUGIN	"Build Levenberg-Marquardt Plugin"	        ON)
 OPTION (RRP_BUILD_AUTO_2000_PLUGIN	            "Build Auto 2000 Plugin"	                ON)
-OPTION (RRP_BUILD_EXAMPLES   	                "Build Plugin Examples"                     ON)
 
 if(${RRP_BUILD_ADD_NOISE_PLUGIN} STREQUAL ON)
     add_subdirectory(add_noise)
@@ -27,10 +26,6 @@ endif()
 
 if(${RRP_BUILD_AUTO_2000_PLUGIN} STREQUAL ON)
     add_subdirectory(auto_2000)
-endif()
-
-if(${RRP_BUILD_EXAMPLES} STREQUAL ON)
-    add_subdirectory(examples)
 endif()
 
 endif() #Build plugins.. 
