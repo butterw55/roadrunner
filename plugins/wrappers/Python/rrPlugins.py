@@ -436,46 +436,75 @@ if __name__=='__main__':
     print "Test Finished"
 
 ##\mainpage Python support code for working with RoadRUnner Plugins
-#\section Introduction
-## Wrapper around the Python Plugin C API to help avoid the use of handles.
-#The code fragment below shows briefly how to load plugins, check for plugins, and use an individual plugin.
-#\include rrPluginExample.py
+##\section Introduction
+#Wrapper around the Python Plugin C API to help avoid the use of handles.
+#The code fragment below shows briefly how to create a plugin object and access the plugin properties.
 #
-#import roadrunner
-#from rrPlugins_CAPI import *
-#import rrPlugins as rrp
-
-#noisePlugin = rrp.Plugin ("rrp_add_noise")
-#print noisePlugin.name()
-#print noisePlugin.hint()
-#print noisePlugin.description()
-
-#print noisePlugin.listOfProperties()
-
-## Create a roadrunner instance
-#rr = roadrunner.RoadRunner()
-#rr.load("sbml_test_0001.xml")
-
+#@code
+##import roadrunner
+##from rrPlugins_CAPI import *
+##import rrPlugins as rrp
+##
+##noisePlugin = rrp.Plugin ("rrp_add_noise")
+##print noisePlugin.name()
+##print noisePlugin.hint()
+##print noisePlugin.description()
+##
+##print noisePlugin.listOfProperties()
+##
+### Create a roadrunner instance
+##rr = roadrunner.RoadRunner()
+##rr.load("sbml_test_0001.xml")
+##
 ## Generate data
-#rr.simulate(0, 10, 511) # Want 512 points
-
+##rr.simulate(0, 10, 511) # Want 512 points
+##
 ## The plugin will need a handle to the underlying roadrunner data
-#d = rrp.getRoadRunnerData (rr)
-
-#noisePlugin.InputData = d
-
+##d = rrp.getRoadRunnerData (rr)
+##
+##noisePlugin.InputData = d
+##
 ## Get parameter for the 'size' of the noise
-#noisePlugin.Sigma = 3.e-5
-
-#noisePlugin.execute ()
-
-#numpydata = noisePlugin.InputData.AsNumpy;
-
-#rrp.plot (numpydata[:,[0,2]], myColor="blue", myLinestyle="-", myMarker="", myLabel="S1")
-
-#rrp.show()
-
-#d.writeDataSeries ("testData2.dat")
-
-#d.readDataSeries ("testData2.dat")
-#print "done"
+##noisePlugin.Sigma = 3.e-5
+##
+##noisePlugin.execute ()
+##
+##numpydata = noisePlugin.InputData.AsNumpy;
+##
+##rrp.plot (numpydata[:,[0,2]], myColor="blue", myLinestyle="-", myMarker="", myLabel="S1")
+##
+##rrp.show()
+##
+##d.writeDataSeries ("testData2.dat")
+##
+##d.readDataSeries ("testData2.dat")
+##print "done"
+#@endcode
+#
+##\section Plugins
+# Plugin objects are instanciated using Plugin class. For example to instanciate a plugin called myplugin, we would
+# use the code:
+#@code
+#p = Plugin ("myplugin")
+#@endcode
+#All interactions with plugins are via plugin properties. Values can be set and retrieved via plugin properties.
+#For example, if a plugin has a property sigma, we can assign or access the value using the code:
+#@code
+#p.sigma = 0.1
+#print p.sigma
+#@endcode
+Plugins have a single method that can be used to excecute the plugin's functionality:
+#@code
+#p.execute()
+#@endcode
+#Once a plugin has been executed, any output from the plugin can be retrieved via propoerties. Let's 
+#suppose for example there is a plugin all add, which has three properties called, x, y and result. When executed
+#the plugin will take the values in x and y, compute the sum and assign it to result. The plugin can therefore
+#be used as follows:
+#@code
+p = Plugin("add")
+p.x = 3.4
+p.y = 5.6
+p.execute()
+print p.result
+#@endcode
