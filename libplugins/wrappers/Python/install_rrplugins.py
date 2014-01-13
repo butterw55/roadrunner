@@ -1,10 +1,10 @@
 """ 
 Usage:
-   python install_rrplugins_module.py
+   python install_rrplugins.py
    This file will install files needed to 
-   use roadrunner plugins from Python
+   use roadrunner plugins from Python. Specifically, it will install a module named
+   rrplugins in the systems Python sitepackage folder
 """
-
 import site
 import shutil
 import os.path
@@ -15,19 +15,19 @@ def rmrrplugins(path):
     print('deleting ' + rrPackage +' from ' + path)
 
     files = ['rrPlugins', 'rrPlugins_CAPI', 'rrPluginUtils', 'rrFindSharedLib']
-    try:
-        for file in files:
+    for file in files:
+        try:
             fName = file + '.py'
             os.remove(os.path.join(path, fName))
-    except:
-		pass
-	
-    try:
-        for file in files:
+        except:
+		  pass	
+        
+    for file in files:
+        try:        
             fName = file + '.pyd'
             os.remove(os.path.join(path, fName))
-    except:
-		pass
+        except:
+		  pass
 		
     shutil.rmtree(os.path.join(path, rrPackage), ignore_errors=True)
 
@@ -41,12 +41,12 @@ for s in splist:
 		
 print('installing ' + rrPackage +' to site packages dir: ' + spFolder)
 
-destination = os.path.join(spFolder, 'rrplugins')
+destination = os.path.join(spFolder, rrPackage)
 
 #Figure out where we are
 cwd = os.path.dirname(os.path.abspath(__file__))
 
-src = os.path.abspath(os.path.join(cwd, 'site-packages', 'rrplugins'))
+src = os.path.abspath(os.path.join(cwd, rrPackage))
 
 print('src directory is :' + src)
 print("destination directory is: " + destination)

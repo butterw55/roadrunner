@@ -1,7 +1,7 @@
 import ctypes
 import matplotlib.pyplot as plot
 import roadrunner
-from rrPlugins_CAPI import *
+from rrplugins import *
 
 #Create a plugin manager
 pm = createPluginManager()

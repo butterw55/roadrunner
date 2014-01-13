@@ -1,9 +1,8 @@
 libRoadRunners Python PluginAPI using ctypes
-Totte Karlsson (tottek@gmail.com)
 
 The rrPlugins_CAPI.py file is a python wrapper using ctypes and RoadRunners rrplugins_c_api library.
-If you import this script in your on script, you will get access to the functionality as
-documented on the RoadRunner website:
+If you import this script in your own script, you will get access to the functionality as documented 
+on the RoadRunner website:
 http://docs.libroadrunner.org/rrLibPluginsPythonAPI/html/index.html
 
 On top of the API defined by rrPlugins_CAPI.py, another user friendly API is defined, in the file rrPlugins.py.
@@ -25,5 +24,4 @@ the following requirements need to be satisfied
 The Example folder contains Examples illustrating how to get access and use the pluginlibrary and plugins.
 See further API documentation on the web, http://libroadrunner.org/ on how to use roadrunner plugins from python.
 
-
-
+by Totte Karlsson and Herbert Sauro.

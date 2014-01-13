@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plot
 from numpy import *
-from rrPlugins_CAPI import *
+from rrplugins import *
 
 #Create a plugin manager
 pm = createPluginManager()
