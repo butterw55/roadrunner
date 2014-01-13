@@ -2445,15 +2445,16 @@ ExecutableModel *CModelGenerator::createModel(const string& sbml, LibStructural 
     if(mModelLib->isLoaded())
     {
         model = new CompiledExecutableModel(ms, mModelLib);
-        if(!model)
-        {
-            throw(CoreException("Failed creating model"));
-        }
     }
     else
     {
         Log(Logger::LOG_ERROR)<<"Failed to create model from DLL";
         model = NULL;        
+    }
+
+    if(!model)
+    {
+        throw(CoreException("Failed creating model"));
     }
     
 
