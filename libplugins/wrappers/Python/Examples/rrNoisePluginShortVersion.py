@@ -1,4 +1,4 @@
-import rrPlugins as rrp
+import rrplugins as rrp
 
 p = rrp.Plugin ("rrp_add_noise")
 

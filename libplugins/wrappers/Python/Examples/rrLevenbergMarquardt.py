@@ -1,6 +1,5 @@
 import ctypes
-from rrPlugins_CAPI import *
-import rrPlugins as rrp
+import rrplugins as rrp
 
 try:   
     #Get a lmfit plugin object
@@ -10,17 +9,16 @@ try:
     def pluginIsProgressing(lmP):
         # The plugin don't know what a python object is.
         # We need to cast it here, to a proper python object
-        lmObject = cast(lmP, ctypes.py_object).value
+        lmObject = ctypes.cast(lmP, ctypes.py_object).value
         print 'Iterations = ' + `lmObject.getProperty("NrOfIter")` \
             + '\tNorm = ' + `lmObject.getProperty("Norm")`
     
-    
-    progressEvent =  NotifyEventEx(pluginIsProgressing)
+    progressEvent =  rrp.NotifyEventEx(pluginIsProgressing)
     
     #The ID of the plugin is passed as the last argument in the assignOnProgressEvent. 
     #The plugin ID is later on retrieved in the plugin Event handler, see above
     theId = id(lm)
-    assignOnProgressEvent(lm.plugin, progressEvent, theId, None)
+    rrp.assignOnProgressEvent(lm.plugin, progressEvent, theId, None)
     #============================================================
     
     #Setup lmfit properties.
@@ -37,7 +35,7 @@ try:
     lm.execute()
     
     print 'Minimization finished. \n==== Result ====' 
-    print getPluginResult(lm.plugin)
+    print rrp.getPluginResult(lm.plugin)
     
     # Get the experimental data as a numpy array
     experimentalData = experimentalData.AsNumpy
@@ -46,12 +44,12 @@ try:
     fittedData = lm.getProperty ("FittedData").AsNumpy
     residuals  = lm.getProperty ("Residuals").AsNumpy
     
-    rrp.plot(fittedData         [:,[0,1]], "blue", "-",    "",    "S1 Fitted")
-    rrp.plot(fittedData         [:,[0,2]], "blue", "-",    "",    "S2 Fitted")
-    rrp.plot(residuals          [:,[0,1]], "blue", "None", "x",   "S1 Residual")
-    rrp.plot(residuals          [:,[0,2]], "red",  "None", "x",   "S2 Residual")
-    rrp.plot(experimentalData   [:,[0,1]], "red",  "",     "*",   "S1 Data")
-    rrp.plot(experimentalData   [:,[0,2]], "blue", "",     "*",   "S2 Data")
-    rrp.plt.show()
+    rrp.rrPlugins.plot(fittedData         [:,[0,1]], "blue", "-",    "",    "S1 Fitted")
+    rrp.rrPlugins.plot(fittedData         [:,[0,2]], "blue", "-",    "",    "S2 Fitted")
+    rrp.rrPlugins.plot(residuals          [:,[0,1]], "blue", "None", "x",   "S1 Residual")
+    rrp.rrPlugins.plot(residuals          [:,[0,2]], "red",  "None", "x",   "S2 Residual")
+    rrp.rrPlugins.plot(experimentalData   [:,[0,1]], "red",  "",     "*",   "S1 Data")
+    rrp.rrPlugins.plot(experimentalData   [:,[0,2]], "blue", "",     "*",   "S2 Data")
+    rrp.rrPlugins.plt.show()
 except Exception as e:
     print 'There was a problem: ' + `e`

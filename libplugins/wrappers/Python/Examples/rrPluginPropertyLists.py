@@ -1,4 +1,4 @@
-from rrPlugins_CAPI import *
+from rrplugins import *
 
 listParaHandle = createProperty("myList", "listOfProperties", "a Hint")
 

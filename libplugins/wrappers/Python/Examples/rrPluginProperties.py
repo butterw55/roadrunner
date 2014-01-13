@@ -1,4 +1,4 @@
-from rrPlugins_CAPI import *
+from rrplugins import *
 
 #Create a plugin manager
 pm = createPluginManager()

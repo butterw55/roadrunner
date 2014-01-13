@@ -1,4 +1,4 @@
-from rrPlugins_CAPI import *
+from rrplugins import *
 
 try:
 
@@ -6,7 +6,6 @@ try:
     hdr = getRoadRunnerDataColumnHeader(rrDataHandle)
     npData = getNumpyData(rrDataHandle)
     print `hdr` + `npData`
-
 
     plotRoadRunnerData(npData, hdr)
 

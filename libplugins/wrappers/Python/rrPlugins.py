@@ -435,7 +435,7 @@ if __name__=='__main__':
 
     print "Test Finished"
 
-##\mainpage Python support code for working with RoadRUnner Plugins
+##\mainpage Python support code for working with RoadRunner Plugins
 #\section Introduction
 ## Wrapper around the Python Plugin C API to help avoid the use of handles.
 #The code fragment below shows briefly how to load plugins, check for plugins, and use an individual plugin.

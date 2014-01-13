@@ -1,6 +1,5 @@
 import roadrunner
-from rrPlugins_CAPI import *
-import rrPlugins as rrp
+import rrplugins as rrp
 
 noisePlugin = rrp.Plugin ("rrp_add_noise")
 
@@ -28,7 +27,7 @@ noisePlugin.execute ()
 # Get the data to plot
 numpydata = noisePlugin.InputData.AsNumpy;
 
-rrp.plot (numpydata[:,[0,1]], myColor="blue", myLinestyle="-", myMarker="", myLabel="S1 Fitted")
+rrp.rrPlugins.plot (numpydata[:,[0,1]], myColor="blue", myLinestyle="-", myMarker="", myLabel="S1 Fitted")
 rrp.show()
 
 d.writeDataSeries ("testData2.dat")
