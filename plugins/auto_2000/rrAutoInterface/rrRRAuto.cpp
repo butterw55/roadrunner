@@ -18,9 +18,7 @@ RoadRunner*     RRAuto::mRR = NULL;
 SetupControl    RRAuto::mAutoSetup;
 string          RRAuto::mSelectedParameter = gEmptyString;
 
-RRAuto::RRAuto(RoadRunner* rr, AutoData& data)
-:
-mAutoData(data)
+RRAuto::RRAuto(RoadRunner* rr)
 {
     mRR = rr;
 }
@@ -31,11 +29,6 @@ RRAuto::~RRAuto()
 void RRAuto::assignRoadRunner(RoadRunner* rrInstance)
 {
     mRR = rrInstance;
-}
-
-AutoData& RRAuto::getAutoData()
-{
-    return mAutoData;
 }
 
 bool RRAuto::selectParameter(const string& para)

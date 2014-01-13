@@ -3,7 +3,6 @@
 #include "rrProperty.h"
 #include "rrRoadRunner.h"
 #include "rrLogger.h"
-#include "rrAutoData.h"
 #include "rrRRAutoSetupControl.h"
 #include "rrRRAutoExporter.h"
 //---------------------------------------------------------------------------
@@ -21,9 +20,8 @@ enum ScanDirection {sdPositive, sdNegative};
 class RRA_DECLSPEC RRAuto
 {
     public:
-                                    RRAuto(RoadRunner* rr, AutoData& data);
+                                    RRAuto(RoadRunner* rr);
                                    ~RRAuto();
-        AutoData&                   getAutoData();
         string                      getTempFolder();
         bool                        setTempFolder(const string& fldr);
         bool                        setupUsingCurrentModel();
@@ -39,7 +37,6 @@ class RRA_DECLSPEC RRAuto
     private:
         static string               mSelectedParameter;
         string                      mTempFolder;
-        AutoData&                   mAutoData;
 
         static RoadRunner*          mRR;         //Static so we can access this in autos callback
         static SetupControl         mAutoSetup;  //Auto constants, parameters

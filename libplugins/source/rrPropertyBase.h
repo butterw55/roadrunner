@@ -53,7 +53,7 @@ using std::string;
 using std::ostream;
 
 /**
- * The PluginProperty class is an interface for derived Properties, that can be of any type.
+ * \brief The PluginProperty class is an interface for derived Properties, that can be of any type.
  * A property has a name, description and a hint, encapsulating the the purpose of the actual property.
  */
 class RRP_DECLSPEC PropertyBase

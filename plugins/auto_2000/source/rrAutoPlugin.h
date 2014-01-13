@@ -50,7 +50,6 @@ class AutoPlugin : public CPPPlugin
         Property<double>                        mPCPLowerBound;
         Property<double>                        mPCPUpperBound;
         Property<string>                        mBiFurcationDiagram;    //This is generated data
-        AutoData                                mAutoData;              //This plugin generates a lot of data
 
         //This property is a container for parameters inside auto
         Property<Properties>                    mAutoParameters;
@@ -59,14 +58,12 @@ class AutoPlugin : public CPPPlugin
 
         string                                  getTempFolder();
         string                                  getSBML();
-        AutoData&                               getAutoData();
 
         //The worker
         AutoWorker                              mAutoWorker;
 
         //So make it a friend
         friend class AutoWorker;
-
 };
 
 extern "C"

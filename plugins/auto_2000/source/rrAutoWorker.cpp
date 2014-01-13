@@ -19,7 +19,6 @@ using namespace rr;
 AutoWorker::AutoWorker(AutoPlugin& host)
 :
 mTheHost(host),
-mAutoData(mTheHost.getAutoData()),
 mRRAuto(mTheHost.getRRAuto())
 {}
 
@@ -83,11 +82,12 @@ void AutoWorker::run()
     string str = mRRAuto.getConstantsAsString();
     Log(lInfo)<<str;
 
+    //==================== This is where auto is called
     if(!mRRAuto.run())
     {
         Log(lError)<<"There was a problem running auto";
     }
-
+    //================================================
 
     //Parse output;
     string tempFolder;

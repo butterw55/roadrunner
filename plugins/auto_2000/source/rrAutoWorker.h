@@ -5,7 +5,6 @@
 #include "rrRoadRunner.h"
 #include "rrOSSpecifics.h"
 #include "rrpExporter.h"
-#include "../rrAutoInterface/rrAutoData.h"
 #include "auto_utils.h"
 //---------------------------------------------------------------------------
 
@@ -35,8 +34,6 @@ class AutoWorker : public Poco::Runnable
         Poco::Thread                mThread;
         AutoPlugin&                 mTheHost;
         rrauto::RRAuto&             mRRAuto;        //This class communicate with auto
-        AutoData&                   mAutoData;
-
 
         bool                        setup();
         RoadRunnerData              createModelData();

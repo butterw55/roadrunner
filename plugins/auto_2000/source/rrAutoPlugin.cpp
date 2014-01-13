@@ -26,7 +26,7 @@ mPCPLowerBound(                     0,                      "PCPLowerBound",    
 mPCPUpperBound(                     0,                      "PCPUpperBound",                                    "Principal Continuation Parameter Upper Bound"),
 mBiFurcationDiagram(                "<none>",               "BiFurcationDiagram",                               "BifurcationDiagram"),
 mAutoParameters(                    Properties(),           "AutoParameters",                                   "Auto parameter container"),
-mRRAuto(NULL, mAutoData),
+mRRAuto(NULL),
 mAutoWorker(*this)
 {
     mVersion = "0.8";
@@ -123,14 +123,7 @@ bool AutoPlugin::resetPlugin()
         return false;
     }
 
-    AutoData& data = getAutoData();
-//    data.reset();
     return true;
-}
-
-AutoData& AutoPlugin::getAutoData()
-{
-    return mAutoData;//*(mAutoData.getValuePointer());
 }
 
 string AutoPlugin::getTempFolder()
@@ -146,16 +139,9 @@ string AutoPlugin::getSBML()
 string AutoPlugin::getResult()
 {
     stringstream msg;
-//    AutoData& data = getAutoData();
     msg<<"AUTO 2000 DATA\n";
-
     msg<<mBiFurcationDiagram.getValue();
     return msg.str();
-}
-
-bool AutoPlugin::setInputData(void* inputData)
-{
-    return true;
 }
 
 bool AutoPlugin::execute(bool inThread)
@@ -170,7 +156,7 @@ bool AutoPlugin::execute(bool inThread)
 AutoPlugin* auto_cc createPlugin()
 {
     //allocate a new object and return it
-    return new AutoPlugin();
+    return new AutoPlugin;
 }
 
 const char* auto_cc getImplementationLanguage()

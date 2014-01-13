@@ -98,10 +98,6 @@
         <CppCompile Include="auto_link.cpp">
             <BuildOrder>4</BuildOrder>
         </CppCompile>
-        <CppCompile Include="rrAutoData.cpp">
-            <DependentOn>rrAutoData.h</DependentOn>
-            <BuildOrder>0</BuildOrder>
-        </CppCompile>
         <CppCompile Include="rrAutoInputConstants.cpp">
             <DependentOn>rrAutoInputConstants.h</DependentOn>
             <BuildOrder>1</BuildOrder>

@@ -13,7 +13,7 @@
 #else
     #pragma comment(lib, "roadrunner.lib")
     #pragma comment(lib, "rrplugins.lib")
-    #pragma comment(lib, "rrAutoInterface.lib")
+    #pragma comment(lib, "rrAutoInterface-static.lib")
 #endif
 
 #pragma comment(lib, "poco_foundation-static.lib")
