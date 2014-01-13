@@ -1,8 +1,9 @@
-This directory contains examples demonstrating various features of the RoadRunners Plugin API.
-To build the examples, check the CMake RRP_BUILD_EXAMPLES flag.
+This directory contains examples plugins
 
-List of Examples
-1. property_meta_data
-    Demonstrate how to create a property and access some of its meta data, such as the hint, name, description and alias.
+List of examples:
+1. c_plugin_demo_1
+Example illustrating how to write a plugin using pure C language, using the plugins C API.
 
+2. cpp_plugin_demo_1
+Example illustrating how to write a plugin using C++ language.
 

@@ -493,7 +493,7 @@ if __name__=='__main__':
 #p.sigma = 0.1
 #print p.sigma
 #@endcode
-Plugins have a single method that can be used to excecute the plugin's functionality:
+#Plugins have a single method that can be used to excecute the plugin's functionality:
 #@code
 #p.execute()
 #@endcode
