@@ -231,14 +231,27 @@ bool RoadRunnerData::hasWeights() const
     return (mWeights.size() > 0) ? true : false;
 }
 
-double RoadRunnerData::weight(int row, int col) const
+
+double RoadRunnerData::getDataElement(int row, int col)
+{
+    return mTheData(row,col);    
+}
+
+void   RoadRunnerData::setDataElement(int row, int col, double value)
+{
+    mTheData(row,col) = value;
+}
+
+
+
+double RoadRunnerData::getWeight(int row, int col) const
 {
     return mWeights(row, col);
 }
 
-double& RoadRunnerData::setWeight(int row, int col)
+void RoadRunnerData::setWeight(int row, int col, double value)
 {
-    return mWeights(row, col);
+    mWeights(row, col) = value;
 }
 
 double RoadRunnerData::operator() (const unsigned& row, const unsigned& col) const

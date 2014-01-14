@@ -412,7 +412,7 @@ RRCDataPtr createRRCData(const RoadRunnerData& result)
             rrCData->Data[index] = result(row, col);
             if(result.hasWeights())
             {
-                rrCData->Weights[index] = result.weight(row, col);
+                rrCData->Weights[index] = result.getWeight(row, col);
             }
             ++index;
         }

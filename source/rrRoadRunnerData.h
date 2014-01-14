@@ -271,6 +271,23 @@ public:
     double operator()(const unsigned& row, const unsigned& col) const;
 
     /** 
+    * \brief Return data element at (row, col)
+
+    * \param row Index of row
+    * \param col Index of col
+    */
+    double getDataElement(int row, int col);
+
+    /** 
+    * \brief Set data element at (row, col)
+
+    * \param row Index of row
+    * \param col Index of col
+    * \param value New value
+    */
+    void   setDataElement(int row, int col, double value);
+
+    /** 
     * \brief Assignment operator. Deep copy of data in an assignment expression.
     *
     * \param rhs RoadRunnerdata object on the right side of the assignment ().
@@ -282,19 +299,20 @@ public:
     *
     * The following code will print the weight element at row 3 and column 4
     \code
-     cout<< myData.weight(3,4);
+     cout<< myData.getWeight(3,4);
     \endcode
     * \param row Index of row
     * \param col Index of col
     */
-    double weight(int row, int col) const;
+    double getWeight(int row, int col) const;
 
     /** 
-    * \brief Set data weight number at row,col index.
+    * \brief Set data weight at number at row,col index.
     * \param row Index of row
     * \param col Index of col
+    * \param val Value of new weight
     */
-    double& setWeight(int row, int col);
+    void setWeight(int row, int col, double val);
 
     /** 
     * \brief Set data object name.
