@@ -114,11 +114,13 @@ structuredResult  If set (default is True), the result from simulate is a numpy 
                   displaying a legend for each time series. 
 ================  =============
 
-One important point to note about simulate(). When simulate() is run, the concentration of the floating species 
-will naturally change. If simulate() is called a second time, the simulation will use as the initial conditions the last 
-values from the previous simulation. This can be used to easily to follow on simulations. However there will be times
-when we wish to run the same simulation again but perhaps with a slightly different parameters value. To do
-this we must reset the initial conditions back to the original values. To do that we run the command reset::
+One important point to note about simulate(). When simulate() is run, the concentration of 
+the floating species will naturally change. If simulate() is called a second time, the simulation 
+will start the simulation from the previous simulated values. This can be used to easily follow on 
+simulations. However there will be times when we wish to run the same simulation again but perhaps 
+with slightly different parameters values. To do this we must reset the initial conditions back to 
+the original values. To do that we run the command reset::
+
    
    rr.reset()
 
