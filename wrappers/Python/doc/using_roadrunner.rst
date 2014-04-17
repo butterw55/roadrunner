@@ -25,7 +25,7 @@ Loading Models
 --------------
 
 RoadRunner reads models using the SBML format. If you have a SBML model stored on your hard drive, it is 
-possible to load that model either by giving he document contents or path to the Roadrunner
+possible to load that model either by giving the document contents or path to the Roadrunner
 constructor, or later by using the method, ``load()``. Let's assume you have a model called
 mymodel.xml in ``C:\MyModels``. To load this model in **Windows** we would use the command::
 
@@ -44,7 +44,7 @@ On the **Mac or Linux** we might use one of these two commands::
    rr = roadrunner.RoadRunner("http://www.ebi.ac.uk/biomodels-main/download?mid=BIOMD0000000010") 
 
 If the model was loaded successfully, the RoadRunner object is now ready to use,  otherwise an exception will 
-be raised that contains extendend information detailing exactly what failed. If any warnings are
+be raised that contains extended information detailing exactly what failed. If any warnings are
 found in the SBML document, these will be displayed in the console error log. 
 
 Additionally, there are a couple models **included with libRoadRunner**. The models  ``feedback.xml`` 
@@ -62,12 +62,12 @@ There are a few additional models in the ``models/`` directory of the distributi
 Running Simulations
 -------------------
 
-Once a model is successfuly loaded we can next run a time course simulation. To do this we use the
+Once a model is successfully loaded we can next run a time course simulation. To do this we use the
 simulate method::
    
    result = rr.simulate()
 
-The variable result will be a Python numpy array. The first column will contain time and the reminaing columns will include
+The variable result will be a Python numpy array. The first column will contain time and the remaining columns will include
 all the floating species. In the simulate method we didn't specify how long to do the simulation for or how many 
 points to generate.  By default the time start is set to zero, time end to 40 time units and the number of points to 500.
 There are two ways to set these values to different values. The easiest is to add them to the called in the following
@@ -75,7 +75,7 @@ way::
    
    result = rr.simulate (0, 10, 100)
   
-This means set the time start to zero, the time end to 10 and generate 100 points. This means that the simualation points
+This means set the time start to zero, the time end to 10 and generate 100 points. This means that the simulation points
 will be output in intervals of 0.1.
 
 The alternative is to set the options record in simulateOptions. The advantage here is that the simulateOptions record
@@ -92,7 +92,7 @@ And to set the time end for the simulation we would type::
    
    rr.simulateOptions.end = 10
 
-Typing somethng like::
+Typing something like::
    
    print rr.simulateOptions.steps
   
@@ -141,7 +141,7 @@ detailed information on selections, see the :ref:`selecting-values` section.
 
 The simulate method, by default returns an `structured array
 <http://docs.scipy.org/doc/numpy/user/basics.rec.html>`_,
-which are arrays that also contain column names. These can be ploted directly using the
+which are arrays that also contain column names. These can be plotted directly using the
 ``roadrunner.plot`` function. 
 
 The output selections default to time and the set of floating species. 
@@ -158,7 +158,7 @@ type the following::
    rr.selections = ['S1', 'S2']
    result = rr.simulate(0, 10, 100)
    
-Some additional examples inlcude:
+Some additional examples include:
   
   # Select time and two rates of change (dS1/dt and dS2/dt)
   rr.selections = ['time, 'S1''', 'S2''']
